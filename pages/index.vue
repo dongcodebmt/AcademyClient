@@ -1,5 +1,5 @@
 <template>
-  <div id="container">
-    <h1>Hello wolrd</h1>
+  <div id="home">
+    <h1 class="text-center">Home</h1>
   </div>
 </template>

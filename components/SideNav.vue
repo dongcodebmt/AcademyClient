@@ -76,12 +76,53 @@
             :class="{ active: isActive(item.url) }"
             :key="item.key"
           >
-            <nuxt-link :to="item.url" class="nav-link">
+            <nuxt-link :to="item.url" class="nav-link" v-if="!isHasSub(item)" @click.native="closeSideNav()">
               <span class="sidebar-icon">
                 <fa-icon :icon="item.icon" />
               </span>
               <span class="sidebar-text">{{ item.name }}</span>
             </nuxt-link>
+            <template v-else>
+              <span
+                class="
+                  nav-link
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                "
+                data-bs-toggle="collapse"
+                :data-bs-target="`#${item.id}`"
+                aria-expanded="false" 
+                :aria-controls="`#${item.id}`"
+              >
+                <span>
+                  <span class="sidebar-icon">
+                    <fa-icon :icon="item.icon" />
+                  </span>
+                  <span class="sidebar-text">{{ item.name }}</span>
+                </span>
+                <span class="link-arrow">
+                  <fa-icon icon="chevron-right" />
+                </span>
+              </span>
+              <div
+                class="multi-level collapse"
+                role="list"
+                :id="item.id"
+              >
+                <ul
+                  class="flex-column nav"
+                  v-for="sub in item.submenu"
+                  :key="sub.key"
+                >
+                  <li class="nav-item">
+                    <nuxt-link class="nav-link" :to="sub.url" @click.native="closeSideNav()">
+                      <span class="sidebar-text">{{ sub.name }}</span>
+                    </nuxt-link>
+                  </li>
+                </ul>
+              </div>
+            </template>
           </li>
         </template>
         <!-- End items -->
@@ -100,6 +141,18 @@ export default {
       }
       return false;
     },
+    isHasSub(item) {
+      if (item.hasOwnProperty("submenu") && item.submenu.length > 0) {
+        return true;
+      }
+      return false;
+    },
+    closeSideNav() {
+      let el = document.getElementById("sidebarMenu");
+      if (el && el.classList.contains("show")) {
+        el.classList.remove("show");
+      }
+    }
   },
 };
 </script>
