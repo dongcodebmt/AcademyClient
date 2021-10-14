@@ -60,7 +60,7 @@
                 alt="Volt Logo"
               />
             </span>
-            <span class="mt-1 ms-1 sidebar-text">Volt Overview</span>
+            <span class="mt-1 ms-1 sidebar-text">AcademyStudy</span>
           </a>
         </li>
 
