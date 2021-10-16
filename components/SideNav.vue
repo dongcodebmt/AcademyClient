@@ -1,19 +1,9 @@
 <template>
-  <nav
-    id="sidebarMenu"
-    class="sidebar d-lg-block bg-gray-800 text-white collapse"
-    data-simplebar
-  >
+  <nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
     <div class="sidebar-inner px-4 pt-3">
       <!-- Mobile User Card -->
       <div
-        class="
-          user-card
-          d-flex d-md-none
-          align-items-center
-          justify-content-between justify-content-md-center
-          pb-4
-        "
+        class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4"
       >
         <div class="d-flex align-items-center">
           <div class="avatar-lg me-4">
@@ -29,8 +19,7 @@
               href="~pages/examples/sign-in.html"
               class="btn btn-secondary btn-sm d-inline-flex align-items-center"
             >
-              <fa-icon icon="sign-out-alt" />
-              Sign Out
+              <fa-icon icon="sign-out-alt" />Sign Out
             </a>
           </div>
         </div>
@@ -51,32 +40,26 @@
 
       <ul class="nav flex-column pt-3 pt-md-0">
         <li class="nav-item">
-          <a href="/" class="nav-link d-flex align-items-center">
+          <a href="/" class="nav-link d-flex justify-content-center">
             <span class="sidebar-icon">
-              <img
-                src="~assets/img/brand/light.svg"
-                height="20"
-                width="20"
-                alt="Volt Logo"
-              />
+              <fa-icon icon="graduation-cap" height="20" width="20" alt="Volt Logo"/>
+              <!-- <img src="~assets/img/brand/light.svg" height="20" width="20" alt="Volt Logo" /> -->
             </span>
-            <span class="mt-1 ms-1 sidebar-text">AcademyStudy</span>
+            <span class="mt-1 ms-1 sidebar-text">Academy</span>
           </a>
         </li>
 
-        <li
-          role="separator"
-          class="dropdown-divider mt-4 mb-3 border-gray-700"
-        ></li>
+        <!-- <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li> -->
 
         <!-- Items -->
         <template v-for="item in $store.state.sideNavItems">
-          <li
-            class="nav-item"
-            :class="{ active: isActive(item.url) }"
-            :key="item.key"
-          >
-            <nuxt-link :to="item.url" class="nav-link" v-if="!isHasSub(item)" @click.native="closeSideNav()">
+          <li class="nav-item" :class="{ active: isActive(item.url) }" :key="item.key">
+            <nuxt-link
+              :to="item.url"
+              class="nav-link"
+              v-if="!isHasSub(item)"
+              @click.native="closeSideNav()"
+            >
               <span class="sidebar-icon">
                 <fa-icon :icon="item.icon" />
               </span>
@@ -84,15 +67,10 @@
             </nuxt-link>
             <template v-else>
               <span
-                class="
-                  nav-link
-                  d-flex
-                  justify-content-between
-                  align-items-center
-                "
+                class="nav-link d-flex justify-content-between align-items-center"
                 data-bs-toggle="collapse"
                 :data-bs-target="`#${item.id}`"
-                aria-expanded="false" 
+                aria-expanded="false"
                 :aria-controls="`#${item.id}`"
               >
                 <span>
@@ -105,16 +83,8 @@
                   <fa-icon icon="chevron-right" />
                 </span>
               </span>
-              <div
-                class="multi-level collapse"
-                role="list"
-                :id="item.id"
-              >
-                <ul
-                  class="flex-column nav"
-                  v-for="sub in item.submenu"
-                  :key="sub.key"
-                >
+              <div class="multi-level collapse" role="list" :id="item.id">
+                <ul class="flex-column nav" v-for="sub in item.submenu" :key="sub.key">
                   <li class="nav-item">
                     <nuxt-link class="nav-link" :to="sub.url" @click.native="closeSideNav()">
                       <span class="sidebar-text">{{ sub.name }}</span>
@@ -133,7 +103,7 @@
 
 <script>
 export default {
-  mounted: async function () {},
+  mounted: async function() {},
   methods: {
     isActive(url) {
       if (this.$route.path === url) {
@@ -153,6 +123,6 @@ export default {
         el.classList.remove("show");
       }
     }
-  },
+  }
 };
 </script>

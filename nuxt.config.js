@@ -5,6 +5,10 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
+  router: {
+    middleware: ['auth']
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'AcademyClient',
@@ -29,6 +33,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/core.js', ssr: false },
     { src: '~/plugins/bootstrap.js', ssr: false },
     { src: '~/plugins/volt.js', ssr: false }
   ],
@@ -70,7 +75,11 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    // baseURL: process.env.API_DOMAIN,
+    baseURL: 'https://localhost:44316',
+    credentials: true
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

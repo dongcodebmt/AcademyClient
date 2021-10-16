@@ -39,4 +39,9 @@ export default [
             }
         ]
     },
+    {
+        "name": "Đăng xuất",
+        "url": "/signout",
+        "icon": "sign-out-alt"
+    }
 ];
