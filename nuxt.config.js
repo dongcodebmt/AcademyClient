@@ -11,7 +11,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'AcademyClient',
+    title: 'Academy',
     htmlAttrs: {
       lang: 'en'
     },
@@ -70,9 +70,46 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
     '@nuxtjs/component-cache',
     'nuxt-lazy-load'
   ],
+
+  auth: {
+    plugins: [ '~/plugins/auth.js' ],
+    redirect: {
+      login: '/auth/signin',
+      logout: '/auth/signout',
+      callback: '/auth/callback',
+      home: '/'
+    },
+    strategies: {
+      local: {
+        scheme: 'refresh',
+        token: {
+          property: 'accessToken',
+          data: 'refreshToken',
+          global: true,
+        },
+        refreshToken: {
+          property: 'refreshToken',
+          data: 'refreshToken',
+        },
+        endpoints: {
+          login: { url: '/api/auth/token', method: 'post' },
+          refresh: { url: '/api/auth/refresh', method: 'post' },
+          user: false,
+          logout: false
+        }
+      },
+      google: {
+        redirectUri: 'http://localhost:3000/auth/callback',
+        codeChallengeMethod: '',
+        clientId: '1012733307588-t8n56jgi8j1hcmhai7b2phdab8gor6sc.apps.googleusercontent.com',
+        responseType: 'token id_token'
+      },
+    },
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

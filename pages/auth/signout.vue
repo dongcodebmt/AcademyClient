@@ -19,8 +19,7 @@ export default {
   methods: {
     async signOut() {
       setTimeout(() => {
-        this.setCookie("accessToken", null, Date.now());
-        this.setCookie("refreshToken", null, Date.now());
+        this.$auth.logout();
         this.$router.push("/auth/signin");
       }, 1000);
     }

@@ -3,27 +3,13 @@
     <div class="container">
       <div class="row justify-content-center form-bg-image">
         <p class="text-center">
-          <nuxt-link
-            to="/"
-            class="d-flex align-items-center justify-content-center"
-          >
-            <fa-icon icon="long-arrow-alt-left" />
-            &nbsp; Back to homepage
+          <nuxt-link to="/" class="d-flex align-items-center justify-content-center">
+            <fa-icon icon="long-arrow-alt-left" />&nbsp; Back to homepage
           </nuxt-link>
-        </p>    
+        </p>
         <div class="col-12 d-flex align-items-center justify-content-center">
           <div
-            class="
-              signin-inner
-              my-3 my-lg-0
-              bg-white
-              shadow
-              border-0
-              rounded
-              p-4 p-lg-5
-              w-100
-              fmxw-500
-            "
+            class="signin-inner my-3 my-lg-0 bg-white shadow border-0 rounded p-4 p-lg-5 w-100 fmxw-500"
           >
             <h1 class="h3">Forgot your password?</h1>
             <p class="mb-4">
@@ -47,9 +33,7 @@
               </div>
               <!-- End of Form -->
               <div class="d-grid">
-                <button type="submit" class="btn btn-gray-800">
-                  Recover password
-                </button>
+                <button type="submit" class="btn btn-gray-800">Recover password</button>
               </div>
             </form>
           </div>
@@ -61,6 +45,7 @@
 
 <script>
 export default {
-  layout: "empty",
+  auth: false,
+  layout: "empty"
 };
 </script>

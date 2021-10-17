@@ -41,7 +41,7 @@ export default [
     },
     {
         "name": "Đăng xuất",
-        "url": "/signout",
+        "url": "/auth/signout",
         "icon": "sign-out-alt"
     }
 ];
