@@ -14,6 +14,7 @@
         <fa-icon class="icon icon-xxs" :icon="['fab', 'google']" />
       </a>
       <a
+        v-on:click="facebook()"
         href="#"
         class="btn btn-icon-only btn-pill btn-outline-gray-500 me-2"
         aria-label="facebook button"
@@ -21,14 +22,14 @@
       >
         <fa-icon class="icon icon-xxs" :icon="['fab', 'facebook-f']" />
       </a>
-      <a
+      <!-- <a
         href="#"
         class="btn btn-icon-only btn-pill btn-outline-gray-500"
         aria-label="github button"
         title="github button"
       >
         <fa-icon class="icon icon-xxs" :icon="['fab', 'github']" />
-      </a>
+      </a> -->
     </div>
   </div>
 </template>
@@ -38,6 +39,9 @@ export default {
   methods: {
     async google() {
       this.$auth.loginWith("google");
+    },
+    async facebook() {
+      this.$auth.loginWith("facebook");
     }
   }
 };

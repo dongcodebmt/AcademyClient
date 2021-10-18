@@ -1,4 +1,14 @@
+import path from 'path'
+import fs from 'fs'
+
 export default {
+  server: {
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'example.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'example.crt'))
+    }
+  },
+
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -70,13 +80,14 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
     '@nuxtjs/auth-next',
     '@nuxtjs/component-cache',
     'nuxt-lazy-load'
   ],
 
   auth: {
-    plugins: [ '~/plugins/auth.js' ],
+    plugins: ['~/plugins/auth.js'],
     redirect: {
       login: '/auth/signin',
       logout: '/auth/signout',
@@ -103,19 +114,31 @@ export default {
         }
       },
       google: {
-        redirectUri: 'http://localhost:3000/auth/callback',
+        redirectUri: process.env.CALLBACK_URL,
         codeChallengeMethod: '',
-        clientId: '1012733307588-t8n56jgi8j1hcmhai7b2phdab8gor6sc.apps.googleusercontent.com',
+        clientId: process.env.GOOGLE_CLIENT_ID,
         responseType: 'token id_token'
       },
+      facebook: {
+        endpoints: {
+          userInfo: 'https://graph.facebook.com/v6.0/me?fields=id,name,picture{url}'
+        },
+        clientId: process.env.FACEBOOK_CLIENT_ID,
+        scope: ['public_profile', 'email']
+      }
     },
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // baseURL: process.env.API_DOMAIN,
-    baseURL: 'https://localhost:44316',
-    credentials: true
+    proxy: true
+  },
+
+  proxy: {
+    '/api/': {
+      target: process.env.BACKEND_URL,
+      secure: false
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

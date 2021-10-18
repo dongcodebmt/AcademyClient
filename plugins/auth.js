@@ -6,11 +6,10 @@ export default async function ({ app }) {
     let auth = app.$auth;
 
     let authStrategy = auth.strategy.name;
-    if(authStrategy === 'facebook' || authStrategy === 'google'){
+    if (authStrategy === 'facebook' || authStrategy === 'google') {
         let token = auth.strategy.token.get().substr(7);
-        let authStrategyConverted = authStrategy === 'facebook' ? 'fb' : 'google';
-        let url = `/api/auth/${authStrategyConverted}?token=${token}`;
-
+        let url = `/api/auth/${authStrategy}?token=${token}`;
+        console.log(url)
         try {
             let data = await app.$axios.$post(url, null);
             await auth.setStrategy('local');
