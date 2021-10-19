@@ -99,7 +99,7 @@ export default {
         scheme: 'refresh',
         token: {
           property: 'accessToken',
-          data: 'refreshToken',
+          data: 'accessToken',
           global: true,
         },
         refreshToken: {
