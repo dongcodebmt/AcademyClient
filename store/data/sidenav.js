@@ -38,10 +38,5 @@ export default [
                 "url": "/blog/list"
             }
         ]
-    },
-    {
-        "name": "Đăng xuất",
-        "url": "/auth/signout",
-        "icon": "sign-out-alt"
     }
 ];

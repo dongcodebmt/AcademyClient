@@ -8,19 +8,33 @@
         <div class="d-flex align-items-center">
           <div class="avatar-lg me-4">
             <img
-              src="~assets/img/team/profile-picture-3.jpg"
+              :src="[ this.$auth.user && this.$auth.user.picture !== '/' ? this.$auth.user.picture : require('@/assets/img/team/blank-profile.png') ]"
               class="card-img-top rounded-circle border-white"
               alt="Bonnie Green"
             />
           </div>
           <div class="d-block">
-            <h2 class="h5 mb-3">Hi, Jane</h2>
-            <a
-              href="~pages/examples/sign-in.html"
-              class="btn btn-secondary btn-sm d-inline-flex align-items-center"
-            >
-              <fa-icon icon="sign-out-alt" />Sign Out
-            </a>
+            <div id="not-logged" v-if="!this.$auth.loggedIn">
+              <h2 class="h5 mb-3">Hi, Guest</h2>
+              <nuxt-link
+                to="/auth/signin"
+                class="btn btn-secondary btn-sm d-inline-flex align-items-center"
+              >
+                <fa-icon icon="sign-in-alt" class="icon icon-xxs me-1" />Sign In
+              </nuxt-link>
+            </div>
+
+            <div id="not-logged" v-else>
+              <h2 class="h5 mb-3">Hi, {{ this.$auth.user.firstName + " " + this.$auth.user.lastName }}</h2>
+              <a
+                v-on:click="signOut()"
+                v-if="this.$auth.loggedIn"
+                href
+                class="btn btn-secondary btn-sm d-inline-flex align-items-center"
+              >
+                <fa-icon icon="sign-out-alt" class="icon icon-xxs me-1" />Sign Out
+              </a>
+            </div>
           </div>
         </div>
         <div class="collapse-close d-md-none">
@@ -42,7 +56,7 @@
         <li class="nav-item">
           <a href="/" class="nav-link d-flex justify-content-center">
             <span class="sidebar-icon">
-              <fa-icon icon="graduation-cap" height="20" width="20" alt="Volt Logo"/>
+              <fa-icon icon="graduation-cap" alt="Academy Logo" class="text-warning" />
               <!-- <img src="~assets/img/brand/light.svg" height="20" width="20" alt="Volt Logo" /> -->
             </span>
             <span class="mt-1 ms-1 sidebar-text">Academy</span>
@@ -61,7 +75,7 @@
               @click.native="closeSideNav()"
             >
               <span class="sidebar-icon">
-                <fa-icon :icon="item.icon" />
+                <fa-icon :icon="item.icon" class="icon icon-xs me-2" />
               </span>
               <span class="sidebar-text">{{ item.name }}</span>
             </nuxt-link>
@@ -75,7 +89,7 @@
               >
                 <span>
                   <span class="sidebar-icon">
-                    <fa-icon :icon="item.icon" />
+                    <fa-icon :icon="item.icon" class="icon icon-xs me-2" />
                   </span>
                   <span class="sidebar-text">{{ item.name }}</span>
                 </span>
@@ -103,7 +117,10 @@
 
 <script>
 export default {
-  mounted: async function() {},
+  data() {
+    return {};
+  },
+  mounted: async function () {},
   methods: {
     isActive(url) {
       if (this.$route.path === url) {
@@ -122,6 +139,10 @@ export default {
       if (el && el.classList.contains("show")) {
         el.classList.remove("show");
       }
+    },
+    async signOut() {
+      this.$auth.logout();
+      this.$router.push("/auth/signin");
     }
   }
 };

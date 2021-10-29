@@ -1,14 +1,13 @@
 <template>
-  <div>
-    <!-- Page Content-->
-    <div class="px-4 px-lg-5">
-      <!-- Heading Row-->
+  <!-- Page Content-->
+  <div id="homepage" class="px-4 px-lg-5">
+    <!-- Heading Row-->
+    <div id="intro">
       <div class="row gx-4 gx-lg-5 align-items-center my-5">
         <div class="col-lg-7">
           <img
             class="img-fluid rounded mb-4 mb-lg-0"
             src="https://dummyimage.com/900x400/dee2e6/6c757d.jpg"
-            alt="..."
           />
         </div>
         <div class="col-lg-5">
@@ -17,104 +16,65 @@
           <a class="btn btn-primary" href="#">Get Started!</a>
         </div>
       </div>
-      <!-- Call to Action-->
-      <div class="section-heading wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
-        <h6>Our Services</h6>
-        <h4>What Our Agency Provides</h4>
-      </div>
-      <div class="card text-white bg-secondary my-2 py-1 text-center">
-        <div class="card-body">
-          <p class="text-white m-0">Khóa học cơ bản</p>
-        </div>
+    </div>
+    <div id="content">
+      <div class="d-grid gap-3 my-2 py-1">
+        <div class="p-2 bg-secondary text-center rounded border">Khóa học cơ bản</div>
       </div>
       <!-- Content Row-->
-      <div class="row gx-4 gx-lg-5">
-        <div class="col-md-4 mb-5">
+      <div class="row g-4">
+        <div class="col-sm-3" v-for="item in courses" :key="item.key">
           <div class="card h-100">
+            <img src="https://dummyimage.com/460x260/f0e37d/0011ff" class="card-img-top" />
             <div class="card-body">
-              <h2 class="card-title">Card One</h2>
-              <p
-                class="card-text"
-              >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem magni quas ex numquam, maxime minus quam molestias corporis quod, ea minima accusamus.</p>
-            </div>
-            <div class="card-footer">
-              <a class="btn btn-primary btn-sm" href="#!">More Info</a>
+              <h5 class="card-title card-name">{{ item.title }}</h5>
+              <p class="card-text">
+                <fa-icon icon="users" /> 84.890
+              </p>
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-5">
-          <div class="card h-100">
-            <div class="card-body">
-              <h2 class="card-title">Card Two</h2>
-              <p
-                class="card-text"
-              >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod tenetur ex natus at dolorem enim! Nesciunt pariatur voluptatem sunt quam eaque, vel, non in id dolore voluptates quos eligendi labore.</p>
-            </div>
-            <div class="card-footer">
-              <a class="btn btn-primary btn-sm" href="#!">More Info</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-5">
-          <div class="card h-100">
-            <div class="card-body">
-              <h2 class="card-title">Card Three</h2>
-              <p
-                class="card-text"
-              >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem magni quas ex numquam, maxime minus quam molestias corporis quod, ea minima accusamus.</p>
-            </div>
-            <div class="card-footer">
-              <a class="btn btn-primary btn-sm" href="#!">More Info</a>
-            </div>
-          </div>
-        </div>
-        <div class="card text-white bg-secondary my-5 py-4 text-center">
-          <div class="card-body">
-            <p
-              class="text-white m-0"
-            >This call to action card is a great place to showcase some important information or display a clever tagline!</p>
-          </div>
-        </div>
-        <div class="col-md-4 mb-5">
-          <div class="card h-100">
-            <div class="card-body">
-              <h2 class="card-title">Card Three</h2>
-              <p
-                class="card-text"
-              >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem magni quas ex numquam, maxime minus quam molestias corporis quod, ea minima accusamus.</p>
-            </div>
-            <div class="card-footer">
-              <a class="btn btn-primary btn-sm" href="#!">More Info</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-5">
-          <div class="card h-100">
-            <div class="card-body">
-              <h2 class="card-title">Card Three</h2>
-              <p
-                class="card-text"
-              >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem magni quas ex numquam, maxime minus quam molestias corporis quod, ea minima accusamus.</p>
-            </div>
-            <div class="card-footer">
-              <a class="btn btn-primary btn-sm" href="#!">More Info</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-5">
-          <div class="card h-100">
-            <div class="card-body">
-              <h2 class="card-title">Card Three</h2>
-              <p
-                class="card-text"
-              >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem magni quas ex numquam, maxime minus quam molestias corporis quod, ea minima accusamus.</p>
-            </div>
-            <div class="card-footer">
-              <a class="btn btn-primary btn-sm" href="#!">More Info</a>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  auth: false,
+  head() {
+    return {
+      title: "Trang chủ | Academy"
+    };
+  },
+  data() {
+    return {
+      courses: [{
+        id: null,
+        lecturerId: null,
+        categoryId: null,
+        createAt: null,
+        title: null
+      }]
+    }
+  },
+  mounted: async function () {
+    await this.getCourses();
+    console.log(this.courses)
+  },
+  methods: {
+    async getCourses() {
+      try {
+        let courses = await this.$axios.get("/api/course");
+        if (courses.status === 200) {
+          this.courses = courses.data.listCourse;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      
+    }
+  }
+};
+</script>

@@ -150,8 +150,6 @@
                   </div>
                 </div>
               </div>
-              
-              <div class="alert alert-danger" role="alert" v-if="alert.data">{{ alert.data }}</div>
 
               <div class="d-grid">
                 <button type="submit" class="btn btn-gray-800">Sign up</button>
@@ -189,47 +187,63 @@ export default {
         password: null,
         confirmPassword: null,
         terms: false
-      },
-      alert: {
-        data: null
       }
     };
   },
-  mounted: async function() {},
+  mounted: async function () { },
   methods: {
     async signUp() {
       if (this.user.terms === false) {
-        return await this.showAlert("Bạn không chấp nhận điều khoản và điều kiện của chúng tôi!");
+        return this.$toast.error(
+          "Bạn không chấp nhận điều khoản và điều kiện của chúng tôi!",
+          {
+            duration: 5000
+          }
+        );
       }
       if (this.user.password !== this.user.confirmPassword) {
-        return await this.showAlert("Hai mật bạn đã nhập không không khớp!");
+        return this.$toast.error("Hai mật bạn đã nhập không không khớp!", {
+          duration: 5000
+        });
       }
       if (this.user.password.length < 8) {
-        return await this.showAlert("Mật khẩu cần lớn hơn 8 ký tự!");
+        return this.$toast.error("Mật khẩu cần lớn hơn 8 ký tự!", {
+          duration: 5000
+        });
       }
       try {
-        let result = await this.$axios.post("/api/auth/register", this.user);
+        let result = await this.$axios.post("/api/user/register", this.user);
         if (result.status === 200) {
-          //Register successful => set token to nuxtjs/auth to login
+          //Register successful => login
           try {
-            await this.$auth.setStrategy('local');
-            await this.$auth.setUserToken(result.data.accessToken, result.data.refreshToken);
+            let data = {
+              email: this.user.email,
+              password: this.user.password
+            };
+            let response = await this.$auth.loginWith("local", {
+              data: data
+            });
+            this.$toast.success("Đăng ký tài thành công!", {
+              duration: 5000
+            });
             this.$router.push("/");
           } catch (e) {
-            await this.showAlert("Đăng ký tài khoản thất bại vui lòng liên hệ quản trị viên để biết thêm chi tiết!");
+            this.$toast.error(
+              "Đăng ký tài khoản thất bại vui lòng liên hệ quản trị viên để biết thêm chi tiết!",
+              {
+                duration: 5000
+              }
+            );
           }
         }
       } catch (e) {
+        if (e.response) {
           let message = e.response.data.message;
-          await this.showAlert(message);
+          this.$toast.error(message, {
+            duration: 5000
+          });
+        }
       }
-      
-    },
-    async showAlert(data) {
-      this.alert.data = data;
-      setTimeout(() => {
-        this.alert.data = null;
-      }, 3000);
     }
   }
 };

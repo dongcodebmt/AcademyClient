@@ -74,14 +74,12 @@
                       id="remember"
                     />
                     <label class="form-check-label mb-0" for="remember">Remember me</label>
-                  </div> -->
+                  </div>-->
                   <div>
                     <nuxt-link to="/auth/forgot-password" class="small text-right">Lost password?</nuxt-link>
                   </div>
                 </div>
               </div>
-
-              <div class="alert alert-danger" role="alert" v-if="alert.data">{{ alert.data }}</div>
 
               <div class="d-grid">
                 <button type="submit" class="btn btn-gray-800">Sign in</button>
@@ -114,30 +112,28 @@ export default {
       account: {
         email: null,
         password: null
-      },
-      alert: {
-        data: null
       }
     };
   },
-  mounted: async function() {},
+  mounted: async function () { },
   methods: {
     async signIn() {
       try {
         let response = await this.$auth.loginWith("local", {
           data: this.account
         });
-        this.$router.push("/");
+        this.$toast.success("Đăng nhập thành công!", {
+          duration: 5000
+        });
       } catch (e) {
-        let message = e.response.data.message;
-        await this.showAlert(message);
+        console.log(e);
+        if (e.response) {
+          let message = e.response.data.message;
+          this.$toast.error(message, {
+            duration: 5000
+          });
+        }
       }
-    },
-    async showAlert(data) {
-      this.alert.data = data;
-      setTimeout(() => {
-        this.alert.data = null;
-      }, 3000);
     }
   }
 };

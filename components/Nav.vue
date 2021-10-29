@@ -1,8 +1,9 @@
 <template>
   <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <a class="navbar-brand me-lg-5" href="/">
-      <img class="navbar-brand-dark" src="~assets/img/brand/light.svg" alt="Volt logo" />
-      <img class="navbar-brand-light" src="~assets/img/brand/dark.svg" alt="Volt logo" />
+      <!-- <img class="navbar-brand-dark" src="~assets/img/brand/light.svg" alt="Volt logo" />
+      <img class="navbar-brand-light" src="~assets/img/brand/dark.svg" alt="Volt logo" /> -->
+      <fa-icon icon="graduation-cap" alt="Academy Logo" class="text-warning" style="font-size: 40px;"/>
     </a>
     <div class="d-flex align-items-center">
       <button

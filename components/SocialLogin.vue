@@ -29,7 +29,7 @@
         title="github button"
       >
         <fa-icon class="icon icon-xxs" :icon="['fab', 'github']" />
-      </a> -->
+      </a>-->
     </div>
   </div>
 </template>

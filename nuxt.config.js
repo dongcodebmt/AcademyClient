@@ -38,7 +38,8 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '~/assets/scss/volt.scss'
+    '~/assets/scss/volt.scss',
+    '~/assets/css/custom.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -80,17 +81,24 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/toast',
     '@nuxtjs/proxy',
     '@nuxtjs/auth-next',
     '@nuxtjs/component-cache',
     'nuxt-lazy-load'
   ],
 
+  toast: {
+    position: 'top-right',
+    theme: "outline" 
+  },
+
   auth: {
+    //Custom login with google, facebook
     plugins: ['~/plugins/auth.js'],
     redirect: {
       login: '/auth/signin',
-      logout: '/auth/signout',
+      logout: '/',
       callback: '/auth/callback',
       home: '/'
     },
@@ -106,10 +114,14 @@ export default {
           property: 'refreshToken',
           data: 'refreshToken',
         },
+        user: {
+          property: false,
+          autoFetch: true
+        },
         endpoints: {
           login: { url: '/api/auth/token', method: 'post' },
           refresh: { url: '/api/auth/refresh', method: 'post' },
-          user: false,
+          user: { url: '/api/user/me', method: 'get' },
           logout: false
         }
       },
