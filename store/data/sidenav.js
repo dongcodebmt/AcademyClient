@@ -6,7 +6,7 @@ export default [
     },
     {
         "name": "Khóa học",
-        "url": "/course",
+        "url": "/courses",
         "icon": "book"
     },
     {

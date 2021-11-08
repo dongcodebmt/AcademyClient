@@ -46,7 +46,10 @@ export default {
   plugins: [
     { src: '~/plugins/core.js', ssr: false },
     { src: '~/plugins/bootstrap.js', ssr: false },
-    { src: '~/plugins/volt.js', ssr: false }
+    { src: '~/plugins/volt.js', ssr: false },
+    { src: '~/plugins/tinymce.js', ssr: false },
+    { src: '~/plugins/draggable.js', ssr: false },
+    { src: '~/plugins/prism.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

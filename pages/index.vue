@@ -25,7 +25,7 @@
       <div class="row g-4">
         <div class="col-sm-3" v-for="item in courses" :key="item.key">
           <div class="card h-100">
-            <img src="https://dummyimage.com/460x260/f0e37d/0011ff" class="card-img-top" />
+            <img :src="item.picturePath" class="card-img-top" />
             <div class="card-body">
               <h5 class="card-title card-name">{{ item.title }}</h5>
               <p class="card-text">
@@ -34,7 +34,22 @@
             </div>
           </div>
         </div>
-
+      </div>
+      <div class="d-grid gap-3 my-2 py-1">
+        <div class="p-2 bg-secondary text-center rounded border">Bài viết nổi bật</div>
+      </div>
+      <div class="row g-4">
+        <div class="col-sm-3" v-for="item in courses" :key="item.key">
+          <div class="card h-100">
+            <img :src="item.picturePath" class="card-img-top" />
+            <div class="card-body">
+              <h5 class="card-title card-name">{{ item.title }}</h5>
+              <p class="card-text">
+                <fa-icon icon="users" /> 84.890
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -55,7 +70,8 @@ export default {
         lecturerId: null,
         categoryId: null,
         createAt: null,
-        title: null
+        title: null,
+        picturePath: null
       }]
     }
   },
@@ -68,7 +84,7 @@ export default {
       try {
         let courses = await this.$axios.get("/api/course");
         if (courses.status === 200) {
-          this.courses = courses.data.listCourse;
+          this.courses = courses.data.courses;
         }
       } catch (e) {
         console.log(e);
