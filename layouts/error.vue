@@ -12,18 +12,16 @@
                 alt="404 not found"
               />
               <h1 class="mt-5">
-                Page not
-                <span class="fw-bolder text-primary">found</span>
+                <span class="fw-bolder text-primary">Không tìm thấy trang</span>
               </h1>
               <p class="lead my-4">
-                Oops! Looks like you followed a bad link. If you think this is a
-                problem with us, please tell us.
+                Oops! Có vẻ như bạn đã bấm vào một liên kết không hợp lệ. Nếu bạn nghĩ rằng đây là lỗi của chúng chúng tôi, vui lòng cho chúng tôi biết.
               </p>
               <nuxt-link
                 to="/"
                 class="btn btn-gray-800 d-inline-flex align-items-center justify-content-center mb-4"
               >
-                <fa-icon icon="long-arrow-alt-left" />&nbsp;Back to homepage
+                <fa-icon icon="long-arrow-alt-left" />&nbsp;Quay về trang chủ
               </nuxt-link>
             </div>
           </div>
@@ -34,17 +32,16 @@
         <div class="row align-items-center" v-else>
           <div class="col-12 col-lg-5 order-2 order-lg-1 text-center text-lg-left">
             <h1 class="mt-5">
-              Something has gone
-              <span class="text-primary">seriously</span> wrong
+              <span class="text-primary">Đã xảy ra sự cố nghiêm trọng</span>
             </h1>
             <p
               class="lead my-4"
-            >It's always time for a coffee break. We should be back by the time you finish your coffee.</p>
+            >Đây là lúc để nghỉ giải lao. Chúng tôi sẽ quay lại khi bạn uống xong một tách cà phê.</p>
             <nuxt-link
               to="/"
               class="btn btn-gray-800 d-inline-flex align-items-center justify-content-center mb-4"
             >
-              <fa-icon icon="long-arrow-alt-left" />&nbsp;Back to homepage
+              <fa-icon icon="long-arrow-alt-left" />&nbsp;Quay về trang chủ
             </nuxt-link>
           </div>
           <div

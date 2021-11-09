@@ -4,100 +4,64 @@
       <div class="card card-body border-0 shadow mb-4">
         <div class="row">
           <div class="col-lg-8">
-            <h4 class="card-title">{{ title }}</h4>
-            <p class="card-text">{{ content }}</p>
+            <h3 class="card-title">{{ course.title }}</h3>
+            <div class="card-text" v-html="course.description"></div>
             <h5 class="card-title">Bạn sẽ học được những gì?</h5>
-            <ul class="row card-text list-unstyled">
-              <li class="col-lg-6">Row1</li>
-              <li class="col-lg-6">Row2</li>
-              <li class="col-lg-6">Row3</li>
-              <li class="col-lg-6">Row4</li>
-              <li class="col-lg-6">Row5</li>
+            <ul class="row card-text">
+              <li class="col-lg-6" v-for="item in willLearns" :key="item.id">{{ item.content }}</li>
+            </ul>
+            <h5 class="card-title">Những yêu cầu trước khi tham gia khóa học</h5>
+            <ul class="row card-text">
+              <li class="col-lg-6" v-for="item in requirements" :key="item.id">{{ item.content }}</li>
             </ul>
             <h5 class="card-title">Nội dung khóa học</h5>
             <div class="accordion" id="curriculum">
-              <div class="accordion-item">
+              <div class="accordion-item" v-for="item in trackSteps" :key="item.id">
                 <h2 class="accordion-header">
                   <button
                     class="accordion-button collapsed"
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#collapse1"
-                  >Accordion Item #1</button>
+                    :data-bs-target="'#collapse' + item.id"
+                  >{{ item.title + ' - ' + item.steps.length + ' bài học' }}</button>
                 </h2>
-                <div id="collapse1" class="accordion-collapse collapse">
+                <div :id="'collapse' + item.id" class="accordion-collapse collapse">
                   <div class="accordion-body">
-                    <ul class="card-text list-unstyled">
-                      <li>1. Mô hình Client - Server</li>
-                      <li>1. Mô hình Client - Server</li>
-                      <li>1. Mô hình Client - Server</li>
-                      <li>1. Mô hình Client - Server</li>
-                      <li>1. Mô hình Client - Server</li>
+                    <ul class="row card-text">
+                      <li
+                        class="col-lg-12"
+                        v-for="i in item.steps"
+                        :key="i.id"
+                      >{{ i.title + ' - Thời lượng: ' + secToMin(i.duration) }}</li>
                     </ul>
                   </div>
                 </div>
               </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo"
-                  >Accordion Item #2</button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse">
-                  <div class="accordion-body">
-                    <li>1. Mô hình Client - Server</li>
-                    <li>1. Mô hình Client - Server</li>
-                    <li>1. Mô hình Client - Server</li>
-                    <li>1. Mô hình Client - Server</li>
-                    <li>1. Mô hình Client - Server</li>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapse3"
-                  >Accordion Item #2</button>
-                </h2>
-                <div id="collapse3" class="accordion-collapse collapse">
-                  <div class="accordion-body">
-                    <li>1. Mô hình Client - Server</li>
-                    <li>1. Mô hình Client - Server</li>
-                    <li>1. Mô hình Client - Server</li>
-                    <li>1. Mô hình Client - Server</li>
-                    <li>1. Mô hình Client - Server</li>
-                  </div>
-                </div>
-              </div>
             </div>
-            <h5 class="card-title">Những yêu cầu cần để tham gia khóa học</h5>
-            <ul class="row card-text list-unstyled">
-              <li class="col-lg-6">Row1</li>
-              <li class="col-lg-6">Row2</li>
-              <li class="col-lg-6">Row3</li>
-              <li class="col-lg-6">Row4</li>
-              <li class="col-lg-6">Row5</li>
-            </ul>
           </div>
 
           <div class="col-lg-4 position-relative">
-            <div class="position-absolute top-50 start-50 translate-middle">
-              <p>
-                <fa-icon icon="layer-group" />&nbsp;Trình độ cơ bản
-              </p>
-              <p>
-                <fa-icon icon="plus-square" />&nbsp;Tổng số 8 bài học
-              </p>
-              <p>
-                <fa-icon icon="clock" />&nbsp;Thời lượng 02 giờ 15 phút
-              </p>
-              <a class="btn btn-outline-danger" href="#" role="button">Đăng ký khóa học</a>
+            <div class="mb-4">
+              <img
+                :src="[ course.picturePath && course.picturePath !== '/' ? course.picturePath : 'https://dummyimage.com/460x260/f0e37d/0011ff' ]"
+                class="card-img"
+              />
+            </div>
+            <div class="d-flex justify-content-center" id="info">
+              <ul class="list-group">
+                <a class="btn btn-outline-danger mb-4" href="#" role="button">Đăng ký khóa học</a>
+                <li class="list-group-item">
+                  <fa-icon icon="layer-group" />&nbsp;Trình độ cơ bản
+                </li>
+                <li class="list-group-item">
+                  <fa-icon icon="plus-square" />
+                  &nbsp;Tổng số {{ totalStep }} bài học
+                </li>
+                <li class="list-group-item">
+                  <fa-icon icon="clock" />
+                  &nbsp;Thời lượng {{ secToMin(totalDuration) }}
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -110,8 +74,93 @@
 export default {
   data() {
     return {
-      title: 'Javascript cơ bản',
-      content: 'Some quick example text to build on the card title and make up the bulk of the card\'s content.',
+      id: this.$route.query.id,
+      totalStep: 0,
+      totalDuration: 0,
+      course: {
+        id: 0,
+        lecturerId: 0,
+        categoryId: 0,
+        pictureId: 0,
+        createAt: null,
+        title: null,
+        description: null,
+        isDeleted: false,
+        picturePath: '/'
+      },
+      willLearns: [],
+      requirements: [],
+      trackSteps: []
+    }
+  },
+  mounted: async function () {
+    if (this.id) {
+      [this.course, this.trackSteps, this.willLearns, this.requirements] = await Promise.all(
+        [this.getCourse(this.id),
+        this.getTrackSteps(this.id),
+        this.getWillLearns(this.id),
+        this.getRequirements(this.id)
+      ]);
+      this.handleTotal();
+    } else {
+      this.$router.push("/courses");
+    }
+  },
+  methods: {
+    async handleTotal() {
+      this.trackSteps.forEach((el) => {
+        this.totalStep += el.steps.length;
+        el.steps.forEach((e) => {
+          this.totalDuration += e.duration;
+        });
+      });
+    },
+    secToMin(seconds) {
+      let format = val => `0${Math.floor(val)}`.slice(-2);
+      let hours = seconds / 3600;
+      let minutes = (seconds % 3600) / 60;
+
+      return [hours, minutes, seconds % 60].map(format).join(':');
+    },
+    async getTrackSteps(courseId) {
+      try {
+        let result = await this.$axios.get("api/Course/" + courseId + "/TrackSteps");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getRequirements(courseId) {
+      try {
+        let result = await this.$axios.get("/api/course/" + courseId + "/requirements");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getWillLearns(courseId) {
+      try {
+        let result = await this.$axios.get("/api/Course/" + courseId + "/WillLearns");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getCourse(id) {
+      try {
+        let result = await this.$axios.get("/api/Course/" + id);
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 }

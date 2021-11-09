@@ -84,9 +84,9 @@ export default {
     },
     async getSteps(trackId) {
       try {
-        let result = await this.$axios.get("/api/track/" + trackId + "/tracksteps");
+        let result = await this.$axios.get("/api/track/" + trackId + "/steps");
         if (result.status === 200) {
-          return result.data.list;
+          return result.data;
         }
       } catch (e) {
         console.log(e);

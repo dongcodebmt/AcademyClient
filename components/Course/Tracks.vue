@@ -126,7 +126,7 @@ export default {
       try {
         let result = await this.$axios.get("/api/course/" + courseId + "/tracks");
         if (result.status === 200) {
-          return await this.addFlag(result.data.list);
+          return await this.addFlag(result.data);
         }
       } catch (e) {
         console.log(e);
