@@ -4,11 +4,11 @@
       <div class="col-lg-12">
         <div class="card card-body border-0 shadow mb-4">
           <div class="mb-3">
-            <label class="form-label">Danh sách các khóa học</label>
+            <label class="form-label">Danh sách các tài khoản người dùng</label>
             <div class="table-responsive">
               <vue-good-table
                 :columns="columns"
-                :rows="courses"
+                :rows="users"
                 :search-options="{
                   enabled: true,
                   placeholder: 'Tìm kiếm',
@@ -25,18 +25,19 @@
                 }"
               >
                 <template slot="table-row" slot-scope="props">
+                  <span v-if="props.column.field == 'picturePath'">
+                    <img
+                      class="rounded avatar-md"
+                      style="object-fit: cover;"
+                      :src="[ props.row.picture && props.row.picture !== '/' ? props.row.picture : require('@/assets/img/team/blank-profile.png') ]"
+                    />
+                  </span>
                   <span v-if="props.column.field == 'actions'">
                     <nuxt-link
                       class="btn btn-outline-primary btn-sm"
-                      :to="'/admin/course/edit?id=' + props.row.id"
+                      :to="'/admin/user/edit?id=' + props.row.id"
                     >
                       <fa-icon icon="edit" />
-                    </nuxt-link>
-                    <nuxt-link
-                      class="btn btn-outline-danger btn-sm"
-                      :to="'/admin/course/edit?id=' + props.row.id"
-                    >
-                      <fa-icon icon="trash-alt" />
                     </nuxt-link>
                   </span>
                   <span v-else>{{props.formattedRow[props.column.field]}}</span>
@@ -56,35 +57,30 @@ export default {
     return {
       columns: [
         { label: '#', field: 'id' },
-        { label: 'Tên khóa học', field: 'title' },
-        { label: 'categoryId', field: 'categoryId' },
-        {
-          label: 'Ngày tạo', field: 'createdAt', formatFn: function (value) {
-            return value != null ? new Date(value).toLocaleString() : null
-          }
-        },
+        { label: 'Ảnh đại diện', field: 'picturePath' },
+        { label: 'Email', field: 'email' },
+        { label: 'Họ', field: 'firstName' },
+        { label: 'Tên', field: 'lastName' },
+        { label: 'Quyền', field: 'scope' },
         { label: 'Thao tác', field: 'actions', sortable: false, }
       ],
-      courses: [{
+      users: [{
         id: 0,
-        lecturerId: 0,
-        categoryId: 0,
-        pictureId: 0,
-        createdAt: null,
-        title: null,
-        description: null,
-        isDeleted: false,
-        picturePath: null
+        email: null,
+        firstName: null,
+        lastName: null,
+        picture: null,
+        scope: []
       }],
     }
   },
   mounted: async function () {
-    this.courses = await this.getCourse();
+    this.users = await this.getUsers();
   },
   methods: {
-    async getCourse() {
+    async getUsers() {
       try {
-        let result = await this.$axios.get("/api/Course");
+        let result = await this.$axios.get("/api/user/getall");
         if (result.status === 200) {
           return result.data;
         }

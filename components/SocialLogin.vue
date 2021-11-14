@@ -1,8 +1,5 @@
 <template>
   <div id="social-login">
-    <div class="mt-3 mb-4 text-center">
-      <span class="fw-normal">or login with</span>
-    </div>
     <div class="d-flex justify-content-center my-4">
       <a
         v-on:click="google()"

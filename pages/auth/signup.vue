@@ -3,7 +3,7 @@
     <div class="container">
       <p class="text-center">
         <nuxt-link to="/" class="d-flex align-items-center justify-content-center">
-          <fa-icon icon="long-arrow-alt-left" />&nbsp; Back to homepage
+          <fa-icon icon="long-arrow-alt-left" />&nbsp; Quay về trang chủ
         </nuxt-link>
       </p>
       <div
@@ -16,12 +16,12 @@
         <div class="col-12 d-flex align-items-center justify-content-center">
           <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500">
             <div class="text-center text-md-center mb-4 mt-md-0">
-              <h1 class="mb-0 h3">Create Account</h1>
+              <h1 class="mb-0 h3">Tạo tài khoản</h1>
             </div>
             <form class="mt-4" v-on:submit.prevent="signUp()">
               <!-- Form -->
               <div class="form-group mb-2">
-                <label for="firstname">First Name</label>
+                <label for="firstname">Họ</label>
                 <div class="input-group">
                   <span class="input-group-text" id="basic-addon1">
                     <fa-icon
@@ -34,7 +34,7 @@
                     v-model="user.firstName"
                     type="text"
                     class="form-control"
-                    placeholder="First Name"
+                    placeholder="Họ"
                     id="firstname"
                     autofocus
                     required
@@ -44,7 +44,7 @@
               <!-- End of Form -->
               <!-- Form -->
               <div class="form-group mb-2">
-                <label for="lastname">Last Name</label>
+                <label for="lastname">Tên</label>
                 <div class="input-group">
                   <span class="input-group-text" id="basic-addon1">
                     <fa-icon
@@ -57,7 +57,7 @@
                     v-model="user.lastName"
                     type="text"
                     class="form-control"
-                    placeholder="Last Name"
+                    placeholder="Tên"
                     id="lastname"
                     autofocus
                     required
@@ -67,7 +67,7 @@
               <!-- End of Form -->
               <!-- Form -->
               <div class="form-group mb-2">
-                <label for="email">Your Email</label>
+                <label for="email">Email</label>
                 <div class="input-group">
                   <span class="input-group-text" id="basic-addon1">
                     <fa-icon
@@ -91,7 +91,7 @@
               <div class="form-group">
                 <!-- Form -->
                 <div class="form-group mb-2">
-                  <label for="password">Your Password</label>
+                  <label for="password">Mật khẩu</label>
                   <div class="input-group">
                     <span class="input-group-text" id="basic-addon2">
                       <fa-icon
@@ -103,7 +103,7 @@
                     <input
                       v-model="user.password"
                       type="password"
-                      placeholder="Password"
+                      placeholder="Mật khẩu"
                       class="form-control"
                       id="password"
                       required
@@ -113,7 +113,7 @@
                 <!-- End of Form -->
                 <!-- Form -->
                 <div class="form-group mb-2">
-                  <label for="confirm_password">Confirm Password</label>
+                  <label for="confirm_password">Xác nhận mật khẩu</label>
                   <div class="input-group">
                     <span class="input-group-text" id="basic-addon2">
                       <fa-icon
@@ -125,7 +125,7 @@
                     <input
                       v-model="user.confirmPassword"
                       type="password"
-                      placeholder="Confirm Password"
+                      placeholder="Xác nhận mật khẩu"
                       class="form-control"
                       id="confirm_password"
                       required
@@ -140,26 +140,26 @@
                       class="form-check-input"
                       type="checkbox"
                       value
-                      id="remember"
+                      id="terms"
                       required
                     />
-                    <label class="form-check-label fw-normal mb-0" for="remember">
-                      I agree to the
-                      <a href="#" class="fw-bold">terms and conditions</a>
+                    <label class="form-check-label fw-normal mb-0" for="terms">
+                      Tôi đồng ý với
+                      <a href="#" class="fw-bold">các điều khoản và điều kiện</a>
                     </label>
                   </div>
                 </div>
               </div>
 
               <div class="d-grid">
-                <button type="submit" class="btn btn-gray-800">Sign up</button>
+                <button type="submit" class="btn btn-gray-800">Đăng ký</button>
               </div>
             </form>
             <SocialLogin></SocialLogin>
             <div class="d-flex justify-content-center align-items-center mt-4">
               <span class="fw-normal">
-                Already have an account?
-                <nuxt-link to="/auth/signin" class="fw-bold">Login here</nuxt-link>
+                Đã có tài khoản?
+                <nuxt-link to="/auth/signin" class="fw-bold">Đăng nhập ở đây</nuxt-link>
               </span>
             </div>
           </div>

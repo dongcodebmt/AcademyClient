@@ -25,7 +25,9 @@
             </div>
 
             <div id="not-logged" v-else>
-              <h2 class="h5 mb-3">Hi, {{ this.$auth.user.firstName + " " + this.$auth.user.lastName }}</h2>
+              <h2
+                class="h5 mb-3"
+              >Hi, {{ this.$auth.user.firstName + " " + this.$auth.user.lastName }}</h2>
               <a
                 v-on:click="signOut()"
                 v-if="this.$auth.loggedIn"
@@ -99,7 +101,7 @@
               </span>
               <div class="multi-level collapse" role="list" :id="item.id">
                 <ul class="flex-column nav" v-for="sub in item.submenu" :key="sub.key">
-                  <li class="nav-item">
+                  <li class="nav-item" :class="{ active: isActive(sub.url) }">
                     <nuxt-link class="nav-link" :to="sub.url" @click.native="closeSideNav()">
                       <span class="sidebar-text">{{ sub.name }}</span>
                     </nuxt-link>
@@ -120,7 +122,8 @@ export default {
   data() {
     return {};
   },
-  mounted: async function () {},
+  mounted: async function () {
+  },
   methods: {
     isActive(url) {
       if (this.$route.path === url) {

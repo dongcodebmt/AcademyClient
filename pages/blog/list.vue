@@ -1,204 +1,136 @@
 <template>
-  <div id="listPosts">
-    <header class="py-4 bg-light border-bottom mb-3">
-      <div>
-        <div class="text-center my-3">
-          <h1 class="fw-bolder">Welcome to AcademyStudy Blog!</h1>
-          <p class="lead mb-2">Learn to change yourself</p>
+  <div id="blogs">
+    <div class="row py-4">
+      <!-- Blog entries-->
+      <div class="col-lg-8">
+        <!-- Nested row for non-featured blog posts-->
+        <div class="row g-4 mb-4">
+          <div class="col-sm-3" v-for="item in blogs" :key="item.key">
+            <nuxt-link :to="'/blog/view?id=' + item.id">
+              <div class="card h-100">
+                <img
+                  :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : 'https://dummyimage.com/460x260/f0e37d/0011ff' ]"
+                  class="card-img-top"
+                />
+                <div class="card-body">
+                  <h5 class="card-title card-name">{{ item.title }}</h5>
+                </div>
+              </div>
+            </nuxt-link>
+          </div>
         </div>
+
+        <!-- Pagination-->
+        <!-- <nav aria-label="Pagination">
+          <hr class="my-0" />
+          <ul class="pagination justify-content-center my-4">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a>
+            </li>
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" href="#!">1</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#!">2</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#!">3</a>
+            </li>
+            <li class="page-item disabled">
+              <a class="page-link" href="#!">...</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#!">15</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#!">Older</a>
+            </li>
+          </ul>
+        </nav> -->
       </div>
-    </header>
-    <!-- Page content-->
-    <div>
-      <div class="row">
-        <!-- Blog entries-->
-        <div class="col-lg-8">
-          <!-- Featured blog post-->
-          <div class="card mb-4">
-            <a href="#!">
-              <img
-                class="card-img-top"
-                src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg"
-                alt="..."
+      <!-- Side widgets-->
+      <div class="col-lg-4">
+        <!-- Search widget-->
+        <div class="card mb-4">
+          <div class="card-header">Tìm kiếm</div>
+          <div class="card-body">
+            <div class="input-group">
+              <input
+                class="form-control"
+                type="text"
+                placeholder="Bạn muốn tìm gì?"
+                aria-label="Bạn muốn tìm gì?"
+                aria-describedby="button-search"
               />
-            </a>
-            <div class="card-body">
-              <div class="small text-muted">January 1, 2021</div>
-              <h2 class="card-title">Featured Post Title</h2>
-              <p
-                class="card-text"
-              >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-              <a class="btn btn-primary" href="#!">Read more →</a>
+              <button class="btn btn-primary" id="button-search" type="button">
+                <fa-icon icon="search" />
+              </button>
             </div>
           </div>
-          <!-- Nested row for non-featured blog posts-->
-          <div class="row">
-            <div class="col-lg-6">
-              <!-- Blog post-->
-              <div class="card mb-4">
-                <a href="#!">
-                  <img
-                    class="card-img-top"
-                    src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg"
-                    alt="..."
-                  />
-                </a>
-                <div class="card-body">
-                  <div class="small text-muted">January 1, 2021</div>
-                  <h2 class="card-title h4">Post Title</h2>
-                  <p
-                    class="card-text"
-                  >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                  <a class="btn btn-primary" href="#!">Read more →</a>
-                </div>
-              </div>
-              <!-- Blog post-->
-              <div class="card mb-4">
-                <a href="#!">
-                  <img
-                    class="card-img-top"
-                    src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg"
-                    alt="..."
-                  />
-                </a>
-                <div class="card-body">
-                  <div class="small text-muted">January 1, 2021</div>
-                  <h2 class="card-title h4">Post Title</h2>
-                  <p
-                    class="card-text"
-                  >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                  <a class="btn btn-primary" href="#!">Read more →</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <!-- Blog post-->
-              <div class="card mb-4">
-                <a href="#!">
-                  <img
-                    class="card-img-top"
-                    src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg"
-                    alt="..."
-                  />
-                </a>
-                <div class="card-body">
-                  <div class="small text-muted">January 1, 2021</div>
-                  <h2 class="card-title h4">Post Title</h2>
-                  <p
-                    class="card-text"
-                  >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                  <a class="btn btn-primary" href="#!">Read more →</a>
-                </div>
-              </div>
-              <!-- Blog post-->
-              <div class="card mb-4">
-                <a href="#!">
-                  <img
-                    class="card-img-top"
-                    src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg"
-                    alt="..."
-                  />
-                </a>
-                <div class="card-body">
-                  <div class="small text-muted">January 1, 2021</div>
-                  <h2 class="card-title h4">Post Title</h2>
-                  <p
-                    class="card-text"
-                  >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam.</p>
-                  <a class="btn btn-primary" href="#!">Read more →</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Pagination-->
-          <nav aria-label="Pagination">
-            <hr class="my-0" />
-            <ul class="pagination justify-content-center my-4">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a>
-              </li>
-              <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#!">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#!">2</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#!">3</a>
-              </li>
-              <li class="page-item disabled">
-                <a class="page-link" href="#!">...</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#!">15</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#!">Older</a>
+        </div>
+        <!-- Categories widget-->
+        <div class="card mb-4">
+          <div class="card-header">Blog theo danh mục</div>
+          <div class="card-body">
+            <ul class="row list-unstyled mb-0">
+              <li class="col-lg-6" v-for="item in categories" :key="item.id">
+                <a href="#!">{{ item.name }}</a>
               </li>
             </ul>
-          </nav>
-        </div>
-        <!-- Side widgets-->
-        <div class="col-lg-4">
-          <!-- Search widget-->
-          <div class="card mb-4">
-            <div class="card-header">Search</div>
-            <div class="card-body">
-              <div class="input-group">
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="Enter search term..."
-                  aria-label="Enter search term..."
-                  aria-describedby="button-search"
-                />
-                <button class="btn btn-primary" id="button-search" type="button">Go!</button>
-              </div>
-            </div>
-          </div>
-          <!-- Categories widget-->
-          <div class="card mb-4">
-            <div class="card-header">Categories</div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#!">Web Design</a>
-                    </li>
-                    <li>
-                      <a href="#!">HTML</a>
-                    </li>
-                    <li>
-                      <a href="#!">Freebies</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-sm-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#!">JavaScript</a>
-                    </li>
-                    <li>
-                      <a href="#!">CSS</a>
-                    </li>
-                    <li>
-                      <a href="#!">Tutorials</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Side widget-->
-          <div class="card mb-4">
-            <div class="card-header">Side Widget</div>
-            <div
-              class="card-body"
-            >You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      categories: [{
+        id: 0,
+        name: null
+      }],
+      blogs: [
+        {
+          id: 0,
+          userId: 0,
+          categoryId: 0,
+          title: null,
+          content: null,
+          createAt: null,
+          isDeleted: true,
+          pictureId: 0,
+          picturePath: 0
+        }
+      ]
+    }
+  },
+  mounted: async function () {
+    [this.blogs, this.categories] = await Promise.all([this.getBlogPosts(), this.getCategories()]);
+  },
+  methods: {
+    async getBlogPosts() {
+      try {
+        let result = await this.$axios.get("/api/blog");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getCategories() {
+      try {
+        let result = await this.$axios.get("/api/category");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
+}
+</script>

@@ -28,10 +28,10 @@
         <div class="col-lg-6 mb-4">
           <div class="card card-body border-0 shadow h-100">
             <h2 class="h5 mb-4">Chọn danh mục</h2>
-            <select class="form-select" aria-label="Danh mục" v-model="categories.selected">
+            <select class="form-select" aria-label="Danh mục" v-model="course.categoryId">
               <option value="0" selected>Vui lòng chọn danh mục</option>
               <option
-                v-for="item in categories.list"
+                v-for="item in categories"
                 :value="item.id"
                 v-bind:key="item.id"
               >{{ item.name }}</option>
@@ -50,7 +50,7 @@
                   class="rounded avatar-xl"
                   alt="change avatar"
                   style="object-fit: cover;"
-                  src="@/assets/img/team/blank-profile.png"
+                  :src="[ course.picturePath && course.picturePath !== '/' ? course.picturePath : require('@/assets/img/team/blank-profile.png') ]"
                 />
               </div>
               <div class="file-field">
@@ -86,36 +86,43 @@ export default {
   props: ['courseId'],
   data() {
     return {
-      categories: {
-        selected: 0,
-        list: [{
-          id: null,
-          name: null
-        }]
-      },
-      pictureId: null,
+      categories: [{
+        id: null,
+        name: null
+      }],
+      file: null,
+      tempPic: null,
       course: {
+        lecturerId: this.$auth.user.id,
+        categoryId: 0,
+        pictureId: null,
         title: null,
-        description: null
+        description: null,
+        picturePath: null
       },
     }
   },
   mounted: async function () {
-    this.categories.list = await this.getCategories();
-    this.course = await this.getCourse(this.courseId);
-    this.categories.selected = this.course.categoryId;
+    if (this.courseId) {
+      this.categories = await this.getCategories();
+      this.course = await this.getCourse(this.courseId);
+      this.tempPic = this.course.picturePath;
+    }
   },
   methods: {
     async putCourse() {
-      let data = {
-        lecturerId: this.$auth.user.id,
-        categoryId: this.categories.selected,
-        pictureId: this.pictureId,
-        title: this.course.title,
-        description: this.course.description
+      if (this.course.categoryId === 0) {
+        this.$toast.error("Vui lòng chọn danh mục!", {
+          duration: 5000
+        });
+        return;
       }
       try {
-        let result = await this.$axios.put("/api/course/" + this.courseId, data);
+        if (this.tempPic !== this.course.picturePath) {
+          let picture = await this.uploadFile();
+          this.course.pictureId = picture.id;
+        }
+        let result = await this.$axios.put("/api/course/" + this.courseId, this.course);
         if (result.status === 200) {
           this.$toast.success("Sửa thông tin khóa học thành công!", {
             duration: 5000
@@ -129,7 +136,7 @@ export default {
       try {
         let result = await this.$axios.get("/api/category");
         if (result.status === 200) {
-          return result.data.categories;
+          return result.data;
         }
       } catch (e) {
         console.log(e);
@@ -144,7 +151,30 @@ export default {
       } catch (e) {
         console.log(e);
       }
-    }
+    },
+    async uploadFile() {
+      // Initialize the form data
+      let formData = new FormData();
+      formData.append('file', this.file);
+      try {
+        let result = await this.$axios.post("/api/picture/upload", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        this.$toast.error("Hình ảnh đã chọn không hợp lệ!", {
+          duration: 5000
+        });
+      }
+    },
+    handleFileUpload(event) {
+      this.file = event.target.files[0];
+      this.course.picturePath = URL.createObjectURL(this.file);
+    },
   }
 }
 </script>

@@ -77,7 +77,6 @@ export default {
   },
   mounted: async function () {
     await this.getCourses();
-    console.log(this.courses)
   },
   methods: {
     async getCourses() {
@@ -89,7 +88,6 @@ export default {
       } catch (e) {
         console.log(e);
       }
-      
     }
   }
 };

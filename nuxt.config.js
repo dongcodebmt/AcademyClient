@@ -49,6 +49,7 @@ export default {
     { src: '~/plugins/volt.js', ssr: false },
     { src: '~/plugins/tinymce.js', ssr: false },
     { src: '~/plugins/draggable.js', ssr: false },
+    { src: '~/plugins/goodTable.js', ssr: false },
     { src: '~/plugins/prism.js', ssr: false }
   ],
 

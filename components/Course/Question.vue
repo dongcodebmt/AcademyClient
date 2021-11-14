@@ -4,7 +4,7 @@
       <div class="mb-3">
         <div class="mb-3">
           <label class="form-label">Câu hỏi</label>
-          <tinymce :init="$store.state.tinymce" v-model="exam.question.content" />
+          <tinymce :init="$store.state.tinymce" v-model="questionFull.question.content" />
         </div>
 
         <div class="mb-3">
@@ -18,8 +18,8 @@
                   <th class="border-0 rounded-end">Thao tác</th>
                 </tr>
               </thead>
-              <draggable v-model="exam.options" tag="tbody">
-                <tr v-for="(item, index) in exam.options" :key="index">
+              <draggable v-model="questionFull.options" tag="tbody">
+                <tr v-for="(item, index) in questionFull.options" :key="index">
                   <td class="col-1">{{ index + 1 }}</td>
                   <td class="col-9">
                     <input type="text" class="form-control" v-model="item.content" />
@@ -44,17 +44,32 @@
           <label class="form-label">Đáp án đúng</label>
           <select class="form-select" aria-label="Danh mục" id="rightOption">
             <option
-              v-for="(item, index) in exam.options"
+              v-for="(item, index) in questionFull.options"
               :value="index"
               v-bind:key="index"
-              :selected="item.id === exam.rightOption.optionId"
+              :selected="item.id === questionFull.rightOption.optionId"
             >{{ '#' + (index + 1) + ': ' + item.content }}</option>
           </select>
         </div>
 
         <div class="d-flex justify-content-end mt-4">
-          <button type="button" class="btn btn-outline-primary mx-2" v-if="questionId" v-on:click="putQuestion()">Lưu</button>
-          <button type="button" class="btn btn-outline-primary mx-2" v-else v-on:click="postQuestion()">Lưu</button>
+          <button
+            type="button"
+            class="btn btn-outline-warning mx-2"
+            v-on:click="backToQuestions(examId)"
+          >Quay lại</button>
+          <button
+            type="button"
+            class="btn btn-outline-primary mx-2"
+            v-if="questionId"
+            v-on:click="putQuestion()"
+          >Lưu</button>
+          <button
+            type="button"
+            class="btn btn-outline-primary mx-2"
+            v-else
+            v-on:click="postQuestion()"
+          >Lưu</button>
         </div>
       </div>
     </div>
@@ -63,13 +78,13 @@
 
 <script>
 export default {
-  props: ['courseId', 'questionId'],
+  props: ['examId', 'questionId'],
   data() {
     return {
-      exam: {
+      questionFull: {
         question: {
           id: null,
-          courseId: this.courseId,
+          examId: this.examId,
           content: null
         },
         options: [],
@@ -82,21 +97,24 @@ export default {
   },
   mounted: async function () {
     if (this.questionId) {
-      this.exam = await this.getExamQuestion(this.questionId);
+      this.questionFull = await this.getQuestionFull(this.questionId);
     }
   },
   methods: {
+    async backToQuestions(id) {
+      this.$emit('back', id);
+    },
     async insertItem() {
-      this.exam.options.push({ questionId: this.questionId, content: null });
+      this.questionFull.options.push({ questionId: this.questionId, content: null });
     },
     async removeItem(index) {
-      this.exam.options.splice(index, 1);
+      this.questionFull.options.splice(index, 1);
     },
     async putQuestion() {
       try {
-        this.exam.rightOption.index = document.getElementById("rightOption").value;
-        let result = await this.$axios.put("/api/exam/" + this.questionId, this.exam);
-        if (result.data === 200) {
+        this.questionFull.rightOption.index = document.getElementById("rightOption").value;
+        let result = await this.$axios.put("/api/exam/" + this.questionId + "/question", this.questionFull);
+        if (result.status === 200) {
           this.$toast.success("Sửa câu hỏi thành công!", {
             duration: 5000
           });
@@ -107,9 +125,9 @@ export default {
     },
     async postQuestion() {
       try {
-        this.exam.rightOption.index = document.getElementById("rightOption").value;
-        let result = await this.$axios.post("/api/exam", this.exam);
-        if (result.data === 200) {
+        this.questionFull.rightOption.index = document.getElementById("rightOption").value;
+        let result = await this.$axios.post("/api/exam/" + this.examId + "/question", this.questionFull);
+        if (result.status === 200) {
           this.$toast.success("Thêm câu hỏi thành công!", {
             duration: 5000
           });
@@ -118,9 +136,9 @@ export default {
         console.log(e);
       }
     },
-    async getExamQuestion(id) {
+    async getQuestionFull(questionId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + id);
+        let result = await this.$axios.get("/api/exam/" + questionId + "/QuestionFull");
         if (result.status === 200) {
           return result.data;
         }

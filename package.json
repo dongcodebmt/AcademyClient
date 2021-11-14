@@ -16,15 +16,11 @@
     "@nuxtjs/proxy": "^2.1.0",
     "@nuxtjs/toast": "^3.3.1",
     "@tinymce/tinymce-vue": "^3",
-    "chartist": "^0.11.4",
-    "chartist-plugin-tooltips": "^0.0.17",
     "nuxt-lazy-load": "^1.2.7",
     "prismjs": "^1.25.0",
-    "simplebar": "^5.3.6",
     "smooth-scroll": "^16.1.3",
     "sweetalert2": "^11.1.7",
     "tinymce": "^5.10.0",
-    "vanillajs-datepicker": "^1.1.4",
     "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
@@ -36,6 +32,7 @@
     "core-js": "^3.15.1",
     "nuxt": "^2.15.8",
     "sass": "~1.32.13",
-    "sass-loader": "^10.1.1"
+    "sass-loader": "^10.1.1",
+    "vue-good-table": "^2.21.11"
   }
 }

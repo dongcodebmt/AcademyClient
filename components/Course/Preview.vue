@@ -1,5 +1,5 @@
 <template>
-  <div id="course">
+  <div id="preview">
     <div class="py-4">
       <div class="card card-body border-0 shadow mb-4">
         <div class="row">
@@ -49,10 +49,10 @@
             </div>
             <div class="d-flex justify-content-center" id="info">
               <ul class="list-group">
-                <a class="btn btn-outline-danger mb-4" href="#" role="button">Đăng ký khóa học</a>
-                <li class="list-group-item">
+                <a class="btn btn-outline-danger mb-4" role="button" v-on:click="courseRegister(id)">Đăng ký khóa học</a>
+                <!-- <li class="list-group-item">
                   <fa-icon icon="layer-group" />&nbsp;Trình độ cơ bản
-                </li>
+                </li> -->
                 <li class="list-group-item">
                   <fa-icon icon="plus-square" />
                   &nbsp;Tổng số {{ totalStep }} bài học
@@ -72,9 +72,9 @@
 
 <script>
 export default {
+  props: ['id'],
   data() {
     return {
-      id: this.$route.query.id,
       totalStep: 0,
       totalDuration: 0,
       course: {
@@ -100,7 +100,7 @@ export default {
         this.getTrackSteps(this.id),
         this.getWillLearns(this.id),
         this.getRequirements(this.id)
-      ]);
+        ]);
       this.handleTotal();
     } else {
       this.$router.push("/courses");
@@ -124,7 +124,7 @@ export default {
     },
     async getTrackSteps(courseId) {
       try {
-        let result = await this.$axios.get("api/Course/" + courseId + "/TrackSteps");
+        let result = await this.$axios.get("api/course/" + courseId + "/tracksteps");
         if (result.status === 200) {
           return result.data;
         }
@@ -157,6 +157,19 @@ export default {
         let result = await this.$axios.get("/api/Course/" + id);
         if (result.status === 200) {
           return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async courseRegister(id) {
+      try {
+        let result = await this.$axios.post("/api/Course/" + id + "/Register");
+        if (result.status === 200) {
+          this.$toast.success("Đăng ký khóa học thành công!", {
+            duration: 5000
+          });
+          this.$router.push("/course/learning?id=" + id);
         }
       } catch (e) {
         console.log(e);

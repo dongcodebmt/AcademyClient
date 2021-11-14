@@ -26,21 +26,25 @@
                 v-on:click="selected = 4"
               >Danh sách phần học</a>
               <a
-                class="list-group-item list-group-item-action disable"
+                class="list-group-item list-group-item-action disabled"
                 :class="{ active: selected === 5 }"
               >Danh sách bài học</a>
               <a
-                class="list-group-item list-group-item-action disable"
+                class="list-group-item list-group-item-action disabled"
                 :class="{ active: selected === 6 }"
               >Nội dung bài học</a>
               <a
-                class="list-group-item list-group-item-action disable"
+                class="list-group-item list-group-item-action"
                 :class="{ active: selected === 7 }"
                 v-on:click="selected = 7"
+              >Danh sách bài kiểm tra</a>
+              <a
+                class="list-group-item list-group-item-action disabled"
+                :class="{ active: selected === 8 }"
               >Danh sách câu hỏi</a>
               <a
-                class="list-group-item list-group-item-action disable"
-                :class="{ active: selected === 8 }"
+                class="list-group-item list-group-item-action disabled"
+                :class="{ active: selected === 9 }"
               >Nội dung câu hỏi</a>
             </div>
           </div>
@@ -80,18 +84,27 @@
       <!-- End step -->
       <!-- Exam list -->
       <div class="col-lg-9" v-if="selected === 7">
-        <Exams
-          v-bind:courseId="id"
-          v-on:create="openExam('create')"
-          v-on:edit="openExam('edit', $event)"
-        />
+        <Exams v-bind:courseId="id" v-on:open="openExam($event)" />
       </div>
       <!-- End exam list -->
-      <!-- Exam question -->
+      <!-- Questions list -->
       <div class="col-lg-9" v-if="selected === 8">
-        <Exam v-bind:courseId="id" v-bind:questionId="questionId" />
+        <Questions
+          v-bind:examId="examId"
+          v-on:create="openQuestion('create')"
+          v-on:edit="openQuestion('edit', $event)"
+        />
       </div>
-      <!-- End exam question -->
+      <!-- End questions list -->
+      <!-- Question -->
+      <div class="col-lg-9" v-if="selected === 9">
+        <Question
+          v-bind:examId="examId"
+          v-bind:questionId="questionId"
+          v-on:back="openExam($event)"
+        />
+      </div>
+      <!-- End question -->
     </div>
   </div>
 </template>
@@ -104,24 +117,33 @@ import Tracks from "~/components/Course/Tracks.vue"
 import Steps from "~/components/Course/Steps.vue"
 import Step from "~/components/Course/Step.vue"
 import Exams from "~/components/Course/Exams.vue"
-import Exam from "~/components/Course/Exam.vue"
+import Questions from "~/components/Course/Questions.vue"
+import Question from "~/components/Course/Question.vue"
 
 export default {
-  components: { Course, WillLearns, Requirements, Tracks, Steps, Step, Exams, Exam },
+  components: { Course, WillLearns, Requirements, Tracks, Steps, Step, Exams, Questions, Question },
   data() {
     return {
       selected: 1,
       id: this.$route.query.id,
       trackId: null,
       stepId: null,
+      examId: null,
       questionId: null,
     }
   },
   mounted: async function () {
+    if (!this.id) {
+      this.$router.push({ path: "/admin/course/list" });
+    }
   },
   methods: {
-    async openExam(type, questionId = 0) {
+    async openExam(examId) {
       this.selected = 8;
+      this.examId = examId;
+    },
+    async openQuestion(type, questionId = 0) {
+      this.selected = 9;
       this.questionId = null;
       if (type === 'edit') {
         this.questionId = questionId;

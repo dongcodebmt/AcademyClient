@@ -3,7 +3,7 @@
     <div class="container">
       <p class="text-center">
         <nuxt-link to="/" class="d-flex align-items-center justify-content-center">
-          <fa-icon icon="long-arrow-alt-left" />&nbsp; Back to homepage
+          <fa-icon icon="long-arrow-alt-left" />&nbsp; Quay về trang chủ
         </nuxt-link>
       </p>
       <div
@@ -16,12 +16,12 @@
         <div class="col-12 d-flex align-items-center justify-content-center">
           <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500">
             <div class="text-center text-md-center mb-4 mt-md-0">
-              <h1 class="mb-0 h3">Sign in to our platform</h1>
+              <h1 class="mb-0 h3">Đăng nhập vào hệ thống</h1>
             </div>
             <form class="mt-4" v-on:submit.prevent="signIn()">
               <!-- Form -->
               <div class="form-group mb-4">
-                <label for="email">Your Email</label>
+                <label for="email">Địa chỉ email</label>
                 <div class="input-group">
                   <span class="input-group-text" id="basic-addon1">
                     <fa-icon
@@ -45,7 +45,7 @@
               <div class="form-group">
                 <!-- Form -->
                 <div class="form-group mb-4">
-                  <label for="password">Your Password</label>
+                  <label for="password">Mật khẩu</label>
                   <div class="input-group">
                     <span class="input-group-text" id="basic-addon2">
                       <fa-icon
@@ -57,7 +57,7 @@
                     <input
                       v-model="account.password"
                       type="password"
-                      placeholder="Password"
+                      placeholder="Mật khẩu"
                       class="form-control"
                       id="password"
                       required
@@ -76,20 +76,23 @@
                     <label class="form-check-label mb-0" for="remember">Remember me</label>
                   </div>-->
                   <div>
-                    <nuxt-link to="/auth/forgot-password" class="small text-right">Lost password?</nuxt-link>
+                    <nuxt-link to="/auth/forgot-password" class="small text-right">Quên mật khẩu?</nuxt-link>
                   </div>
                 </div>
               </div>
 
               <div class="d-grid">
-                <button type="submit" class="btn btn-gray-800">Sign in</button>
+                <button type="submit" class="btn btn-gray-800">Đăng nhập</button>
               </div>
             </form>
+            <div class="mt-3 mb-4 text-center">
+              <span class="fw-normal">hoặc đăng nhập với</span>
+            </div>
             <SocialLogin></SocialLogin>
             <div class="d-flex justify-content-center align-items-center mt-4">
               <span class="fw-normal">
-                Not registered?
-                <nuxt-link to="/auth/signup" class="fw-bold">Create account</nuxt-link>
+                Chưa đăng ký?
+                <nuxt-link to="/auth/signup" class="fw-bold">Tạo tài khoản</nuxt-link>
               </span>
             </div>
           </div>

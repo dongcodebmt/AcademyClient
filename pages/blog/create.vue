@@ -5,18 +5,13 @@
         <div class="card card-body border-0 shadow mb-4">
           <div class="mb-3">
             <label for="title" class="form-label">Tiêu đề</label>
-            <input type="text" class="form-control" id="title" placeholder="Title" />
+            <input type="text" class="form-control" id="title" placeholder="Title" v-model="title" />
           </div>
           <div class="mb-3">
             <label class="form-label">Bạn muốn hỏi gì?</label>
             <client-only>
-              <tinymce
-              v-model="content"
-              :init="$store.state.tinymce"
-            />
+              <tinymce v-model="content" :init="$store.state.tinymce" />
             </client-only>
-          </div>
-          <div class="mb-3" v-html="content">
           </div>
         </div>
       </div>
@@ -25,11 +20,13 @@
           <div class="col-12">
             <div class="card card-body border-0 shadow mb-4">
               <h2 class="h5 mb-4">Chọn danh mục</h2>
-              <select class="form-select" aria-label="Danh mục">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+              <select class="form-select" aria-label="Danh mục" v-model="categories.selected">
+                <option value="0" selected>Vui lòng chọn danh mục</option>
+                <option
+                  v-for="item in categories.list"
+                  :value="item.id"
+                  v-bind:key="item.id"
+                >{{ item.name }}</option>
               </select>
             </div>
           </div>
@@ -63,7 +60,7 @@
                 <button
                   class="btn btn-gray-800 mt-2 animate-up-2"
                   type="submit"
-                  v-on:click="test()"
+                  v-on:click="postBlog()"
                 >Lưu</button>
               </div>
             </div>
@@ -78,15 +75,52 @@
 export default {
   data() {
     return {
-      content: "Hello world!"
+      categories: {
+        selected: 0,
+        list: [{
+          id: null,
+          name: null
+        }]
+      },
+      title: null,
+      content: null
     }
   },
-  mounted: async function() {
+  mounted: async function () {
+    this.categories.list = await this.getCategories();
   },
   methods: {
     async test() {
       Prism.manual = true;
       Prism.highlightAll();
+    },
+    async postBlog() {
+      try {
+        let data = {
+          userId: this.$auth.user.id,
+          categoryId: this.categories.selected,
+          title: this.title,
+          content: this.content
+        }
+        let result = await this.$axios.post("/api/blog", data);
+        if (result.status === 200) {
+          this.$toast.success("Viết blog thành công!", {
+            duration: 5000
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getCategories() {
+      try {
+        let result = await this.$axios.get("/api/category");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 }

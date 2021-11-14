@@ -46,24 +46,18 @@
               </div>
             </a>
             <div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-1">
-              <!-- <a class="dropdown-item d-flex align-items-center" href="#">
-                <fa-icon icon="user-circle" class="dropdown-icon text-gray-400 me-2" />My Profile
-              </a> -->
               <nuxt-link class="dropdown-item d-flex align-items-center" to="/profile/settings">
-                <fa-icon icon="cog" class="dropdown-icon text-gray-400 me-2" />Settings
+                <fa-icon icon="cog" class="dropdown-icon text-gray-400 me-2" />Thông tin cá nhân
+              </nuxt-link>
+              <nuxt-link class="dropdown-item d-flex align-items-center" to="/profile/courses">
+                <fa-icon icon="cog" class="dropdown-icon text-gray-400 me-2" />Thông tin các khóa học
               </nuxt-link>
               <nuxt-link class="dropdown-item d-flex align-items-center" to="/profile/password">
-                <fa-icon icon="key" class="dropdown-icon text-gray-400 me-2" />Change password
+                <fa-icon icon="key" class="dropdown-icon text-gray-400 me-2" />Đổi mật khẩu
               </nuxt-link>
-              <!-- <a class="dropdown-item d-flex align-items-center" href="#">
-                <fa-icon icon="inbox" class="dropdown-icon text-gray-400 me-2" />Messages
-              </a>
-              <a class="dropdown-item d-flex align-items-center" href="#">
-                <fa-icon icon="life-ring" class="dropdown-icon text-gray-400 me-2" />Support
-              </a> -->
               <div role="separator" class="dropdown-divider my-1"></div>
               <a class="dropdown-item d-flex align-items-center" v-on:click="signOut()">
-                <fa-icon icon="sign-out-alt" class="dropdown-icon text-danger me-2" />Logout
+                <fa-icon icon="sign-out-alt" class="dropdown-icon text-danger me-2" />Đăng xuất
               </a>
             </div>
           </li>
