@@ -15,7 +15,6 @@
                     id="old_password"
                     type="password"
                     placeholder="Nhập mật khẩu cũ"
-                    required
                   />
                 </div>
               </div>
@@ -99,7 +98,8 @@ export default {
       } catch (e) {
         if (e.response) {
           let message = e.response.data.message;
-          this.$toast.error(message, {
+          console.log(message);
+          this.$toast.error("Mật khẩu cũ không đúng!", {
             duration: 5000
           });
         }

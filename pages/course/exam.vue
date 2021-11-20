@@ -1,7 +1,14 @@
 <template>
   <div id="questions">
     <div class="row d-flex justify-content-center">
-      <div class="col-lg-9 gy-4" v-if="!start && !result">
+      <div class="col-lg-9 gy-4" v-if="isTested">
+        <div class="card border-0 shadow mb-4">
+          <div class="card-body d-flex justify-content-center">
+            <h5 class="card-title">Bạn đã hoàn thành bài kiểm tra hoặc khóa học này rồi!</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-9 gy-4" v-if="!start && !result && !isTested">
         <div class="card border-0 shadow mb-4">
           <div class="card-body">
             <p class="card-text">{{ exam.title }}</p>
@@ -13,8 +20,10 @@
       <div class="col-lg-9 gy-4" v-if="result">
         <div class="card border-0 shadow mb-4">
           <div class="card-body">
-            <h2 class="card-text">Kết quả của bạn là: {{ result.noOfRightOption + '/' + result.noOfQuestion }}</h2>
-            <h5 class="card-text">Số điểm của bạn là: {{ (result.noOfRightOption/result.noOfQuestion*10).toFixed(2) }}</h5>
+            <h2
+              class="card-text"
+            >Kết quả của bạn là: {{ result.noOfRightOption + '/' + result.noOfQuestion }}</h2>
+            <h5 class="card-text">Số điểm của bạn là: {{ result.mark.toFixed(2) }}</h5>
           </div>
         </div>
       </div>
@@ -63,6 +72,7 @@ export default {
     return {
       id: this.$route.query.id,
       start: false,
+      isTested: false,
       timeSeconds: 0,
       exam: {
         id: 0,
@@ -94,10 +104,37 @@ export default {
   },
   mounted: async function () {
     if (this.id) {
-      this.exam = await this.getExam(this.id);
+      let is = await this.IsFinished(this.id);
+      if (is === false) {
+        this.exam = await this.getExam(this.id);
+      } else {
+        this.isTested = true;
+      }
     }
   },
   methods: {
+    async requestCertify(courseId) {
+      try {
+        let result = await this.$axios.post("/api/course/" + courseId + "/certify");
+        if (result.status === 200 && result.data === true) {
+          return true;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      return false;
+    },
+    async IsFinished(examId) {
+      try {
+        let result = await this.$axios.get("/api/exam/" + examId + "/IsFinished");
+        if (result.status === 200 && result.data === true) {
+          return true;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      return false;
+    },
     async postAnswers(examUserId, data) {
       if (!examUserId) {
         return;
@@ -111,6 +148,7 @@ export default {
         console.log(e);
       }
     },
+    //Get current exam info of user
     async getOwnExam(examId) {
       try {
         let result = await this.$axios.get("/api/exam/" + examId + "/test");
@@ -143,9 +181,11 @@ export default {
         if (this.timeSeconds !== 0) {
           --this.timeSeconds
         } else {
+          //Clear interval, post answer options and request certify
           clearInterval(timer);
           this.result = await this.postAnswers(this.examUserId, this.answers);
           this.start = false;
+          await this.requestCertify(this.exam.courseId);
         }
       }, 1000);
     },
@@ -168,7 +208,7 @@ export default {
     },
     async getExamQuestions(examId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + examId + "/questions");
+        let result = await this.$axios.get("/api/exam/" + examId + "/ExamQuestions");
         if (result.status === 200) {
           return result.data;
         }

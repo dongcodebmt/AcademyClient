@@ -10,6 +10,11 @@ export default [
         "icon": "book"
     },
     {
+        "name": "Xếp hạng",
+        "url": "/rank",
+        "icon": "star"
+    },
+    {
         "name": "Hỏi & Đáp",
         "id": "question",
         "icon": "question-circle",
@@ -34,7 +39,7 @@ export default [
                 "url": "/blog/create"
             },
             {
-                "name": "Hỏi",
+                "name": "Blog",
                 "url": "/blog/list"
             }
         ]

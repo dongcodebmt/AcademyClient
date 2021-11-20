@@ -84,10 +84,10 @@
 
 <script>
 export default {
+  layout: "admin",
   data() {
     return {
       id: null,
-      pictureId: null,
       categories: [{
         id: null,
         name: null

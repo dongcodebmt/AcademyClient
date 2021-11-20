@@ -50,10 +50,13 @@
                 <fa-icon icon="cog" class="dropdown-icon text-gray-400 me-2" />Thông tin cá nhân
               </nuxt-link>
               <nuxt-link class="dropdown-item d-flex align-items-center" to="/profile/courses">
-                <fa-icon icon="cog" class="dropdown-icon text-gray-400 me-2" />Thông tin các khóa học
+                <fa-icon icon="info-circle" class="dropdown-icon text-gray-400 me-2" />Thông tin khóa học
               </nuxt-link>
               <nuxt-link class="dropdown-item d-flex align-items-center" to="/profile/password">
                 <fa-icon icon="key" class="dropdown-icon text-gray-400 me-2" />Đổi mật khẩu
+              </nuxt-link>
+              <nuxt-link class="dropdown-item d-flex align-items-center" to="/admin" v-if="this.$auth.hasScope('Admin')">
+                <fa-icon icon="user-shield" class="dropdown-icon text-gray-400 me-2" />Quản trị
               </nuxt-link>
               <div role="separator" class="dropdown-divider my-1"></div>
               <a class="dropdown-item d-flex align-items-center" v-on:click="signOut()">

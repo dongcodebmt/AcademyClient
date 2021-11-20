@@ -5,7 +5,13 @@
         <div class="card card-body border-0 shadow mb-4">
           <div class="mb-3">
             <label for="title" class="form-label">Tiêu đề</label>
-            <input type="text" class="form-control" id="title" placeholder="Tiêu đề" v-model="blog.title" />
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Tiêu đề"
+              v-model="blog.title"
+            />
           </div>
           <div class="mb-3">
             <label class="form-label">Nội dung</label>
@@ -60,8 +66,8 @@
                 <button
                   class="btn btn-gray-800 mt-2 animate-up-2"
                   type="submit"
-                  v-on:click="postBlog()"
-                >Đăng</button>
+                  v-on:click="putBlog()"
+                >Lưu</button>
               </div>
             </div>
           </div>
@@ -75,12 +81,15 @@
 export default {
   data() {
     return {
+      id: this.$route.query.id,
       categories: [{
         id: null,
         name: null
       }],
       file: null,
+      tempPic: null,
       blog: {
+        id: 0,
         userId: this.$auth.user.id,
         categoryId: 0,
         title: null,
@@ -92,8 +101,22 @@ export default {
   },
   mounted: async function () {
     this.categories = await this.getCategories();
+    if (this.id) {
+      this.blog = await this.getBlog(this.id);
+      this.tempPic = this.blog.picturePath;
+    }
   },
   methods: {
+    async getBlog(id) {
+      try {
+        let result = await this.$axios.get("/api/blog/" + id);
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
     async uploadFile() {
       // Initialize the form data
       let formData = new FormData();
@@ -117,20 +140,23 @@ export default {
       this.file = event.target.files[0];
       this.blog.picturePath = URL.createObjectURL(this.file);
     },
-    async postBlog() {
+    async putBlog() {
       try {
-        if (this.blog.picturePath) {
+        if (this.tempPic !== this.blog.picturePath) {
           let picture = await this.uploadFile();
           this.blog.pictureId = picture.id;
         }
-        let result = await this.$axios.post("/api/blog", this.blog);
+        let result = await this.$axios.put("/api/blog/" + this.blog.id, this.blog);
         if (result.status === 200) {
-          this.$toast.success("Đăng blog thành công!", {
+          this.$toast.success("Sửa blog thành công!", {
             duration: 5000
           });
         }
       } catch (e) {
         console.log(e);
+          this.$toast.error("Sửa blog thất bại!", {
+            duration: 5000
+          });
       }
     },
     async getCategories() {

@@ -4,7 +4,7 @@
       <div class="col-12 col-xl-8">
         <div class="card card-body border-0 shadow mb-4">
           <h2 class="h5 mb-4">Thông tin cá nhân</h2>
-          <form v-on:submit.prevent="update()">
+          <form v-on:submit.prevent="putUser(id)">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <div>
@@ -63,6 +63,11 @@
           <h2 class="h5 mb-4">Các khoá học đã hoàn thành</h2>
           <form v-on:submit.prevent="update()"></form>
         </div>
+
+        <div class="card card-body border-0 shadow mb-4">
+          <h2 class="h5 mb-4">Tổng quan điểm</h2>
+          <form v-on:submit.prevent="update()"></form>
+        </div>
       </div>
       <div class="col-12 col-xl-4">
         <div class="row">
@@ -96,7 +101,30 @@
                 <button
                   class="btn btn-gray-800 mt-2 animate-up-2"
                   type="submit"
-                  v-on:click="uploadFile()"
+                  v-on:click="updatePicture(id)"
+                >Lưu</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card card-body border-0 shadow mb-4">
+              <h2 class="h5 mb-4">Phân quyền</h2>
+              <div class="form-check" v-for="item in fullRoles" :key="item.id">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  :id="'roles_' + item.id"
+                  :value="item.id"
+                  v-model="roles"
+                />
+                <label class="form-check-label" :for="'roles_' + item.id">{{ item.name }}</label>
+              </div>
+              <div class="d-flex justify-content-end mt-3">
+                <button
+                  class="btn btn-gray-800 mt-2 animate-up-2"
+                  type="submit"
+                  v-on:click="setRoles(id)"
                 >Lưu</button>
               </div>
             </div>
@@ -105,7 +133,7 @@
           <div class="col-12">
             <div class="card card-body border-0 shadow mb-4">
               <h2 class="h5 mb-4">Cập nhật mật khẩu</h2>
-              <form v-on:submit.prevent="changePassword()">
+              <form v-on:submit.prevent="changePassword(id)">
                 <div class="row">
                   <div class="col-md-12 mb-3">
                     <div class="form-group">
@@ -150,6 +178,7 @@
 
 <script>
 export default {
+  layout: "admin",
   data() {
     return {
       id: this.$route.query.id,
@@ -159,18 +188,142 @@ export default {
         firstName: null,
         lastName: null,
         picture: null,
+        pictureId: 0,
         scope: []
       },
       password: {
         newPassword: null,
         confirmPassword: null
-      }
+      },
+      file: null,
+      fullRoles: [{
+        id: 0,
+        name: null
+      }],
+      roles: [],
     }
   },
   mounted: async function () {
-    this.user = await this.getUser(this.id);
+    this.fullRoles = await this.getFullRoles();
+    if (this.id) {
+      this.user = await this.getUser(this.id);
+      this.roles = await this.getUserRoles(this.id);
+    }
   },
   methods: {
+    async setRoles(userId) {
+      try {
+        let result = await this.$axios.post("/api/user/" + userId + "/roles", this.roles);
+        if (result.status === 200) {
+          this.$toast.success("Thay đổi quyền thành công!", {
+            duration: 5000
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getUserRoles(id) {
+      try {
+        let result = await this.$axios.get("/api/user/" + id + "/roles");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getFullRoles() {
+      try {
+        let result = await this.$axios.get("/api/user/roles");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async changePassword(userId) {
+      if (this.password.newPassword.length < 8) {
+        return this.$toast.error("Mật khẩu cần lớn hơn 8 ký tự!", {
+          duration: 5000
+        });
+      }
+      if (this.password.newPassword !== this.password.confirmPassword) {
+        return this.$toast.error("Hai mật khẩu không trùng nhau!", {
+          duration: 5000
+        });
+      }
+      try {
+        let result = await this.$axios.post("/api/user/" + userId + "/password", JSON.stringify(this.password.newPassword), {
+          headers: {
+            'Content-Type': 'application/json-patch+json'
+          }
+        });
+        if (result.status === 200) {
+          this.password.newPassword = null;
+          this.password.confirmPassword = null;
+          this.$toast.success("Cập nhật thông tin thành công!", {
+            duration: 5000
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async updatePicture(userId) {
+      let picId = await this.uploadFile();
+      if (picId === 0) {
+        this.$toast.error("Hình ảnh đã chọn không hợp lệ!", {
+          duration: 5000
+        });
+      } else {
+        this.user.pictureId = picId;
+        this.putUser(userId);
+      }
+    },
+    async uploadFile() {
+      if (!this.file) {
+        return 0;
+      }
+      // Initialize the form data
+      let formData = new FormData();
+      formData.append('file', this.file);
+      try {
+        let result = await this.$axios.post("/api/picture/upload", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        if (result.status === 200) {
+          return result.data.id;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      return 0;
+    },
+    handleFileUpload(event) {
+      this.file = event.target.files[0];
+      this.user.picture = URL.createObjectURL(this.file);
+    },
+    async putUser(id) {
+      try {
+        let result = await this.$axios.put("/api/user/" + id, this.user);
+        if (result.status === 200) {
+          this.$toast.success("Cập nhật thông tin thành công!", {
+            duration: 5000
+          });
+        }
+      } catch (e) {
+        if (e.response) {
+          let error = JSON.stringify(e.response.data.error);
+          this.$toast.error(error, {
+            duration: 5000
+          });
+        }
+      }
+    },
     async getUser(id) {
       try {
         let result = await this.$axios.get("/api/user/" + id);

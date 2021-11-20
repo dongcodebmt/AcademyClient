@@ -4,7 +4,10 @@
       <div class="col-lg-12">
         <div class="card card-body border-0 shadow mb-4">
           <div class="mb-3">
-            <label class="form-label">Danh sách các khóa học</label>
+            <h5 class="form-label">Danh sách các khóa học</h5>
+            <button type="button" class="btn btn-outline-primary mb-2" v-on:click="$router.push('/admin/course/create')">
+              <fa-icon icon="plus" class="me-2" /> Thêm khóa học
+            </button>
             <div class="table-responsive">
               <vue-good-table
                 :columns="columns"
@@ -52,6 +55,7 @@
 
 <script>
 export default {
+  layout: "admin",
   data() {
     return {
       columns: [

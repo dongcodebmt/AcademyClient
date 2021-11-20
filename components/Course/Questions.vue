@@ -71,7 +71,7 @@ export default {
     },
     async getExamQuestions(examId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + examId + "/examquestions");
+        let result = await this.$axios.get("/api/exam/" + examId + "/questions");
         if (result.status === 200) {
           return result.data;
         }

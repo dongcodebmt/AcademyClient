@@ -5,7 +5,7 @@
       <div class="col-lg-8">
         <!-- Nested row for non-featured blog posts-->
         <div class="row g-4 mb-4">
-          <div class="col-sm-3" v-for="item in blogs" :key="item.key">
+          <div class="col-sm-3" v-for="item in blogs" :key="item.updatedAt">
             <nuxt-link :to="'/blog/view?id=' + item.id">
               <div class="card h-100">
                 <img
@@ -14,6 +14,7 @@
                 />
                 <div class="card-body">
                   <h5 class="card-title card-name">{{ item.title }}</h5>
+                  <p class="card-text"><TimeSince :date="item.updatedAt" /></p>
                 </div>
               </div>
             </nuxt-link>
@@ -46,7 +47,7 @@
               <a class="page-link" href="#!">Older</a>
             </li>
           </ul>
-        </nav> -->
+        </nav>-->
       </div>
       <!-- Side widgets-->
       <div class="col-lg-4">
@@ -85,7 +86,10 @@
 </template>
 
 <script>
+import TimeSince from "~/components/TimeSince.vue";
+
 export default {
+  components: { TimeSince },
   data() {
     return {
       categories: [{

@@ -53,6 +53,7 @@
 
 <script>
 export default {
+  layout: "admin",
   data() {
     return {
       columns: [
@@ -80,7 +81,7 @@ export default {
   methods: {
     async getUsers() {
       try {
-        let result = await this.$axios.get("/api/user/getall");
+        let result = await this.$axios.get("/api/user");
         if (result.status === 200) {
           return result.data;
         }

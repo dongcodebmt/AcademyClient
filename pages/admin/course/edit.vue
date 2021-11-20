@@ -121,6 +121,7 @@ import Questions from "~/components/Course/Questions.vue"
 import Question from "~/components/Course/Question.vue"
 
 export default {
+  layout: "admin",
   components: { Course, WillLearns, Requirements, Tracks, Steps, Step, Exams, Questions, Question },
   data() {
     return {

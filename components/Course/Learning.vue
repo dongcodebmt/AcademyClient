@@ -13,8 +13,7 @@
               <h5 class="card-title">Xin chúc mừng!</h5>
               <p
                 class="card-text"
-              >Bạn đã hoàn thành bài học. Bây giờ hãy hoàn thành các bài kiểm tra. Sau khi hoàn tất tất cả các bài kiểm hãy ấn nút nhận chứng nhận để nhận chứng nhận hoàn thành khóa học</p>
-              <button class="btn btn-outline-primary">Nhận chứng nhận</button>
+              >Bạn đã hoàn thành bài học. Bây giờ hãy làm các bài kiểm tra. Sau khi hoàn tất tất cả các bài kiểm tra bạn sẽ được chứng nhận hoàn thành khóa học.</p>
             </div>
           </div>
           <div class="card mb-4" v-if="step.content">
