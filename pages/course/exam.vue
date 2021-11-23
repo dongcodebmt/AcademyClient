@@ -24,6 +24,9 @@
               class="card-text"
             >Kết quả của bạn là: {{ result.noOfRightOption + '/' + result.noOfQuestion }}</h2>
             <h5 class="card-text">Số điểm của bạn là: {{ result.mark.toFixed(2) }}</h5>
+            <p class="card-text">
+              <nuxt-link :to="`/course/result?id=${examUserId}`">Xem chi tiết kết quả</nuxt-link>
+            </p>
           </div>
         </div>
       </div>
@@ -68,6 +71,11 @@
 
 <script>
 export default {
+  head() {
+    return {
+      title: "Kiểm tra | Academy"
+    };
+  },
   data() {
     return {
       id: this.$route.query.id,
@@ -165,6 +173,7 @@ export default {
         this.start = true;
         this.questions = await this.getExamQuestions(this.id);
         this.timeSeconds = this.exam.examDuration;
+
         this.timeCounter();
       }
     },

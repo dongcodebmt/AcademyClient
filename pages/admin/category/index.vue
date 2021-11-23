@@ -77,7 +77,16 @@
 
 <script>
 export default {
+  middleware: ['role'],
+  meta: {
+    auth: { authority: 1 }
+  },
   layout: "admin",
+  head() {
+    return {
+      title: "Quản lý danh mục | Academy"
+    };
+  },
   data() {
     return {
       categories: [{

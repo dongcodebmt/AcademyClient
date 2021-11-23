@@ -21,7 +21,8 @@ export default [
         "submenu": [
             {
                 "name": "Viết câu hỏi",
-                "url": "/question/create"
+                "url": "/question/create",
+                "unauthorized": ["Banned"]
             },
             {
                 "name": "Hỏi",
@@ -36,7 +37,8 @@ export default [
         "submenu": [
             {
                 "name": "Viết blog",
-                "url": "/blog/create"
+                "url": "/blog/create",
+                "unauthorized": ["Banned"]
             },
             {
                 "name": "Blog",

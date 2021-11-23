@@ -56,13 +56,13 @@
 
       <ul class="nav flex-column pt-3 pt-md-0">
         <li class="nav-item">
-          <a href="/" class="nav-link d-flex justify-content-center">
+          <nuxt-link to="/" class="nav-link d-flex justify-content-center">
             <span class="sidebar-icon">
               <fa-icon icon="graduation-cap" alt="Academy Logo" class="text-warning" />
               <!-- <img src="~assets/img/brand/light.svg" height="20" width="20" alt="Volt Logo" /> -->
             </span>
             <span class="mt-1 ms-1 sidebar-text">Academy</span>
-          </a>
+          </nuxt-link>
         </li>
 
         <!-- <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li> -->
@@ -73,6 +73,7 @@
             <nuxt-link
               :to="item.url"
               class="nav-link"
+              :class="{ 'd-none': !isHasRole(item.roles) }"
               v-if="!isHasSub(item)"
               @click.native="closeSideNav()"
             >
@@ -122,9 +123,18 @@ export default {
   data() {
     return {};
   },
-  mounted: async function () {
-  },
   methods: {
+    isHasRole(arr) {
+      let check = false;
+      if (arr && arr.length > 0) {
+        arr.forEach(element => {
+          if (this.$auth.hasScope(element)) {
+            check = true;
+          }
+        });
+      }
+      return check;
+    },
     isActive(url) {
       if (this.$route.path === url) {
         return true;

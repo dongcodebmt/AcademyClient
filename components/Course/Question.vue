@@ -68,7 +68,7 @@
             type="button"
             class="btn btn-outline-primary mx-2"
             v-else
-            v-on:click="postQuestion()"
+            v-on:click="post()"
           >Lưu</button>
         </div>
       </div>
@@ -101,6 +101,14 @@ export default {
     }
   },
   methods: {
+    async post() {
+      try {
+        await this.postQuestion();
+        this.backToQuestions(this.examId);
+      } catch (e) {
+        console.log(e);
+      }
+    },
     async backToQuestions(id) {
       this.$emit('back', id);
     },

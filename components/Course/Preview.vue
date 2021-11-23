@@ -43,16 +43,20 @@
           <div class="col-lg-4 position-relative">
             <div class="mb-4">
               <img
-                :src="[ course.picturePath && course.picturePath !== '/' ? course.picturePath : 'https://dummyimage.com/460x260/f0e37d/0011ff' ]"
+                :src="[ course.picturePath && course.picturePath !== '/' ? course.picturePath : require('@/assets/img/empty.png') ]"
                 class="card-img"
               />
             </div>
             <div class="d-flex justify-content-center" id="info">
               <ul class="list-group">
-                <a class="btn btn-outline-danger mb-4" role="button" v-on:click="courseRegister(id)">Đăng ký khóa học</a>
+                <a
+                  class="btn btn-outline-danger mb-4"
+                  role="button"
+                  v-on:click="courseRegister(id)"
+                >Đăng ký khóa học</a>
                 <!-- <li class="list-group-item">
                   <fa-icon icon="layer-group" />&nbsp;Trình độ cơ bản
-                </li> -->
+                </li>-->
                 <li class="list-group-item">
                   <fa-icon icon="plus-square" />
                   &nbsp;Tổng số {{ totalStep }} bài học
@@ -169,7 +173,7 @@ export default {
           this.$toast.success("Đăng ký khóa học thành công!", {
             duration: 5000
           });
-          this.$router.push("/course/learning?id=" + id);
+          this.$emit('learning');
         }
       } catch (e) {
         console.log(e);

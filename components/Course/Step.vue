@@ -51,7 +51,7 @@
           type="button"
           class="btn btn-outline-primary mx-2"
           v-if="!stepId"
-          v-on:click="postStep()"
+          v-on:click="post()"
         >Lưu</button>
         <!-- Put request -->
         <button
@@ -85,6 +85,14 @@ export default {
     }
   },
   methods: {
+    async post() {
+      try {
+        await this.postStep();
+        await this.backToSteps(this.trackId);
+      } catch (e) {
+        console.log(e);
+      }
+    },
     async putStep() {
       try {
         this.step.trackId = this.trackId;

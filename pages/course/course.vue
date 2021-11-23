@@ -1,7 +1,7 @@
 <template>
   <div id="course">
     <Learning :id="id" v-if="selector === 1" />
-    <Preview :id="id" v-if="selector === 2" />
+    <Preview :id="id" v-if="selector === 2" v-on:learning="selector = 1"/>
   </div>
 </template>
 
@@ -10,6 +10,11 @@ import Learning from "~/components/Course/Learning.vue";
 import Preview from "~/components/Course/Preview.vue";
 
 export default {
+  head() {
+    return {
+      title: "Học | Academy"
+    };
+  },
   components: { Learning, Preview },
   data() {
     return {

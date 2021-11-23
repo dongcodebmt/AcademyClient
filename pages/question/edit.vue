@@ -1,35 +1,32 @@
 <template>
-  <div id="createCourse">
+  <div id="editQuestion">
     <div class="row py-4">
       <div class="col-lg-9">
         <div class="card card-body border-0 shadow mb-4">
-          <!-- Title -->
           <div class="mb-3">
-            <label for="title" class="form-label">Tên khóa học</label>
+            <label for="title" class="form-label">Tiêu đề</label>
             <input
               type="text"
               class="form-control"
               id="title"
-              placeholder="Khóa học"
-              v-model="course.title"
+              placeholder="Tiêu đề"
+              v-model="question.title"
             />
           </div>
-          <!-- End title -->
-          <!-- Course content -->
           <div class="mb-3">
-            <label class="form-label">Tóm tắt nội dung khóa học</label>
-            <tinymce v-model="course.description" :init="$store.state.tinymce" />
+            <label class="form-label">Nội dung</label>
+            <client-only>
+              <tinymce v-model="question.content" :init="$store.state.tinymce" />
+            </client-only>
           </div>
-          <!-- End course content -->
         </div>
       </div>
       <div class="col-lg-3">
         <div class="row">
-          <!-- Categories -->
           <div class="col-12">
             <div class="card card-body border-0 shadow mb-4">
               <h2 class="h5 mb-4">Chọn danh mục</h2>
-              <select class="form-select" aria-label="Danh mục" v-model="course.categoryId">
+              <select class="form-select" aria-label="Danh mục" v-model="question.categoryId">
                 <option value="0" selected>Vui lòng chọn danh mục</option>
                 <option
                   v-for="item in categories"
@@ -39,18 +36,17 @@
               </select>
             </div>
           </div>
-          <!-- End categories -->
-          <!-- Course image -->
           <div class="col-12">
             <div class="card card-body border-0 shadow mb-4">
               <h2 class="h5 mb-4">Chọn ảnh đại diện</h2>
               <div class="d-flex align-items-center">
                 <div class="me-3">
+                  <!-- Avatar -->
                   <img
-                    class="rounded"
-                    height="120"
-                    style="object-fit: cover; max-height: 120px;"
-                    :src="[ course.picturePath && course.picturePath !== '/' ? course.picturePath : require('@/assets/img/empty.png') ]"
+                    class="rounded avatar-xl"
+                    alt="change avatar"
+                    style="object-fit: cover;"
+                    :src="[ question.picturePath && question.picturePath !== '/' ? question.picturePath : require('@/assets/img/empty.png') ]"
                   />
                 </div>
                 <div class="file-field">
@@ -70,12 +66,11 @@
                 <button
                   class="btn btn-gray-800 mt-2 animate-up-2"
                   type="submit"
-                  v-on:click="postCourse()"
+                  v-on:click="putQuestion()"
                 >Lưu</button>
               </div>
             </div>
           </div>
-          <!-- End course image -->
         </div>
       </div>
     </div>
@@ -86,59 +81,44 @@
 export default {
   middleware: ['role'],
   meta: {
-    auth: { authority: 3 }
+    auth: { authority: 4 }
   },
   head() {
     return {
-      title: "Tạo khóa học | Academy"
+      title: "Sửa câu hỏi | Academy"
     };
   },
   data() {
     return {
-      id: null,
+      id: this.$route.query.id,
       categories: [{
         id: null,
         name: null
       }],
-      course: {
-        lecturerId: this.$auth.user.id,
-        categoryId: 0,
-        pictureId: null,
-        title: null,
-        description: null,
-        picturePath: null
-      },
       file: null,
+      tempPic: null,
+      question: {
+        id: 0,
+        userId: this.$auth.user.id,
+        categoryId: 0,
+        title: null,
+        content: null,
+        pictureId: null,
+        picturePath: null
+      }
     }
   },
   mounted: async function () {
     this.categories = await this.getCategories();
+    if (this.id) {
+      this.question = await this.getQuestion(this.id);
+      this.tempPic = this.question.picturePath;
+    }
   },
   methods: {
-    async postCourse() {
-      if (this.course.categoryId === 0) {
-        this.$toast.error("Vui lòng chọn danh mục!", {
-          duration: 5000
-        });
-        return;
-      }
+    async getQuestion(id) {
       try {
-        if (this.course.picturePath) {
-          let picture = await this.uploadFile();
-          this.course.pictureId = picture.id;
-        }
-        let result = await this.$axios.post("/api/course", this.course);
-        if (result.status === 200) {
-          this.id = result.data.id;
-          this.$router.push({ path: "/admin/course/edit", query: { id: this.id } });
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async getCategories() {
-      try {
-        let result = await this.$axios.get("/api/category");
+        let result = await this.$axios.get("/api/question/" + id);
         if (result.status === 200) {
           return result.data;
         }
@@ -167,8 +147,37 @@ export default {
     },
     handleFileUpload(event) {
       this.file = event.target.files[0];
-      this.course.picturePath = URL.createObjectURL(this.file);
+      this.question.picturePath = URL.createObjectURL(this.file);
     },
+    async putQuestion() {
+      try {
+        if (this.tempPic !== this.question.picturePath) {
+          let picture = await this.uploadFile();
+          this.question.pictureId = picture.id;
+        }
+        let result = await this.$axios.put("/api/question/" + this.question.id, this.question);
+        if (result.status === 200) {
+          this.$toast.success("Sửa câu hỏi thành công!", {
+            duration: 5000
+          });
+        }
+      } catch (e) {
+        console.log(e);
+          this.$toast.error("Sửa câu hỏi thất bại!", {
+            duration: 5000
+          });
+      }
+    },
+    async getCategories() {
+      try {
+        let result = await this.$axios.get("/api/category");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 }
 </script>

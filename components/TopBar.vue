@@ -4,7 +4,11 @@
       <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
         <div class="d-flex align-items-center">
           <!-- Search form -->
-          <form class="navbar-search form-inline" id="navbar-search-main">
+          <form
+            class="navbar-search form-inline"
+            id="navbar-search-main"
+            v-on:submit.prevent="$router.push({path:'/search', query:{query:query}})"
+          >
             <div class="input-group input-group-merge search-bar">
               <span class="input-group-text" id="topbar-addon">
                 <fa-icon icon="search" />
@@ -13,9 +17,10 @@
                 type="text"
                 class="form-control"
                 id="topbarInputIconLeft"
-                placeholder="Search"
-                aria-label="Search"
+                placeholder="Tìm kiếm..."
+                aria-label="Tìm kiếm..."
                 aria-describedby="topbar-addon"
+                v-model="query"
               />
             </div>
           </form>
@@ -23,7 +28,7 @@
         </div>
         <!-- Navbar links -->
         <ul class="navbar-nav align-items-center" v-if="this.$auth.loggedIn">
-          <Notification />
+          <!-- <Notification /> -->
           <li class="nav-item dropdown ms-lg-3">
             <a
               class="nav-link dropdown-toggle pt-1 px-0"
@@ -35,7 +40,7 @@
               <div class="media d-flex align-items-center">
                 <img
                   class="avatar rounded-circle"
-                  alt="Image placeholder"
+                  style="object-fit: cover;"
                   :src="[ this.$auth.user && this.$auth.user.picture !== '/' ? this.$auth.user.picture :  require('@/assets/img/team/blank-profile.png') ]"
                 />
                 <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
@@ -55,7 +60,11 @@
               <nuxt-link class="dropdown-item d-flex align-items-center" to="/profile/password">
                 <fa-icon icon="key" class="dropdown-icon text-gray-400 me-2" />Đổi mật khẩu
               </nuxt-link>
-              <nuxt-link class="dropdown-item d-flex align-items-center" to="/admin" v-if="this.$auth.hasScope('Admin')">
+              <nuxt-link
+                class="dropdown-item d-flex align-items-center"
+                to="/admin"
+                v-if="this.$auth.hasScope('Admin') || this.$auth.hasScope('Lecturer')"
+              >
                 <fa-icon icon="user-shield" class="dropdown-icon text-gray-400 me-2" />Quản trị
               </nuxt-link>
               <div role="separator" class="dropdown-divider my-1"></div>
@@ -76,9 +85,11 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      query: null,
+    };
   },
-  mounted: async function () {},
+  mounted: async function () { },
   methods: {
     async signOut() {
       this.$auth.logout();

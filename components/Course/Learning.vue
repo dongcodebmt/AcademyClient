@@ -8,7 +8,7 @@
               <iframe :src="step.embedLink" style="min-height: 570px" width="95%" class="mx-4 my-4"></iframe>
             </div>
           </div>
-          <div class="card mb-4" v-if="getAvg() === 100">
+          <div class="card mb-4" v-if="getAvg() == 100">
             <div class="card-body border-0 shadow">
               <h5 class="card-title">Xin chúc mừng!</h5>
               <p
@@ -69,7 +69,7 @@
                         class="list-group-item rounded"
                         v-for="i in item.steps"
                         :key="i.id"
-                        :class="{ active: i.id === stepId, disabled: i.id > stepId + 1 && stepId !== 0 }"
+                        :class="{ active: i.id === stepId, disabled: i.id > stepId + 1 && stepId !== 0 && i.completed === false }"
                         v-on:click="getStep(i.id)"
                       >{{ i.title }}</a>
                     </div>
@@ -78,7 +78,7 @@
               </div>
 
               <!-- Exam -->
-              <div class="accordion-item" v-if="getAvg() === 100 && exams.length > 0">
+              <div class="accordion-item" v-if="getAvg() == 100 && exams.length > 0">
                 <h2 class="accordion-header">
                   <button
                     class="accordion-button collapsed"
@@ -140,7 +140,7 @@ export default {
   methods: {
     getAvg() {
       let result = (this.progress.completed / this.progress.total) * 100;
-      return result ? result : 0;
+      return result ? result.toFixed(2) : 0;
     },
     async handleProgress() {
       this.trackSteps.forEach((element) => {

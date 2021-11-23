@@ -47,10 +47,10 @@
             <div class="d-flex align-items-center">
               <div class="me-3">
                 <img
-                  class="rounded avatar-xl"
-                  alt="change avatar"
-                  style="object-fit: cover;"
-                  :src="[ course.picturePath && course.picturePath !== '/' ? course.picturePath : require('@/assets/img/team/blank-profile.png') ]"
+                  class="rounded"
+                  height="120"
+                  style="object-fit: cover; max-height: 130px;"
+                  :src="[ course.picturePath && course.picturePath !== '/' ? course.picturePath : require('@/assets/img/empty.png') ]"
                 />
               </div>
               <div class="file-field">

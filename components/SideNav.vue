@@ -10,7 +10,7 @@
             <img
               :src="[ this.$auth.user && this.$auth.user.picture !== '/' ? this.$auth.user.picture : require('@/assets/img/team/blank-profile.png') ]"
               class="card-img-top rounded-circle border-white"
-              alt="Bonnie Green"
+              style="object-fit: cover;"
             />
           </div>
           <div class="d-block">
@@ -56,13 +56,13 @@
 
       <ul class="nav flex-column pt-3 pt-md-0">
         <li class="nav-item">
-          <a href="/" class="nav-link d-flex justify-content-center">
+          <nuxt-link to="/" class="nav-link d-flex justify-content-center">
             <span class="sidebar-icon">
               <fa-icon icon="graduation-cap" alt="Academy Logo" class="text-warning" />
               <!-- <img src="~assets/img/brand/light.svg" height="20" width="20" alt="Volt Logo" /> -->
             </span>
             <span class="mt-1 ms-1 sidebar-text">Academy</span>
-          </a>
+          </nuxt-link>
         </li>
 
         <!-- <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li> -->
@@ -73,6 +73,7 @@
             <nuxt-link
               :to="item.url"
               class="nav-link"
+              :class="{ 'd-none': isHidden(item.unauthorized) }"
               v-if="!isHasSub(item)"
               @click.native="closeSideNav()"
             >
@@ -101,7 +102,7 @@
               </span>
               <div class="multi-level collapse" role="list" :id="item.id">
                 <ul class="flex-column nav" v-for="sub in item.submenu" :key="sub.key">
-                  <li class="nav-item" :class="{ active: isActive(sub.url) }">
+                  <li class="nav-item" :class="{ active: isActive(sub.url), 'd-none': isHidden(sub.unauthorized) }">
                     <nuxt-link class="nav-link" :to="sub.url" @click.native="closeSideNav()">
                       <span class="sidebar-text">{{ sub.name }}</span>
                     </nuxt-link>
@@ -125,6 +126,17 @@ export default {
   mounted: async function () {
   },
   methods: {
+    isHidden(arr) {
+      let check = false;
+      if (arr && arr.length > 0) {
+        arr.forEach(element => {
+          if (this.$auth.hasScope(element)) {
+            check = true;
+          }
+        });
+      }
+      return check;
+    },
     isActive(url) {
       if (this.$route.path === url) {
         return true;

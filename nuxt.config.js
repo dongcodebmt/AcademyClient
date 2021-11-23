@@ -50,7 +50,9 @@ export default {
     { src: '~/plugins/tinymce.js', ssr: false },
     { src: '~/plugins/draggable.js', ssr: false },
     { src: '~/plugins/goodTable.js', ssr: false },
-    { src: '~/plugins/prism.js', ssr: false }
+    { src: '~/plugins/prism.js', ssr: false },
+    { src: '~/plugins/chartist.js', ssr: false },
+    { src: '~/plugins/infinite-loading.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -99,7 +101,7 @@ export default {
 
   auth: {
     //Custom login with google, facebook
-    plugins: ['~/plugins/auth.js'],
+    plugins: ['~/middleware/auth.js'],
     redirect: {
       login: '/auth/signin',
       logout: '/',

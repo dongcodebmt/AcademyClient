@@ -1,78 +1,57 @@
 <template>
   <div id="courses">
     <div class="list py-4">
-      <div class="row g-4">
-        <div class="col-sm-3" v-for="item in courses" :key="item.key">
+      <div class="row">
+        <div class="col-sm-3" style="width: 20%" v-for="item in courses" :key="item.id">
           <nuxt-link :to="'/course/course?id=' + item.id">
-            <div class="card h-100">
+            <div class="card special-card border-0 h-100">
               <img
-                :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : 'https://dummyimage.com/460x260/f0e37d/0011ff' ]"
-                class="card-img-top"
+                :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : require('@/assets/img/empty.png') ]"
+                class="card-img-top rounded-3 image-crop"
               />
               <div class="card-body">
-                <h5 class="card-title card-name">{{ item.title }}</h5>
-                <p class="card-text">
-                  <fa-icon icon="users" />&nbsp;84.890
-                </p>
+                <h6 class="card-title card-name">{{ item.title }}</h6>
               </div>
             </div>
           </nuxt-link>
         </div>
+        <infinite-loading :identifier="infiniteId" @infinite="infiniteHandler"></infinite-loading>
       </div>
     </div>
-
-    <!-- <div id="paging">
-      <nav aria-label="Pagination">
-        <hr class="my-0" />
-        <ul class="pagination justify-content-center my-4">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a>
-          </li>
-          <li class="page-item active" aria-current="page">
-            <a class="page-link" href="#!">1</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#!">2</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#!">3</a>
-          </li>
-          <li class="page-item disabled">
-            <a class="page-link" href="#!">...</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#!">10</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#!">Older</a>
-          </li>
-        </ul>
-      </nav>
-    </div> -->
   </div>
 </template>
 
 <script>
 export default {
+  head() {
+    return {
+      title: "Khóa học | Academy"
+    };
+  },
   data() {
     return {
-      courses: [{
-        id: null,
-        lecturerId: null,
-        categoryId: null,
-        createAt: null,
-        title: null,
-        picturePath: null
-      }]
+      page: 0,
+      infiniteId: +new Date(),
+      courses: []
     }
   },
   mounted: async function () {
-    this.courses = await this.getCourses();
+    // this.courses = await this.getCourses();
   },
   methods: {
-    async getCourses() {
+    async infiniteHandler($state) {
+      let data = await this.getCourses(this.page * 10);
+      if (data.length > 0) {
+        this.page += 1;
+        this.courses.push(...data);
+        $state.loaded();
+      } else {
+        $state.complete();
+      }
+    },
+    async getCourses(skip = 0, take = 10) {
       try {
-        let courses = await this.$axios.get("/api/course");
+        let courses = await this.$axios.get(`/api/course?skip=${skip}&take=${take}`);
         if (courses.status === 200) {
           return courses.data;
         }

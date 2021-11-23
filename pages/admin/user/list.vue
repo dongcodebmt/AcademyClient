@@ -53,7 +53,16 @@
 
 <script>
 export default {
+  middleware: ['role'],
+  meta: {
+    auth: { authority: 2 }
+  },
   layout: "admin",
+  head() {
+    return {
+      title: "Quản lý người dùng | Academy"
+    };
+  },
   data() {
     return {
       columns: [
@@ -62,7 +71,11 @@ export default {
         { label: 'Email', field: 'email' },
         { label: 'Họ', field: 'firstName' },
         { label: 'Tên', field: 'lastName' },
-        { label: 'Quyền', field: 'scope' },
+        {
+          label: 'Quyền', field: 'scope', formatFn: function (value) {
+            return value ? value.join(', ') : null;
+          }
+        },
         { label: 'Thao tác', field: 'actions', sortable: false, }
       ],
       users: [{

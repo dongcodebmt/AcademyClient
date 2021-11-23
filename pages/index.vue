@@ -2,7 +2,7 @@
   <!-- Page Content-->
   <div id="homepage" class="px-4 px-lg-5">
     <!-- Heading Row-->
-    <div id="intro">
+    <!-- <div id="intro">
       <div class="row gx-4 gx-lg-5 align-items-center my-5">
         <div class="col-lg-7">
           <img
@@ -16,39 +16,44 @@
           <a class="btn btn-primary" href="#">Get Started!</a>
         </div>
       </div>
-    </div>
+    </div>-->
     <div id="content">
       <div class="d-grid gap-3 my-2 py-1">
-        <div class="p-2 bg-secondary text-center rounded border">Khóa học cơ bản</div>
+        <div class="p-2 bg-purple text-center text-white rounded border">Khóa học mới</div>
       </div>
       <!-- Content Row-->
       <div class="row g-4">
-        <div class="col-sm-3" v-for="item in courses" :key="item.key">
-          <div class="card h-100">
-            <img :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : 'https://dummyimage.com/460x260/f0e37d/0011ff' ]" class="card-img-top" />
-            <div class="card-body">
-              <h5 class="card-title card-name">{{ item.title }}</h5>
-              <p class="card-text">
-                <fa-icon icon="users" /> 84.890
-              </p>
+        <div class="col-sm-3" style="width: 20%" v-for="item in courses" :key="item.id">
+          <nuxt-link :to="'/course/course?id=' + item.id">
+            <div class="card special-card border-0 h-100">
+              <img
+                :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : require('@/assets/img/empty.png') ]"
+                class="card-img-top rounded-3 image-crop"
+              />
+              <div class="card-body">
+                <h6 class="card-title card-name">{{ item.title }}</h6>
+              </div>
             </div>
-          </div>
+          </nuxt-link>
         </div>
       </div>
+
       <div class="d-grid gap-3 my-2 py-1">
-        <div class="p-2 bg-secondary text-center rounded border">Bài viết nổi bật</div>
+        <div class="p-2 bg-purple text-center text-white rounded border">Bài viết mới</div>
       </div>
       <div class="row g-4">
-        <div class="col-sm-3" v-for="item in courses" :key="item.key">
-          <div class="card h-100">
-            <img :src="item.picturePath" class="card-img-top" />
-            <div class="card-body">
-              <h5 class="card-title card-name">{{ item.title }}</h5>
-              <p class="card-text">
-                <fa-icon icon="users" /> 84.890
-              </p>
+        <div class="col-sm-3" style="width: 20%" v-for="item in blogs" :key="item.id">
+          <nuxt-link :to="'/blog/view?id=' + item.id">
+            <div class="card special-card border-0 h-100">
+              <img
+                :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : require('@/assets/img/empty.png') ]"
+                class="card-img-top rounded-3 image-crop"
+              />
+              <div class="card-body">
+                <h6 class="card-title card-name">{{ item.title }}</h6>
+              </div>
             </div>
-          </div>
+          </nuxt-link>
         </div>
       </div>
     </div>
@@ -72,18 +77,41 @@ export default {
         createAt: null,
         title: null,
         picturePath: null
-      }]
+      }],
+      blogs: [
+        {
+          id: 0,
+          userId: 0,
+          categoryId: 0,
+          title: null,
+          content: null,
+          createAt: null,
+          isDeleted: true,
+          pictureId: 0,
+          picturePath: 0
+        }
+      ]
     }
   },
   mounted: async function () {
-    await this.getCourses();
+    [this.courses, this.blogs] = await Promise.all([this.getCourses(), this.getBlogPosts()]);
   },
   methods: {
+    async getBlogPosts() {
+      try {
+        let result = await this.$axios.get("/api/blog");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
     async getCourses() {
       try {
         let courses = await this.$axios.get("/api/course");
         if (courses.status === 200) {
-          this.courses = courses.data;
+          return courses.data;
         }
       } catch (e) {
         console.log(e);
@@ -92,3 +120,14 @@ export default {
   }
 };
 </script>
+
+<style>
+.image-crop {
+  width: 365px;
+  height: 150px;
+  object-fit: cover;
+}
+.special-card {
+  background: none;
+}
+</style>

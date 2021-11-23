@@ -40,7 +40,7 @@
                     class="rounded avatar-xl"
                     alt="change avatar"
                     style="object-fit: cover;"
-                    :src="[ blog.picturePath && blog.picturePath !== '/' ? blog.picturePath : require('@/assets/img/team/blank-profile.png') ]"
+                    :src="[ blog.picturePath && blog.picturePath !== '/' ? blog.picturePath : require('@/assets/img/empty.png') ]"
                   />
                 </div>
                 <div class="file-field">
@@ -73,6 +73,15 @@
 
 <script>
 export default {
+  middleware: ['role'],
+  meta: {
+    auth: { authority: 4 }
+  },
+  head() {
+    return {
+      title: "Viết blog | Academy"
+    };
+  },
   data() {
     return {
       categories: [{

@@ -5,8 +5,12 @@
         <div class="card card-body border-0 shadow mb-4">
           <div class="mb-3">
             <h5 class="form-label">Danh sách các khóa học</h5>
-            <button type="button" class="btn btn-outline-primary mb-2" v-on:click="$router.push('/admin/course/create')">
-              <fa-icon icon="plus" class="me-2" /> Thêm khóa học
+            <button
+              type="button"
+              class="btn btn-outline-primary mb-2"
+              v-on:click="$router.push('/admin/course/create')"
+            >
+              <fa-icon icon="plus" class="me-2" />Thêm khóa học
             </button>
             <div class="table-responsive">
               <vue-good-table
@@ -55,13 +59,26 @@
 
 <script>
 export default {
+  middleware: ['role'],
+  meta: {
+    auth: { authority: 3 }
+  },
   layout: "admin",
+  head() {
+    return {
+      title: "Quản lý khóa học | Academy"
+    };
+  },
   data() {
     return {
       columns: [
         { label: '#', field: 'id' },
         { label: 'Tên khóa học', field: 'title' },
-        { label: 'categoryId', field: 'categoryId' },
+        {
+          label: 'Tên danh mục', field: 'categoryId', formatFn: (value) => {
+            return value != null ? this.getCategoryName(value) : null;
+          }
+        },
         {
           label: 'Ngày tạo', field: 'createdAt', formatFn: function (value) {
             return value != null ? new Date(value).toLocaleString() : null
@@ -80,15 +97,34 @@ export default {
         isDeleted: false,
         picturePath: null
       }],
+      categories: [{
+        id: 0,
+        name: null
+      }]
     }
   },
   mounted: async function () {
-    this.courses = await this.getCourse();
+    this.categories = await this.getCategories();
+    this.courses = await this.getCourse(0, 9999);
   },
   methods: {
-    async getCourse() {
+    getCategoryName(id) {
+      let cate = this.categories.find(x => x.id === id);
+      return cate ? cate.name : id;
+    },
+    async getCategories() {
       try {
-        let result = await this.$axios.get("/api/Course");
+        let result = await this.$axios.get("/api/Category");
+        if (result.status === 200) {
+          return result.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getCourse(skip = 0, take = 10) {
+      try {
+        let result = await this.$axios.get(`/api/Course?skip=${skip}&take=${take}`);
         if (result.status === 200) {
           return result.data;
         }
