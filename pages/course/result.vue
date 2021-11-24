@@ -98,7 +98,7 @@ export default {
     },
     async getExamResult(examUserId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + examUserId + "/Result");
+        let result = await this.$axios.get(`/api/exam/${examUserId}/Result`);
         if (result.status === 200) {
           return result.data;
         }

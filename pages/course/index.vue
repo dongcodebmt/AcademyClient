@@ -3,7 +3,7 @@
     <div class="list py-4">
       <div class="row">
         <div class="col-sm-3" style="width: 20%" v-for="item in courses" :key="item.id">
-          <nuxt-link :to="'/course/course?id=' + item.id">
+          <nuxt-link :to="`/course/course?id=${item.id}`">
             <div class="card special-card border-0 h-100">
               <img
                 :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : require('@/assets/img/empty.png') ]"
@@ -23,6 +23,7 @@
 
 <script>
 export default {
+  auth: false,
   head() {
     return {
       title: "Khóa học | Academy"

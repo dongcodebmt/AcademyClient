@@ -35,7 +35,7 @@ export default {
   methods: {
     async isRegisted(id) {
       try {
-        let result = await this.$axios.get("api/Course/" + id + "/IsRegisted");
+        let result = await this.$axios.get(`api/Course/${id}/IsRegisted`);
         if (result.status === 200 && JSON.parse(result.data) === true) {
           return true;
         }

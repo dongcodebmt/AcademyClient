@@ -36,6 +36,7 @@
 
 <script>
 export default {
+  auth: false,
   head() {
     return {
       title: "Tìm kiếm | Academy"

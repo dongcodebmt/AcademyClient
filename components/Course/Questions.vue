@@ -58,7 +58,7 @@ export default {
     async deleteExamQuestion(index) {
       try {
         let id = this.examQuestions[index].id;
-        let result = await this.$axios.delete("/api/exam/" + id + "/question");
+        let result = await this.$axios.delete(`/api/exam/${id}/question`);
         if (result.status === 200) {
           await this.removeItem(index);
           this.$toast.success("Xóa câu hỏi thành công!", {
@@ -71,7 +71,7 @@ export default {
     },
     async getExamQuestions(examId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + examId + "/questions");
+        let result = await this.$axios.get(`/api/exam/${examId}/questions`);
         if (result.status === 200) {
           return result.data;
         }

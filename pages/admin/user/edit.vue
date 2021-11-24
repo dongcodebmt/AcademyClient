@@ -363,7 +363,7 @@ export default {
       [this.user, this.roles, this.courses, this.certs, this.mark] = await Promise.all([
         this.getUser(this.id),
         this.getUserRoles(this.id),
-        this.getCourseRegisted(this.id),
+        this.getRegistedCourses(this.id),
         this.getCertifications(this.id),
         this.getMarkChart(this.id)
       ]);
@@ -421,9 +421,9 @@ export default {
       }
     },
     // Get registed courses
-    async getCourseRegisted(userId) {
+    async getRegistedCourses(userId) {
       try {
-        let result = await this.$axios.get(`/api/course/CourseRegisted/${userId}`);
+        let result = await this.$axios.get(`/api/course/RegistedCourses/${userId}`);
         if (result.status === 200) {
           return result.data;
         }

@@ -109,7 +109,7 @@ export default {
     async deleteCategory(index) {
       try {
         let id = this.categories[index].id;
-        let result = await this.$axios.delete("/api/category/" + id);
+        let result = await this.$axios.delete(`/api/category/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
         }
@@ -120,7 +120,7 @@ export default {
     async putCategory(index) {
       try {
         let id = this.categories[index].id;
-        let result = await this.$axios.put("/api/category/" + id, this.categories[index]);
+        let result = await this.$axios.put(`/api/category/${id}`, this.categories[index]);
         if (result.status === 200) {
           this.categories[index].edit = false;
         }

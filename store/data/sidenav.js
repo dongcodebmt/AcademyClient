@@ -6,7 +6,7 @@ export default [
     },
     {
         "name": "Khóa học",
-        "url": "/course/courses",
+        "url": "/course",
         "icon": "book"
     },
     {
@@ -26,7 +26,7 @@ export default [
             },
             {
                 "name": "Hỏi",
-                "url": "/question/list"
+                "url": "/question"
             }
         ]
     },
@@ -42,7 +42,7 @@ export default [
             },
             {
                 "name": "Blog",
-                "url": "/blog/list"
+                "url": "/blog"
             }
         ]
     }

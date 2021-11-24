@@ -21,7 +21,7 @@
                     <td>{{ item.title }}</td>
                     <td>{{ item.progress.toFixed(2) }}</td>
                     <td>
-                      <nuxt-link :to="'/course/course?id=' + item.id">Xem chi tiết</nuxt-link>
+                      <nuxt-link :to="`/course/course?id=${item.id}`">Xem chi tiết</nuxt-link>
                     </td>
                   </tr>
                 </tbody>
@@ -159,7 +159,7 @@ export default {
   },
   mounted: async function () {
     if (this.id) {
-      [this.certs, this.courses] = await Promise.all([this.getCertifications(this.id), this.getCourseRegisted(this.id)]);
+      [this.certs, this.courses] = await Promise.all([this.getCertifications(this.id), this.getRegistedCourses(this.id)]);
     }
   },
   methods: {
@@ -169,7 +169,7 @@ export default {
     },
     async getExamUsers(courseId) {
       try {
-        let result = await this.$axios.get("/api/course/" + courseId + "/ExamUsers");
+        let result = await this.$axios.get(`/api/course/${courseId}/ExamUsers`);
         if (result.status === 200) {
           return result.data;
         }
@@ -177,9 +177,9 @@ export default {
         console.log(e);
       }
     },
-    async getCourseRegisted(userId) {
+    async getRegistedCourses(userId) {
       try {
-        let result = await this.$axios.get("/api/course/CourseRegisted/" + userId);
+        let result = await this.$axios.get(`/api/course/RegistedCourses/${userId}`);
         if (result.status === 200) {
           return result.data;
         }
@@ -189,7 +189,7 @@ export default {
     },
     async getCertifications(userId) {
       try {
-        let result = await this.$axios.get("/api/course/certifications/" + userId);
+        let result = await this.$axios.get(`/api/course/certifications/${userId}`);
         if (result.status === 200) {
           return result.data;
         }

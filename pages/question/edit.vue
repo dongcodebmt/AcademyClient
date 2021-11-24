@@ -118,7 +118,7 @@ export default {
   methods: {
     async getQuestion(id) {
       try {
-        let result = await this.$axios.get("/api/question/" + id);
+        let result = await this.$axios.get(`/api/question/${id}`);
         if (result.status === 200) {
           return result.data;
         }
@@ -155,17 +155,18 @@ export default {
           let picture = await this.uploadFile();
           this.question.pictureId = picture.id;
         }
-        let result = await this.$axios.put("/api/question/" + this.question.id, this.question);
+        let result = await this.$axios.put(`/api/question/${this.question.id}`, this.question);
         if (result.status === 200) {
           this.$toast.success("Sửa câu hỏi thành công!", {
             duration: 5000
           });
+          this.$router.push(`/question/view?id=${result.data.id}`);
         }
       } catch (e) {
         console.log(e);
-          this.$toast.error("Sửa câu hỏi thất bại!", {
-            duration: 5000
-          });
+        this.$toast.error("Sửa câu hỏi thất bại!", {
+          duration: 5000
+        });
       }
     },
     async getCategories() {

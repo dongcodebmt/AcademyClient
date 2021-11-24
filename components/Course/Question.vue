@@ -121,7 +121,7 @@ export default {
     async putQuestion() {
       try {
         this.questionFull.rightOption.index = document.getElementById("rightOption").value;
-        let result = await this.$axios.put("/api/exam/" + this.questionId + "/question", this.questionFull);
+        let result = await this.$axios.put(`/api/exam/${this.questionId}/question`, this.questionFull);
         if (result.status === 200) {
           this.$toast.success("Sửa câu hỏi thành công!", {
             duration: 5000
@@ -134,7 +134,7 @@ export default {
     async postQuestion() {
       try {
         this.questionFull.rightOption.index = document.getElementById("rightOption").value;
-        let result = await this.$axios.post("/api/exam/" + this.examId + "/question", this.questionFull);
+        let result = await this.$axios.post(`/api/exam/${this.examId}/question`, this.questionFull);
         if (result.status === 200) {
           this.$toast.success("Thêm câu hỏi thành công!", {
             duration: 5000
@@ -146,7 +146,7 @@ export default {
     },
     async getQuestionFull(questionId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + questionId + "/QuestionFull");
+        let result = await this.$axios.get(`/api/exam/${questionId}/QuestionFull`);
         if (result.status === 200) {
           return result.data;
         }

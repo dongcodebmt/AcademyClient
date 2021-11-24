@@ -123,7 +123,7 @@ export default {
   methods: {
     async requestCertify(courseId) {
       try {
-        let result = await this.$axios.post("/api/course/" + courseId + "/certify");
+        let result = await this.$axios.post(`/api/course/${courseId}/certify`);
         if (result.status === 200 && result.data === true) {
           return true;
         }
@@ -134,7 +134,7 @@ export default {
     },
     async IsFinished(examId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + examId + "/IsFinished");
+        let result = await this.$axios.get(`/api/exam/${examId}/IsFinished`);
         if (result.status === 200 && result.data === true) {
           return true;
         }
@@ -148,7 +148,7 @@ export default {
         return;
       }
       try {
-        let result = await this.$axios.post("/api/exam/" + examUserId + "/answers", data);
+        let result = await this.$axios.post(`/api/exam/${examUserId}/answers`, data);
         if (result.status === 200) {
           return result.data;
         }
@@ -159,7 +159,7 @@ export default {
     //Get current exam info of user
     async getOwnExam(examId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + examId + "/test");
+        let result = await this.$axios.get(`/api/exam/${examId}/test`);
         if (result.status === 200) {
           return result.data.id;
         }
@@ -207,7 +207,7 @@ export default {
     },
     async getExam(examId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + examId);
+        let result = await this.$axios.get(`/api/exam/${examId}`);
         if (result.status === 200) {
           return result.data;
         }
@@ -217,7 +217,7 @@ export default {
     },
     async getExamQuestions(examId) {
       try {
-        let result = await this.$axios.get("/api/exam/" + examId + "/ExamQuestions");
+        let result = await this.$axios.get(`/api/exam/${examId}/ExamQuestions`);
         if (result.status === 200) {
           return result.data;
         }

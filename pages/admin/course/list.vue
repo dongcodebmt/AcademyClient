@@ -35,13 +35,13 @@
                   <span v-if="props.column.field == 'actions'">
                     <nuxt-link
                       class="btn btn-outline-primary btn-sm"
-                      :to="'/admin/course/edit?id=' + props.row.id"
+                      :to="`/admin/course/edit?id=${props.row.id}`"
                     >
                       <fa-icon icon="edit" />
                     </nuxt-link>
                     <nuxt-link
                       class="btn btn-outline-danger btn-sm"
-                      :to="'/admin/course/edit?id=' + props.row.id"
+                      :to="`/admin/course/edit?id=${props.row.id}`"
                     >
                       <fa-icon icon="trash-alt" />
                     </nuxt-link>

@@ -5,7 +5,13 @@
         <div class="card card-body border-0 shadow mb-4">
           <div class="mb-3">
             <label for="title" class="form-label">Tiêu đề</label>
-            <input type="text" class="form-control" id="title" placeholder="Tiêu đề" v-model="question.title" />
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Tiêu đề"
+              v-model="question.title"
+            />
           </div>
           <div class="mb-3">
             <label class="form-label">Nội dung</label>
@@ -28,7 +34,7 @@
                   v-bind:key="item.id"
                 >{{ item.name }}</option>
               </select>
-              
+
               <div class="d-flex justify-content-end mt-3">
                 <button
                   class="btn btn-gray-800 mt-2 animate-up-2"
@@ -137,6 +143,7 @@ export default {
           this.$toast.success("Đăng câu hỏi thành công!", {
             duration: 5000
           });
+          this.$router.push(`/question/view?id=${result.data.id}`);
         }
       } catch (e) {
         console.log(e);

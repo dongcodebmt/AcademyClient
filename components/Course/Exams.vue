@@ -100,7 +100,7 @@ export default {
     async deleteExam(index) {
       try {
         let id = this.exams[index].id;
-        let result = await this.$axios.delete("/api/exam/" + id);
+        let result = await this.$axios.delete(`/api/exam/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
         }
@@ -109,15 +109,12 @@ export default {
       }
     },
     async putExam(index) {
-      if (this.exams[index].examDuration < 300 || this.exams[index].examDuration > 21600) {
-        this.$toast.error("Thời gian cần lớn hơn 300s và nhỏ hơn 21.600s!", {
-          duration: 5000
-        });
+      if (!await checkData(index)) {
         return;
       }
       try {
         let id = this.exams[index].id;
-        let result = await this.$axios.put("/api/exam/" + id, this.exams[index]);
+        let result = await this.$axios.put(`/api/exam/${id}`, this.exams[index]);
         if (result.status === 200) {
           this.exams[index].edit = false;
         }
@@ -126,10 +123,7 @@ export default {
       }
     },
     async postExam(index) {
-      if (this.exams[index].examDuration < 300 || this.exams[index].examDuration > 21600) {
-        this.$toast.error("Thời gian cần lớn hơn 300s và nhỏ hơn 21.600s!", {
-          duration: 5000
-        });
+      if (!await checkData(index)) {
         return;
       }
       try {
@@ -143,9 +137,24 @@ export default {
         console.log(e);
       }
     },
+    async checkData(index) {
+      if (this.exams[index].title === null) {
+        this.$toast.error("Vui lòng nhập tiêu đề!", {
+          duration: 5000
+        });
+        return false;
+      }
+      if (this.exams[index].examDuration < 300 || this.exams[index].examDuration > 21600) {
+        this.$toast.error("Thời gian cần lớn hơn 300s và nhỏ hơn 21.600s!", {
+          duration: 5000
+        });
+        return false;
+      }
+      return true;
+    },
     async getExams(courseId) {
       try {
-        let result = await this.$axios.get("/api/course/" + courseId + "/exams");
+        let result = await this.$axios.get(`/api/course/${courseId}/exams`);
         if (result.status === 200) {
           return await this.addFlag(result.data);
         }

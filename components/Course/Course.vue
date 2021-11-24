@@ -122,7 +122,7 @@ export default {
           let picture = await this.uploadFile();
           this.course.pictureId = picture.id;
         }
-        let result = await this.$axios.put("/api/course/" + this.courseId, this.course);
+        let result = await this.$axios.put(`/api/course/${this.courseId}`, this.course);
         if (result.status === 200) {
           this.$toast.success("Sửa thông tin khóa học thành công!", {
             duration: 5000
@@ -144,7 +144,7 @@ export default {
     },
     async getCourse(id) {
       try {
-        let result = await this.$axios.get("/api/course/" + id);
+        let result = await this.$axios.get(`/api/course/${id}`);
         if (result.status === 200) {
           return result.data;
         }

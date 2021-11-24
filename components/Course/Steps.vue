@@ -74,7 +74,7 @@ export default {
     async deleteStep(index) {
       try {
         let id = this.steps[index].id;
-        let result = await this.$axios.delete("/api/step/" + id);
+        let result = await this.$axios.delete(`/api/step/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
         }
@@ -84,7 +84,7 @@ export default {
     },
     async getSteps(trackId) {
       try {
-        let result = await this.$axios.get("/api/track/" + trackId + "/steps");
+        let result = await this.$axios.get(`/api/track/${trackId}/steps`);
         if (result.status === 200) {
           return result.data;
         }

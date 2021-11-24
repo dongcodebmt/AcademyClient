@@ -118,7 +118,7 @@ export default {
   methods: {
     async getBlog(id) {
       try {
-        let result = await this.$axios.get("/api/blog/" + id);
+        let result = await this.$axios.get(`/api/blog/${id}`);
         if (result.status === 200) {
           return result.data;
         }
@@ -155,17 +155,18 @@ export default {
           let picture = await this.uploadFile();
           this.blog.pictureId = picture.id;
         }
-        let result = await this.$axios.put("/api/blog/" + this.blog.id, this.blog);
+        let result = await this.$axios.put(`/api/blog/${this.blog.id}`, this.blog);
         if (result.status === 200) {
           this.$toast.success("Sửa blog thành công!", {
             duration: 5000
           });
+          this.$router.push(`/blog/view?id=${result.data.id}`);
         }
       } catch (e) {
         console.log(e);
-          this.$toast.error("Sửa blog thất bại!", {
-            duration: 5000
-          });
+        this.$toast.error("Sửa blog thất bại!", {
+          duration: 5000
+        });
       }
     },
     async getCategories() {

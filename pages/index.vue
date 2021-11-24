@@ -24,7 +24,7 @@
       <!-- Content Row-->
       <div class="row g-4">
         <div class="col-sm-3" style="width: 20%" v-for="item in courses" :key="item.id">
-          <nuxt-link :to="'/course/course?id=' + item.id">
+          <nuxt-link :to="`/course/course?id=${item.id}`">
             <div class="card special-card border-0 h-100">
               <img
                 :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : require('@/assets/img/empty.png') ]"
@@ -43,7 +43,7 @@
       </div>
       <div class="row g-4">
         <div class="col-sm-3" style="width: 20%" v-for="item in blogs" :key="item.id">
-          <nuxt-link :to="'/blog/view?id=' + item.id">
+          <nuxt-link :to="`/blog/view?id=${item.id}`">
             <div class="card special-card border-0 h-100">
               <img
                 :src="[ item.picturePath && item.picturePath !== '/' ? item.picturePath : require('@/assets/img/empty.png') ]"

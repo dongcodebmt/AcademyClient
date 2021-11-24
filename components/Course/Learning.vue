@@ -94,7 +94,7 @@
                         class="list-group-item rounded"
                         v-for="item in exams"
                         :key="item.id"
-                        :to="'/course/exam?id=' + item.id"
+                        :to="`/course/exam?id=${item.id}`"
                       >{{ item.title }}</nuxt-link>
                     </div>
                   </div>
@@ -165,7 +165,7 @@ export default {
     },
     async getExams(courseId) {
       try {
-        let result = await this.$axios.get("/api/course/" + courseId + "/exams");
+        let result = await this.$axios.get(`/api/course/${courseId}/exams`);
         if (result.status === 200) {
           return result.data;
         }
@@ -176,7 +176,7 @@ export default {
     async getStep(stepId) {
       this.stepId = stepId;
       try {
-        let result = await this.$axios.get("/api/step/" + stepId);
+        let result = await this.$axios.get(`/api/step/${stepId}`);
         if (result.status === 200) {
           this.step = result.data;
           // High light code
@@ -196,7 +196,7 @@ export default {
         return;
       }
       try {
-        let result = await this.$axios.post("/api/step/" + stepId + "/progress");
+        let result = await this.$axios.post(`/api/step/${stepId}/progress`);
         if (result.status === 200 && result.data === true) {
           this.progress.completed += 1;
         }
@@ -206,7 +206,7 @@ export default {
     },
     async getTrackSteps(courseId) {
       try {
-        let result = await this.$axios.get("api/course/" + courseId + "/tracksteps");
+        let result = await this.$axios.get(`api/course/${courseId}/tracksteps`);
         if (result.status === 200) {
           return result.data;
         }

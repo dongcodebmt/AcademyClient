@@ -91,7 +91,7 @@ export default {
     async deleteTrack(index) {
       try {
         let id = this.tracks[index].id;
-        let result = await this.$axios.delete("/api/track/" + id);
+        let result = await this.$axios.delete(`/api/track/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
         }
@@ -102,7 +102,7 @@ export default {
     async putTrack(index) {
       try {
         let id = this.tracks[index].id;
-        let result = await this.$axios.put("/api/track/" + id, this.tracks[index]);
+        let result = await this.$axios.put(`/api/track/${id}`, this.tracks[index]);
         if (result.status === 200) {
           this.tracks[index].edit = false;
         }
@@ -124,7 +124,7 @@ export default {
     },
     async getTracks(courseId) {
       try {
-        let result = await this.$axios.get("/api/course/" + courseId + "/tracks");
+        let result = await this.$axios.get(`/api/course/${courseId}/tracks`);
         if (result.status === 200) {
           return await this.addFlag(result.data);
         }

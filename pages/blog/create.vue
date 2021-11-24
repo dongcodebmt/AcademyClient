@@ -5,7 +5,13 @@
         <div class="card card-body border-0 shadow mb-4">
           <div class="mb-3">
             <label for="title" class="form-label">Tiêu đề</label>
-            <input type="text" class="form-control" id="title" placeholder="Tiêu đề" v-model="blog.title" />
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              placeholder="Tiêu đề"
+              v-model="blog.title"
+            />
           </div>
           <div class="mb-3">
             <label class="form-label">Nội dung</label>
@@ -137,6 +143,7 @@ export default {
           this.$toast.success("Đăng blog thành công!", {
             duration: 5000
           });
+          this.$router.push(`/blog/view?id=${result.data.id}`);
         }
       } catch (e) {
         console.log(e);

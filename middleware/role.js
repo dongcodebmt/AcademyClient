@@ -13,16 +13,16 @@ export default ({ $auth, route, redirect }) => {
   if ($auth.hasScope('Banned')) {
     authority = 5;
   }
-  if ($auth.hasScope('Student')) {
+  if ($auth.hasScope('Students')) {
     authority = 4;
   }
-  if ($auth.hasScope('Lecturer')) {
+  if ($auth.hasScope('Lecturers')) {
     authority = 3;
   }
-  if ($auth.hasScope('Mod')) {
+  if ($auth.hasScope('Moderators')) {
     authority = 2;
   }
-  if ($auth.hasScope('Admin')) {
+  if ($auth.hasScope('Administrators')) {
     authority = 1;
   }
 

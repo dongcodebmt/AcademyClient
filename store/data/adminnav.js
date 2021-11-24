@@ -3,24 +3,24 @@ export default [
         "name": "Thống kê",
         "url": "/admin/statistics",
         "icon": "signal",
-        "roles": ["Admin"]
+        "roles": ["Administrators"]
     },
     {
         "name": "Quản lý danh mục",
         "url": "/admin/category",
         "icon": "list-ul",
-        "roles": ["Admin"]
+        "roles": ["Administrators"]
     },
     {
         "name": "Quản lý khóa học",
         "url": "/admin/course/list",
         "icon": "book",
-        "roles": ["Admin", "Lecturer"]
+        "roles": ["Administrators", "Lecturers"]
     },
     {
         "name": "Quản lý người dùng",
         "url": "/admin/user/list",
         "icon": "users",
-        "roles": ["Admin", "Mod"]
+        "roles": ["Administrators"]
     },
 ];

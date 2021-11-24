@@ -66,7 +66,7 @@
                             <div
                               class="media-body ms-2 text-dark align-items-center d-none d-lg-block"
                             >
-                              <nuxt-link :to="'/profile/view?id=' + item.user.id">
+                              <nuxt-link :to="`/profile/view?id=${item.user.id}`">
                                 <span
                                   class="mb-0 font-small fw-bold text-gray-900"
                                 >{{ item.user.firstName + " " + item.user.lastName }}</span>
@@ -169,7 +169,7 @@
                             <div
                               class="media-body ms-2 text-dark align-items-center d-none d-lg-block"
                             >
-                              <nuxt-link :to="'/profile/view?id=' + item.user.id">
+                              <nuxt-link :to="`/profile/view?id=${item.user.id}`">
                                 <span
                                   class="mb-0 font-small fw-bold text-gray-900"
                                 >{{ item.user.firstName + " " + item.user.lastName }}</span>
@@ -196,6 +196,7 @@
 
 <script>
 export default {
+  auth: false,
   head() {
     return {
       title: "Xếp hạng | Academy"

@@ -82,7 +82,7 @@ export default {
     async deleteRequirement(index) {
       try {
         let id = this.requirements[index].id;
-        let result = await this.$axios.delete("/api/requirement/" + id);
+        let result = await this.$axios.delete(`/api/requirement/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
         }
@@ -93,7 +93,7 @@ export default {
     async putRequirement(index) {
       try {
         let id = this.requirements[index].id;
-        let result = await this.$axios.put("/api/requirement/" + id, this.requirements[index]);
+        let result = await this.$axios.put(`/api/requirement/${id}`, this.requirements[index]);
         if (result.status === 200) {
           this.requirements[index].edit = false;
         }
@@ -115,7 +115,7 @@ export default {
     },
     async getRequirements(courseId) {
       try {
-        let result = await this.$axios.get("/api/course/" + courseId + "/requirements");
+        let result = await this.$axios.get(`/api/course/${courseId}/requirements`);
         if (result.status === 200) {
           return await this.addFlag(result.data);
         }

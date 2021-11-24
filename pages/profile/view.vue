@@ -74,6 +74,7 @@
 
 <script>
 export default {
+  auth: false,
   head() {
     return {
       title: this.user.firstName + " " + this.user.lastName + " | Academy"
@@ -99,7 +100,7 @@ export default {
     if (this.id) {
       [this.user, this.courses, this.certs] = await Promise.all([
         this.getUser(this.id),
-        this.getCourseRegisted(this.id),
+        this.getRegistedCourses(this.id),
         this.getCertifications(this.id)
       ]);
     }
@@ -117,9 +118,9 @@ export default {
       }
     },
     // Get registed courses
-    async getCourseRegisted(userId) {
+    async getRegistedCourses(userId) {
       try {
-        let result = await this.$axios.get(`/api/course/CourseRegisted/${userId}`);
+        let result = await this.$axios.get(`/api/course/RegistedCourses/${userId}`);
         if (result.status === 200) {
           return result.data;
         }
@@ -130,7 +131,7 @@ export default {
     // Get user
     async getUser(id) {
       try {
-        let result = await this.$axios.get("/api/User/Public/" + id);
+        let result = await this.$axios.get(`/api/User/Public/${id}`);
         if (result.status === 200) {
           return result.data;
         }

@@ -82,7 +82,7 @@ export default {
     async deleteWillLearn(index) {
       try {
         let id = this.willLearns[index].id;
-        let result = await this.$axios.delete("/api/willlearn/" + id);
+        let result = await this.$axios.delete(`/api/willlearn/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
         }
@@ -93,7 +93,7 @@ export default {
     async putWillLearn(index) {
       try {
         let id = this.willLearns[index].id;
-        let result = await this.$axios.put("/api/willlearn/" + id, this.willLearns[index]);
+        let result = await this.$axios.put(`/api/willlearn/${id}`, this.willLearns[index]);
         if (result.status === 200) {
           this.willLearns[index].edit = false;
         }
@@ -115,7 +115,7 @@ export default {
     },
     async getWillLearns(courseId) {
       try {
-        let result = await this.$axios.get("/api/course/" + courseId + "/willlearns");
+        let result = await this.$axios.get(`/api/course/${courseId}/willlearns`);
         if (result.status === 200) {
           return await this.addFlag(result.data);
         }

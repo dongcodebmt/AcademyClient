@@ -54,12 +54,7 @@
           v-on:click="post()"
         >Lưu</button>
         <!-- Put request -->
-        <button
-          type="button"
-          class="btn btn-outline-primary mx-2"
-          v-else
-          v-on:click="putStep()"
-        >Lưu</button>
+        <button type="button" class="btn btn-outline-primary mx-2" v-else v-on:click="putStep()">Lưu</button>
       </div>
     </div>
   </div>
@@ -87,16 +82,34 @@ export default {
   methods: {
     async post() {
       try {
-        await this.postStep();
+        if (!await this.checkData()) {
+          return;
+        }
+        await this.postStep(); 
         await this.backToSteps(this.trackId);
       } catch (e) {
         console.log(e);
       }
     },
+    async checkData() {
+      if (this.step.title === null) {
+        this.$toast.error("Vui lòng nhập tiêu đề!", {
+          duration: 5000
+        });
+        return false;
+      }
+      if (this.step.duration === null) {
+        this.$toast.error("Vui lòng nhập thời gian!", {
+          duration: 5000
+        });
+        return false;
+      }
+      return true;
+    },
     async putStep() {
       try {
         this.step.trackId = this.trackId;
-        let result = await this.$axios.put("/api/step/" + this.stepId, this.step);
+        let result = await this.$axios.put(`/api/step/${this.stepId}`, this.step);
         if (result.status === 200) {
           this.$toast.success("Sửa thành công!", {
             duration: 5000
@@ -121,7 +134,7 @@ export default {
     },
     async getStep(id) {
       try {
-        let result = await this.$axios.get("/api/step/" + id);
+        let result = await this.$axios.get(`/api/step/${id}`);
         if (result.status === 200) {
           return result.data;
         }

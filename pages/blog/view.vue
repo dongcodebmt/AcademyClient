@@ -15,7 +15,7 @@
                     :src="[user.picture && user.picture !== '/' ? user.picture :  require('@/assets/img/team/blank-profile.png') ]"
                   />
                   <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                    <nuxt-link :to="'/profile/view?id=' + user.id">
+                    <nuxt-link :to="`/profile/view?id=${user.id}`">
                       <span
                         class="mb-0 font-small fw-bold text-gray-900"
                       >{{ user.firstName + " " + user.lastName }}</span>
@@ -30,7 +30,7 @@
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="baction">
                     <li>
-                      <nuxt-link class="dropdown-item" :to="'/blog/edit?id=' + id">Sửa</nuxt-link>
+                      <nuxt-link class="dropdown-item" :to="`/blog/edit?id=${id}`">Sửa</nuxt-link>
                     </li>
                     <li>
                       <a class="dropdown-item" v-on:click="deleteBlog(id)">Xóa</a>
@@ -53,7 +53,7 @@
         </div>
       </div>
 
-      <div class="col-lg-8" id="commentEditor" v-if="!$auth.hasScope('Banned')">
+      <div class="col-lg-8" id="commentEditor" v-if="!$auth.hasScope('Banned') && $auth.loggedIn">
         <div class="card mb-4">
           <div class="card-body">
             <h6 class="card-title">Hãy để lại bình luận của bạn</h6>
@@ -98,7 +98,7 @@
                     :src="[ item.user.picture && item.user.picture !== '/' ? item.user.picture :  require('@/assets/img/team/blank-profile.png') ]"
                   />
                   <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                    <nuxt-link :to="'/profile/view?id=' + user.id">
+                    <nuxt-link :to="`/profile/view?id=${user.id}`">
                       <span
                         class="mb-0 font-small fw-bold text-gray-900"
                       >{{ item.user.firstName + " " + item.user.lastName }}</span>
@@ -148,6 +148,7 @@
 import TimeSince from "~/components/TimeSince.vue";
 
 export default {
+  auth: false,
   head() {
     return {
       title: this.blog.title + " | Academy"
@@ -182,7 +183,7 @@ export default {
       comment: {
         id: 0,
         blogId: this.$route.query.id,
-        userId: this.$auth.user.id,
+        userId: this.$auth.loggedIn ? this.$auth.user.id : 0,
         content: null,
       },
       cmtEdit: false
@@ -222,14 +223,17 @@ export default {
       }
     },
     isHasRole(userId) {
+      if (!this.$auth.loggedIn) {
+        return check;
+      }
       let check = 0;
       if (!this.$auth.hasScope("Banned") && userId === this.$auth.user.id) {
         check = 1;
       }
-      if (this.$auth.hasScope("Mod")) {
+      if (this.$auth.hasScope("Moderators")) {
         check = 2;
       }
-      if (this.$auth.hasScope("Admin")) {
+      if (this.$auth.hasScope("Administrators")) {
         check = 3;
       }
       return check;
@@ -256,7 +260,7 @@ export default {
           this.$toast.success("Xóa bài viết thành công!", {
             duration: 5000
           });
-          this.$router.push("/blog/list");
+          this.$router.push("/blog");
         }
       } catch (e) {
         console.log(e);

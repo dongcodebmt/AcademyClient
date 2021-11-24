@@ -63,7 +63,7 @@
               <nuxt-link
                 class="dropdown-item d-flex align-items-center"
                 to="/admin"
-                v-if="this.$auth.hasScope('Admin') || this.$auth.hasScope('Lecturer')"
+                v-if="this.$auth.hasScope('Administrators') || this.$auth.hasScope('Lecturers')"
               >
                 <fa-icon icon="user-shield" class="dropdown-icon text-gray-400 me-2" />Quản trị
               </nuxt-link>

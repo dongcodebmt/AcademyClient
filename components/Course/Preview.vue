@@ -128,7 +128,7 @@ export default {
     },
     async getTrackSteps(courseId) {
       try {
-        let result = await this.$axios.get("api/course/" + courseId + "/tracksteps");
+        let result = await this.$axios.get(`api/course/${courseId}/tracksteps`);
         if (result.status === 200) {
           return result.data;
         }
@@ -138,7 +138,7 @@ export default {
     },
     async getRequirements(courseId) {
       try {
-        let result = await this.$axios.get("/api/course/" + courseId + "/requirements");
+        let result = await this.$axios.get(`/api/course/${courseId}/requirements`);
         if (result.status === 200) {
           return result.data;
         }
@@ -148,7 +148,7 @@ export default {
     },
     async getWillLearns(courseId) {
       try {
-        let result = await this.$axios.get("/api/Course/" + courseId + "/WillLearns");
+        let result = await this.$axios.get(`/api/Course/${courseId}/WillLearns`);
         if (result.status === 200) {
           return result.data;
         }
@@ -158,7 +158,7 @@ export default {
     },
     async getCourse(id) {
       try {
-        let result = await this.$axios.get("/api/Course/" + id);
+        let result = await this.$axios.get(`/api/Course/${id}`);
         if (result.status === 200) {
           return result.data;
         }
@@ -168,7 +168,7 @@ export default {
     },
     async courseRegister(id) {
       try {
-        let result = await this.$axios.post("/api/Course/" + id + "/Register");
+        let result = await this.$axios.post(`/api/Course/${id}/Register`);
         if (result.status === 200) {
           this.$toast.success("Đăng ký khóa học thành công!", {
             duration: 5000
