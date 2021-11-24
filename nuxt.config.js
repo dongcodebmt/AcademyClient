@@ -1,13 +1,13 @@
-import path from 'path'
-import fs from 'fs'
+// import path from 'path'
+// import fs from 'fs'
 
 export default {
-  server: {
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'example.key')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'example.crt'))
-    }
-  },
+  // server: {
+  //   https: {
+  //     key: fs.readFileSync(path.resolve(__dirname, 'example.key')),
+  //     cert: fs.readFileSync(path.resolve(__dirname, 'example.crt'))
+  //   }
+  // },
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
