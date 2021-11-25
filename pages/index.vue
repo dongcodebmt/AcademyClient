@@ -19,7 +19,7 @@
     </div>-->
     <div id="content">
       <div class="d-grid gap-3 my-2 py-1">
-        <div class="p-2 bg-purple text-center text-white rounded border">Khóa học mới</div>
+        <div class="p-2 bg-gray-800 text-center text-white rounded border">Khóa học mới</div>
       </div>
       <!-- Content Row-->
       <div class="row g-4">
@@ -39,7 +39,7 @@
       </div>
 
       <div class="d-grid gap-3 my-2 py-1">
-        <div class="p-2 bg-purple text-center text-white rounded border">Bài viết mới</div>
+        <div class="p-2 bg-gray-800 text-center text-white rounded border">Bài viết mới</div>
       </div>
       <div class="row g-4">
         <div class="col-sm-3" v-for="item in blogs" :key="item.id">
