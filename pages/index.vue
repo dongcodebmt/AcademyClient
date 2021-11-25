@@ -23,7 +23,7 @@
       </div>
       <!-- Content Row-->
       <div class="row g-4">
-        <div class="col-sm-3" style="width: 20%" v-for="item in courses" :key="item.id">
+        <div class="col-sm-3" v-for="item in courses" :key="item.id">
           <nuxt-link :to="`/course/course?id=${item.id}`">
             <div class="card special-card border-0 h-100">
               <img
@@ -42,7 +42,7 @@
         <div class="p-2 bg-purple text-center text-white rounded border">Bài viết mới</div>
       </div>
       <div class="row g-4">
-        <div class="col-sm-3" style="width: 20%" v-for="item in blogs" :key="item.id">
+        <div class="col-sm-3" v-for="item in blogs" :key="item.id">
           <nuxt-link :to="`/blog/view?id=${item.id}`">
             <div class="card special-card border-0 h-100">
               <img
@@ -97,9 +97,9 @@ export default {
     [this.courses, this.blogs] = await Promise.all([this.getCourses(), this.getBlogPosts()]);
   },
   methods: {
-    async getBlogPosts() {
+    async getBlogPosts(skip = 0, take = 8) {
       try {
-        let result = await this.$axios.get("/api/blog");
+        let result = await this.$axios.get(`/api/blog?skip=${skip}&take=${take}`);
         if (result.status === 200) {
           return result.data;
         }
@@ -107,9 +107,9 @@ export default {
         console.log(e);
       }
     },
-    async getCourses() {
+    async getCourses(skip = 0, take = 8) {
       try {
-        let courses = await this.$axios.get("/api/course");
+        let courses = await this.$axios.get(`/api/course?skip=${skip}&take=${take}`);
         if (courses.status === 200) {
           return courses.data;
         }

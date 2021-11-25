@@ -3,9 +3,9 @@
     <div class="py-4">
       <div class="row">
         <div class="col-lg-8">
-          <div class="card bg-primary mb-4" v-if="step.embedLink">
-            <div id="player">
-              <iframe :src="step.embedLink" style="min-height: 570px" width="95%" class="mx-4 my-4"></iframe>
+          <div class="mb-4" v-if="step.embedLink">
+            <div id="player" class="ratio ratio-16x9">
+              <iframe :src="step.embedLink" class="rounded" allowfullscreen></iframe>
             </div>
           </div>
           <div class="card mb-4" v-if="getAvg() == 100">

@@ -2,7 +2,7 @@
   <div id="courses">
     <div class="list py-4">
       <div class="row">
-        <div class="col-sm-3" style="width: 20%" v-for="item in courses" :key="item.id">
+        <div class="col-sm-3" v-for="item in courses" :key="item.id">
           <nuxt-link :to="`/course/course?id=${item.id}`">
             <div class="card special-card border-0 h-100">
               <img

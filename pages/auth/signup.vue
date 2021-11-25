@@ -145,7 +145,7 @@
                     />
                     <label class="form-check-label fw-normal mb-0" for="terms">
                       Tôi đồng ý với
-                      <a href="#" class="fw-bold">các điều khoản và điều kiện</a>
+                      <nuxt-link :to="'/policies'" class="fw-bold">các điều khoản và điều kiện</nuxt-link>
                     </label>
                   </div>
                 </div>
