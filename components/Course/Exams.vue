@@ -103,13 +103,17 @@ export default {
         let result = await this.$axios.delete(`/api/exam/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
+          this.$toast.success("Xóa bài kiểm tra thành công!", {
+            duration: 5000
+          });
+          return;
         }
       } catch (e) {
         console.log(e);
       }
     },
     async putExam(index) {
-      if (!await checkData(index)) {
+      if (!await this.checkData(index)) {
         return;
       }
       try {
@@ -117,13 +121,16 @@ export default {
         let result = await this.$axios.put(`/api/exam/${id}`, this.exams[index]);
         if (result.status === 200) {
           this.exams[index].edit = false;
+          this.$toast.success("Sửa thông tin bài kiểm tra thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async postExam(index) {
-      if (!await checkData(index)) {
+      if (!await this.checkData(index)) {
         return;
       }
       try {
@@ -132,22 +139,29 @@ export default {
           this.removeItem(index);
           result.data.edit = false;
           this.exams.push(result.data);
+          this.$toast.success("Tạo bài kiểm tra thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async checkData(index) {
-      if (this.exams[index].title === null) {
-        this.$toast.error("Vui lòng nhập tiêu đề!", {
-          duration: 5000
-        });
-        return false;
-      }
-      if (this.exams[index].examDuration < 300 || this.exams[index].examDuration > 21600) {
-        this.$toast.error("Thời gian cần lớn hơn 300s và nhỏ hơn 21.600s!", {
-          duration: 5000
-        });
+      try {
+        if (this.exams[index].title === null) {
+          this.$toast.error("Vui lòng nhập tiêu đề!", {
+            duration: 5000
+          });
+          return false;
+        }
+        if (this.exams[index].examDuration < 300 || this.exams[index].examDuration > 21600) {
+          this.$toast.error("Thời gian cần lớn hơn 300s và nhỏ hơn 21.600s!", {
+            duration: 5000
+          });
+          return false;
+        }
+      } catch (e) {
         return false;
       }
       return true;

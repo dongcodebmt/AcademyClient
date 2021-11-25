@@ -100,6 +100,15 @@ export default {
     this.categories = await this.getCategories();
   },
   methods: {
+    async checkData(index) {
+      if (!this.categories[index].name) {
+        this.$toast.error("Vui lòng nhập tên danh mục!", {
+          duration: 5000
+        });
+        return false;
+      }
+      return true;
+    },
     async removeItem(index) {
       this.categories.splice(index, 1);
     },
@@ -112,29 +121,44 @@ export default {
         let result = await this.$axios.delete(`/api/category/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
+          this.$toast.success("Xóa danh mục thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async putCategory(index) {
+      if (!await this.checkData(index)) {
+        return;
+      }
       try {
         let id = this.categories[index].id;
         let result = await this.$axios.put(`/api/category/${id}`, this.categories[index]);
         if (result.status === 200) {
           this.categories[index].edit = false;
+          this.$toast.success("Sửa danh mục thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async postCategory(index) {
+      if (!await this.checkData(index)) {
+        return;
+      }
       try {
         let result = await this.$axios.post("/api/category", this.categories[index]);
         if (result.status === 200) {
           this.removeItem(index);
           result.data.edit = false;
           this.categories.push(result.data);
+          this.$toast.success("Thêm danh mục thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);

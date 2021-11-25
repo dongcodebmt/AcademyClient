@@ -42,7 +42,7 @@
 
         <div class="mb-3">
           <label class="form-label">Đáp án đúng</label>
-          <select class="form-select" aria-label="Danh mục" id="rightOption">
+          <select class="form-select" id="rightOption">
             <option
               v-for="(item, index) in questionFull.options"
               :value="index"
@@ -68,7 +68,7 @@
             type="button"
             class="btn btn-outline-primary mx-2"
             v-else
-            v-on:click="post()"
+            v-on:click="postQuestion()"
           >Lưu</button>
         </div>
       </div>
@@ -101,14 +101,6 @@ export default {
     }
   },
   methods: {
-    async post() {
-      try {
-        await this.postQuestion();
-        this.backToQuestions(this.examId);
-      } catch (e) {
-        console.log(e);
-      }
-    },
     async backToQuestions(id) {
       this.$emit('back', id);
     },
@@ -118,7 +110,38 @@ export default {
     async removeItem(index) {
       this.questionFull.options.splice(index, 1);
     },
+    async checkData() {
+      try {
+        if (!this.questionFull.question.content || this.questionFull.question.content.length < 10) {
+          this.$toast.error("Câu hỏi quá ngắn!", {
+            duration: 5000
+          });
+          return false;
+        }
+        if (this.questionFull.options.length < 2) {
+          this.$toast.error("Vui lòng nhập ít nhất hai đáp án!", {
+            duration: 5000
+          });
+          return false;
+        }
+        let list = this.questionFull.options;
+        list.forEach((element, index) => {
+          if (!element.content) {
+            this.$toast.error(`Vui lòng nhập đáp án cho câu ${index+1}!`, {
+              duration: 5000
+            });
+            return false;
+          }
+        });
+      } catch (e) {
+        return false;
+      }
+      return true;
+    },
     async putQuestion() {
+      if (!await this.checkData()) {
+        return;
+      }
       try {
         this.questionFull.rightOption.index = document.getElementById("rightOption").value;
         let result = await this.$axios.put(`/api/exam/${this.questionId}/question`, this.questionFull);
@@ -132,6 +155,9 @@ export default {
       }
     },
     async postQuestion() {
+      if (!await this.checkData()) {
+        return;
+      }
       try {
         this.questionFull.rightOption.index = document.getElementById("rightOption").value;
         let result = await this.$axios.post(`/api/exam/${this.examId}/question`, this.questionFull);
@@ -139,6 +165,7 @@ export default {
           this.$toast.success("Thêm câu hỏi thành công!", {
             duration: 5000
           });
+          this.backToQuestions(this.examId);
         }
       } catch (e) {
         console.log(e);

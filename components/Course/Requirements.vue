@@ -69,15 +69,29 @@ export default {
       requirements: [],
     }
   },
-  mounted: async function() {
+  mounted: async function () {
     this.requirements = await this.getRequirements(this.courseId);
   },
   methods: {
     async removeItem(index) {
-        this.requirements.splice(index, 1);
+      this.requirements.splice(index, 1);
     },
     async insertItem() {
-        this.requirements.push({ courseId: this.courseId, content: null });
+      this.requirements.push({ courseId: this.courseId, content: null });
+    },
+    async checkData(index) {
+      try {
+        if (!this.requirements[index].content) {
+          this.$toast.error("Vui lòng nhập nội dung!", {
+            duration: 5000
+          });
+          return false;
+        }
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+      return true;
     },
     async deleteRequirement(index) {
       try {
@@ -85,29 +99,44 @@ export default {
         let result = await this.$axios.delete(`/api/requirement/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
+          this.$toast.success("Xóa yêu cầu thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async putRequirement(index) {
+      if (!await this.checkData(index)) {
+        return;
+      }
       try {
         let id = this.requirements[index].id;
         let result = await this.$axios.put(`/api/requirement/${id}`, this.requirements[index]);
         if (result.status === 200) {
           this.requirements[index].edit = false;
+          this.$toast.success("Sửa yêu cầu thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async postRequirement(index) {
+      if (!await this.checkData(index)) {
+        return;
+      }
       try {
         let result = await this.$axios.post("/api/requirement", this.requirements[index]);
         if (result.status === 200) {
           this.removeItem(index);
           result.data.edit = false;
           this.requirements.push(result.data);
+          this.$toast.success("Tạo yêu cầu thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);

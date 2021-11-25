@@ -149,17 +149,17 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: process.env.BACKEND_URL,
-    credentials: true
-    // proxy: true
+    // baseURL: process.env.BACKEND_URL,
+    // credentials: true
+    proxy: true
   },
 
-  // proxy: {
-  //   '/api/': {
-  //     target: process.env.BACKEND_URL,
-  //     secure: false
-  //   }
-  // },
+  proxy: {
+    '/api/': {
+      target: process.env.BACKEND_URL,
+      secure: false
+    }
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

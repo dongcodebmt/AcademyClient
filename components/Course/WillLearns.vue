@@ -69,15 +69,29 @@ export default {
       willLearns: [],
     }
   },
-  mounted: async function() {
+  mounted: async function () {
     this.willLearns = await this.getWillLearns(this.courseId);
   },
   methods: {
     async removeItem(index) {
-        this.willLearns.splice(index, 1);
+      this.willLearns.splice(index, 1);
     },
     async insertItem() {
-        this.willLearns.push({ courseId: this.courseId, content: null });
+      this.willLearns.push({ courseId: this.courseId, content: null });
+    },
+    async checkData(index) {
+      try {
+        if (!this.willLearns[index].content) {
+          this.$toast.error("Vui lòng nhập nội dung!", {
+            duration: 5000
+          });
+          return false;
+        }
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+      return true;
     },
     async deleteWillLearn(index) {
       try {
@@ -85,29 +99,44 @@ export default {
         let result = await this.$axios.delete(`/api/willlearn/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
+          this.$toast.success("Xóa kiến thức được học thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async putWillLearn(index) {
+      if (!await this.checkData(index)) {
+        return;
+      }
       try {
         let id = this.willLearns[index].id;
         let result = await this.$axios.put(`/api/willlearn/${id}`, this.willLearns[index]);
         if (result.status === 200) {
           this.willLearns[index].edit = false;
+          this.$toast.success("Sửa kiến thức được học thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async postWillLearn(index) {
+      if (!await this.checkData(index)) {
+        return;
+      }
       try {
         let result = await this.$axios.post("/api/willlearn", this.willLearns[index]);
         if (result.status === 200) {
           this.removeItem(index);
           result.data.edit = false;
           this.willLearns.push(result.data);
+          this.$toast.success("Tạo kiến thức được học thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);

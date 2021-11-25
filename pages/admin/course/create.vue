@@ -88,6 +88,7 @@ export default {
   meta: {
     auth: { authority: 3 }
   },
+  layout: "admin",
   head() {
     return {
       title: "Tạo khóa học | Academy"
@@ -116,13 +117,26 @@ export default {
   },
   methods: {
     async postCourse() {
-      if (this.course.categoryId === 0) {
-        this.$toast.error("Vui lòng chọn danh mục!", {
-          duration: 5000
-        });
-        return;
-      }
       try {
+        if (this.course.categoryId == 0) {
+          this.$toast.error("Vui lòng chọn danh mục!", {
+            duration: 5000
+          });
+          return;
+        }
+        if (!this.course.title) {
+          this.$toast.error("Vui lòng nhập tiêu đề!", {
+            duration: 5000
+          });
+          return;
+        }
+        if (!this.course.description || this.course.description.length < 10) {
+          this.$toast.error("Mô tả quá ngắn!", {
+            duration: 5000
+          });
+          return;
+        }
+
         if (this.course.picturePath) {
           let picture = await this.uploadFile();
           this.course.pictureId = picture.id;
@@ -130,6 +144,9 @@ export default {
         let result = await this.$axios.post("/api/course", this.course);
         if (result.status === 200) {
           this.id = result.data.id;
+          this.$toast.success("Tạo khóa học thành công!", {
+            duration: 5000
+          });
           this.$router.push({ path: "/admin/course/edit", query: { id: this.id } });
         }
       } catch (e) {

@@ -134,6 +134,27 @@ export default {
     },
     async postQuestion() {
       try {
+        if (this.question.categoryId == 0) {
+          this.$toast.error("Vui lòng chọn danh mục!", {
+            duration: 5000
+          });
+          return;
+        }
+
+        if (!this.question.title) {
+          this.$toast.error("Vui lòng nhập tiêu đề!", {
+            duration: 5000
+          });
+          return;
+        }
+
+        if (!this.question.content || this.question.content.length < 10) {
+          this.$toast.error("Nội dung quá ngắn!", {
+            duration: 5000
+          });
+          return;
+        }
+
         if (this.question.picturePath) {
           let picture = await this.uploadFile();
           this.question.pictureId = picture.id;

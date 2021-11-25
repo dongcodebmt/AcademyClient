@@ -278,6 +278,13 @@ export default {
     },
     async putComment() {
       try {
+        if (!this.comment.content || this.comment.content.length < 10) {
+          this.$toast.error("Nội dung quá ngắn!", {
+            duration: 5000
+          });
+          return;
+        }
+
         let result = await this.$axios.put(`/api/answer/${this.comment.id}`, this.comment);
         if (result.status === 200) {
           this.$toast.success("Sửa bình luận thành công!", {
@@ -308,6 +315,13 @@ export default {
     },
     async postComment() {
       try {
+        if (!this.comment.content || this.comment.content.length < 10) {
+          this.$toast.error("Nội dung quá ngắn!", {
+            duration: 5000
+          });
+          return;
+        }
+
         let result = await this.$axios.post("/api/answer", this.comment);
         if (result.status === 200) {
           this.comments.unshift(result.data);

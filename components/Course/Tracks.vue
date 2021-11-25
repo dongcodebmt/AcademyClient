@@ -75,7 +75,7 @@ export default {
       tracks: [],
     }
   },
-  mounted: async function() {
+  mounted: async function () {
     this.tracks = await this.getTracks(this.courseId);
   },
   methods: {
@@ -83,10 +83,24 @@ export default {
       this.$emit('open', id);
     },
     async removeItem(index) {
-        this.tracks.splice(index, 1);
+      this.tracks.splice(index, 1);
     },
     async insertItem() {
-        this.tracks.push({ courseId: this.courseId, content: null });
+      this.tracks.push({ courseId: this.courseId, title: null });
+    },
+    async checkData(index) {
+      try {
+        if (!this.tracks[index].title) {
+          this.$toast.error("Vui lòng nhập nội dung!", {
+            duration: 5000
+          });
+          return false;
+        }
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+      return true;
     },
     async deleteTrack(index) {
       try {
@@ -94,29 +108,44 @@ export default {
         let result = await this.$axios.delete(`/api/track/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
+          this.$toast.success("Xoá phần học thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async putTrack(index) {
+      if (!await this.checkData(index)) {
+        return;
+      }
       try {
         let id = this.tracks[index].id;
         let result = await this.$axios.put(`/api/track/${id}`, this.tracks[index]);
         if (result.status === 200) {
           this.tracks[index].edit = false;
+          this.$toast.success("Sửa phần học thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);
       }
     },
     async postTrack(index) {
+      if (!await this.checkData(index)) {
+        return;
+      }
       try {
         let result = await this.$axios.post("/api/track", this.tracks[index]);
         if (result.status === 200) {
           this.removeItem(index);
           result.data.edit = false;
           this.tracks.push(result.data);
+          this.$toast.success("Tạo phần học thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);

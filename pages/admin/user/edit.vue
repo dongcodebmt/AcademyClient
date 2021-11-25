@@ -434,6 +434,12 @@ export default {
     // Roles
     async setRoles(userId) {
       try {
+        if (this.roles.length < 1) {
+          this.$toast.error("Vui lòng chọn ít nhất 1 quyền!", {
+            duration: 5000
+          });
+          return;
+        }
         let result = await this.$axios.post(`/api/user/${userId}/roles`, this.roles);
         if (result.status === 200) {
           this.$toast.success("Thay đổi quyền thành công!", {
@@ -532,6 +538,25 @@ export default {
     },
     // Update user
     async putUser(id) {
+      if (!this.user.firstName) {
+        this.$toast.error("Vui lòng nhập họ!", {
+          duration: 5000
+        });
+        return;
+      }
+      if (!this.user.firstName) {
+        this.$toast.error("Vui lòng nhập tên!", {
+          duration: 5000
+        });
+        return;
+      }
+      if (!this.user.email) {
+        this.$toast.error("Vui lòng nhập email!", {
+          duration: 5000
+        });
+        return;
+      }
+      
       try {
         let result = await this.$axios.put(`/api/user/${id}`, this.user);
         if (result.status === 200) {

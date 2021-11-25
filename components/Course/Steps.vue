@@ -15,9 +15,7 @@
             <draggable v-model="steps" tag="tbody">
               <tr v-for="(item, index) in steps" :key="index">
                 <td class="col-1">{{ item.id }}</td>
-                <td class="col-9">
-                  <input type="text" class="form-control" v-model="item.title" />
-                </td>
+                <td class="col-9">{{ item.title }}</td>
                 <td class="col-2">
                   <!-- Delete local -->
                   <button
@@ -77,6 +75,9 @@ export default {
         let result = await this.$axios.delete(`/api/step/${id}`);
         if (result.status === 200) {
           this.removeItem(index);
+          this.$toast.success("Xóa bài học thành công!", {
+            duration: 5000
+          });
         }
       } catch (e) {
         console.log(e);

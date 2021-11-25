@@ -134,6 +134,27 @@ export default {
     },
     async postBlog() {
       try {
+        if (this.blog.categoryId == 0) {
+          this.$toast.error("Vui lòng chọn danh mục!", {
+            duration: 5000
+          });
+          return;
+        }
+
+        if (!this.blog.title) {
+          this.$toast.error("Vui lòng nhập tiêu đề!", {
+            duration: 5000
+          });
+          return;
+        }
+
+        if (!this.blog.content || this.blog.content.length < 10) {
+          this.$toast.error("Nội dung quá ngắn!", {
+            duration: 5000
+          });
+          return;
+        }
+
         if (this.blog.picturePath) {
           let picture = await this.uploadFile();
           this.blog.pictureId = picture.id;

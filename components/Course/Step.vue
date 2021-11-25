@@ -85,23 +85,34 @@ export default {
         if (!await this.checkData()) {
           return;
         }
-        await this.postStep(); 
+        await this.postStep();
         await this.backToSteps(this.trackId);
       } catch (e) {
         console.log(e);
       }
     },
     async checkData() {
-      if (this.step.title === null) {
-        this.$toast.error("Vui lòng nhập tiêu đề!", {
-          duration: 5000
-        });
-        return false;
-      }
-      if (this.step.duration === null) {
-        this.$toast.error("Vui lòng nhập thời gian!", {
-          duration: 5000
-        });
+      try {
+
+        if (!this.step.title) {
+          this.$toast.error("Vui lòng nhập tiêu đề!", {
+            duration: 5000
+          });
+          return false;
+        }
+        if (!this.step.duration) {
+          this.$toast.error("Vui lòng nhập thời gian!", {
+            duration: 5000
+          });
+          return false;
+        }
+        if (!this.step.content || this.step.content.length < 10) {
+          this.$toast.error("Nội dung quá ngắn!", {
+            duration: 5000
+          });
+          return false;
+        }
+      } catch (e) {
         return false;
       }
       return true;
@@ -111,7 +122,7 @@ export default {
         this.step.trackId = this.trackId;
         let result = await this.$axios.put(`/api/step/${this.stepId}`, this.step);
         if (result.status === 200) {
-          this.$toast.success("Sửa thành công!", {
+          this.$toast.success("Sửa bài học thành công!", {
             duration: 5000
           });
         }
@@ -124,7 +135,7 @@ export default {
         this.step.trackId = this.trackId;
         let result = await this.$axios.post("/api/step", this.step);
         if (result.status === 200) {
-          this.$toast.success("Thêm thành công!", {
+          this.$toast.success("Tạo bài học thành công!", {
             duration: 5000
           });
         }
