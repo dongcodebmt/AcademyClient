@@ -1,7 +1,7 @@
 <template>
   <div id="user">
     <div class="row py-4">
-      <div class="col-12 col-xl-8 ">
+      <div class="col-12 col-xl-8">
         <div class="card border-0 shadow mb-4">
           <div class="card-body">
             <h5 class="card-title">Các khóa học đã hoàn thành</h5>
@@ -54,14 +54,17 @@
         <div class="row">
           <div class="col-12 mb-4">
             <div class="card shadow border-0 text-center p-0">
-              <div class="card-body pb-5 py-8">
+              <div class="card-body pb-5 py-8" v-if="user">
                 <img
                   :src="[user.picture && user.picture !== '/' ? user.picture :  require('@/assets/img/team/blank-profile.png') ]"
                   class="avatar-xl rounded-circle mx-auto mt-n7 mb-4"
                   style="object-fit: cover;"
                 />
                 <h4 class="h3">{{ user.firstName + " " + user.lastName }}</h4>
-                <p class="text-gray mb-4" v-if="user.scope.length > 0">Chức vụ: {{ user.scope.join(', ') }}</p>
+                <p
+                  class="text-gray mb-4"
+                  v-if="user.scope.length > 0"
+                >Chức vụ: {{ user.scope.join(', ') }}</p>
                 <p class="text-gray mb-4" v-else>Chức vụ: Register</p>
               </div>
             </div>
@@ -77,7 +80,7 @@ export default {
   auth: false,
   head() {
     return {
-      title: this.user.firstName + " " + this.user.lastName + " | Academy"
+      title: this.getName() + " | Academy"
     };
   },
   data() {
@@ -97,15 +100,23 @@ export default {
     }
   },
   mounted: async function () {
-    if (this.id) {
-      [this.user, this.courses, this.certs] = await Promise.all([
-        this.getUser(this.id),
-        this.getRegistedCourses(this.id),
-        this.getCertifications(this.id)
-      ]);
-    }
+    [this.user, this.courses, this.certs] = await Promise.all([
+      this.getUser(this.id),
+      this.getRegistedCourses(this.id),
+      this.getCertifications(this.id)
+    ]);
   },
   methods: {
+    getName() {
+      let result = null;
+      if (this.user && this.user.firstName) {
+        result = this.user.firstName
+      }
+      if (this.user && this.user.lastName) {
+        result += " " + this.user.lastName;
+      }
+      return result;
+    },
     // Get completed courses
     async getCertifications(userId) {
       try {
@@ -137,6 +148,7 @@ export default {
         }
       } catch (e) {
         console.log(e);
+        this.$router.push("/404");
       }
     }
   }

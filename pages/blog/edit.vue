@@ -124,6 +124,7 @@ export default {
         }
       } catch (e) {
         console.log(e);
+        this.$router.push("/404");
       }
     },
     async uploadFile() {

@@ -8,20 +8,20 @@
 
             <div class="row">
               <div class="col-6">
-                <div class="media d-flex align-items-center mb-4">
-                  <img
-                    class="avatar rounded-circle"
-                    style="object-fit: cover;"
-                    :src="[user.picture && user.picture !== '/' ? user.picture :  require('@/assets/img/team/blank-profile.png') ]"
-                  />
-                  <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                    <nuxt-link :to="`/profile/view?id=${user.id}`">
+                <nuxt-link :to="`/profile/view?id=${user.id}`">
+                  <div class="media d-flex align-items-center mb-4">
+                    <img
+                      class="avatar rounded-circle"
+                      style="object-fit: cover;"
+                      :src="[user.picture && user.picture !== '/' ? user.picture :  require('@/assets/img/team/blank-profile.png') ]"
+                    />
+                    <div class="media-body ms-2 text-dark align-items-center">
                       <span
                         class="mb-0 font-small fw-bold text-gray-900"
                       >{{ user.firstName + " " + user.lastName }}</span>
-                    </nuxt-link>
+                    </div>
                   </div>
-                </div>
+                </nuxt-link>
               </div>
               <div class="col-6 d-flex justify-content-end" v-if="isHasRole(blog.userId) > 0">
                 <div class="dropdown ms-2">
@@ -91,20 +91,20 @@
             <!-- User info and time since -->
             <div class="row">
               <div class="col-6">
-                <div class="media d-flex align-items-center mb-4">
-                  <img
-                    class="avatar rounded-circle"
-                    style="object-fit: cover;"
-                    :src="[ item.user.picture && item.user.picture !== '/' ? item.user.picture :  require('@/assets/img/team/blank-profile.png') ]"
-                  />
-                  <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                    <nuxt-link :to="`/profile/view?id=${user.id}`">
+                <nuxt-link :to="`/profile/view?id=${item.user.id}`">
+                  <div class="media d-flex align-items-center mb-4">
+                    <img
+                      class="avatar rounded-circle"
+                      style="object-fit: cover;"
+                      :src="[ item.user.picture && item.user.picture !== '/' ? item.user.picture :  require('@/assets/img/team/blank-profile.png') ]"
+                    />
+                    <div class="media-body ms-2 text-dark align-items-center">
                       <span
                         class="mb-0 font-small fw-bold text-gray-900"
                       >{{ item.user.firstName + " " + item.user.lastName }}</span>
-                    </nuxt-link>
+                    </div>
                   </div>
-                </div>
+                </nuxt-link>
               </div>
               <div class="col-6 d-flex justify-content-end">
                 <p class="card-text">
@@ -234,7 +234,7 @@ export default {
     },
     async infiniteHandler($state) {
       let data = await this.getComments(this.id, this.page * 10);
-      if (data.length > 0) {
+      if (data && data.length > 0) {
         this.page += 1;
         this.comments.push(...data);
         $state.loaded();
@@ -364,6 +364,7 @@ export default {
         }
       } catch (e) {
         console.log(e);
+        this.$router.push("/404");
       }
     }
   }

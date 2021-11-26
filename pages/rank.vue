@@ -57,22 +57,20 @@
                       <tr v-for="item in tops" :key="item.top">
                         <td>{{ item.top }}</td>
                         <td>
-                          <div class="media d-flex align-items-center">
-                            <img
-                              class="avatar rounded-circle"
-                              style="object-fit: cover;"
-                              :src="[item.user.picture && item.user.picture !== '/' ? item.user.picture :  require('@/assets/img/team/blank-profile.png') ]"
-                            />
-                            <div
-                              class="media-body ms-2 text-dark align-items-center d-none d-lg-block"
-                            >
-                              <nuxt-link :to="`/profile/view?id=${item.user.id}`">
+                          <nuxt-link :to="`/profile/view?id=${item.user.id}`">
+                            <div class="media d-flex align-items-center">
+                              <img
+                                class="avatar rounded-circle"
+                                style="object-fit: cover;"
+                                :src="[item.user.picture && item.user.picture !== '/' ? item.user.picture :  require('@/assets/img/team/blank-profile.png') ]"
+                              />
+                              <div class="media-body ms-2 text-dark align-items-center">
                                 <span
                                   class="mb-0 font-small fw-bold text-gray-900"
                                 >{{ item.user.firstName + " " + item.user.lastName }}</span>
-                              </nuxt-link>
+                              </div>
                             </div>
-                          </div>
+                          </nuxt-link>
                         </td>
                         <td>{{ item.noOfCourse }}</td>
                       </tr>
@@ -143,7 +141,10 @@
           <div class="modal-dialog modal-xl">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Bảng xếp hạng điểm khóa học theo {{ typeText }}</h5>
+                <h5
+                  class="modal-title"
+                  id="exampleModalLabel"
+                >Bảng xếp hạng điểm khóa học theo {{ typeText }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
