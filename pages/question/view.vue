@@ -23,10 +23,7 @@
                   </div>
                 </div>
               </div>
-              <div
-                class="col-6 d-flex justify-content-end"
-                v-if="isHasRole(question.userId) > 0"
-              >
+              <div class="col-6 d-flex justify-content-end" v-if="isHasRole(question.userId) > 0">
                 <div class="dropdown ms-2">
                   <a class="dropdown-toggle" role="button" id="baction" data-bs-toggle="dropdown">
                     <fa-icon icon="ellipsis-h" />
@@ -197,14 +194,16 @@ export default {
     if (this.id) {
       this.question = await this.getQuestion(this.id);
       this.user = await this.getUser(this.question.userId);
-      // High light code
-      setTimeout(() => {
-        Prism.manual = true;
-        Prism.highlightAll();
-      }, 1000);
+      this.highlightCode();
     }
   },
   methods: {
+    async highlightCode() {
+      setTimeout(() => {
+        Prism.manual = true;
+        Prism.highlightAll();
+      }, 600);
+    },
     async banUser(userId) {
       try {
         let roles = [5];
@@ -240,11 +239,7 @@ export default {
         this.page += 1;
         this.comments.push(...data);
         $state.loaded();
-        // High light code
-        setTimeout(() => {
-          Prism.manual = true;
-          Prism.highlightAll();
-        }, 1000);
+        this.highlightCode();
       } else {
         $state.complete();
       }
@@ -293,6 +288,7 @@ export default {
           let temp = this.comments.find(x => x.id === this.comment.id);
           temp.content = result.data.content;
           temp.updatedAt = result.data.updatedAt;
+          this.highlightCode();
           await this.cancelComment();
         }
       } catch (e) {
@@ -326,6 +322,7 @@ export default {
         if (result.status === 200) {
           this.comments.unshift(result.data);
           this.comment.content = null;
+          this.highlightCode();
           await this.cancelComment();
           this.$toast.success("Bình luận thành công!", {
             duration: 5000

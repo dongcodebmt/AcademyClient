@@ -34,14 +34,20 @@
                   v-bind:key="item.id"
                 >{{ item.name }}</option>
               </select>
+              <div class="d-flex justify-content-end mt-3">
+                <button
+                  class="btn btn-gray-800 mt-2 animate-up-2"
+                  type="submit"
+                  v-on:click="putQuestion()"
+                >Lưu</button>
+              </div>
             </div>
           </div>
-          <div class="col-12">
+          <!-- <div class="col-12">
             <div class="card card-body border-0 shadow mb-4">
               <h2 class="h5 mb-4">Chọn ảnh đại diện</h2>
               <div class="d-flex align-items-center">
                 <div class="me-3">
-                  <!-- Avatar -->
                   <img
                     class="rounded avatar-xl"
                     alt="change avatar"
@@ -62,15 +68,8 @@
                   </div>
                 </div>
               </div>
-              <div class="d-flex justify-content-end mt-3">
-                <button
-                  class="btn btn-gray-800 mt-2 animate-up-2"
-                  type="submit"
-                  v-on:click="putQuestion()"
-                >Lưu</button>
-              </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>

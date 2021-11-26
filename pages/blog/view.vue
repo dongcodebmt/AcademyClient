@@ -193,22 +193,16 @@ export default {
     if (this.id) {
       this.blog = await this.getBlog(this.id);
       this.user = await this.getUser(this.blog.userId);
-      // High light code
-      setTimeout(() => {
-        Prism.manual = true;
-        Prism.highlightAll();
-      }, 1000);
-    }
-    if (this.blog.userId) {
-      this.comments = await this.getComments(this.blog.id);
-      // High light code
-      setTimeout(() => {
-        Prism.manual = true;
-        Prism.highlightAll();
-      }, 1000);
+      this.highlightCode();
     }
   },
   methods: {
+    async highlightCode() {
+      setTimeout(() => {
+        Prism.manual = true;
+        Prism.highlightAll();
+      }, 600);
+    },
     async banUser(userId) {
       try {
         let roles = [5];
@@ -244,11 +238,7 @@ export default {
         this.page += 1;
         this.comments.push(...data);
         $state.loaded();
-        // High light code
-        setTimeout(() => {
-          Prism.manual = true;
-          Prism.highlightAll();
-        }, 1000);
+        this.highlightCode();
       } else {
         $state.complete();
       }
@@ -288,7 +278,7 @@ export default {
           });
           return;
         }
-        
+
         let result = await this.$axios.put(`/api/blogcomment/${this.comment.id}`, this.comment);
         if (result.status === 200) {
           this.$toast.success("Sửa bình luận thành công!", {
@@ -297,6 +287,7 @@ export default {
           let temp = this.comments.find(x => x.id === this.comment.id);
           temp.content = result.data.content;
           temp.updatedAt = result.data.updatedAt;
+          this.highlightCode();
           await this.cancelComment();
         }
       } catch (e) {
@@ -330,6 +321,7 @@ export default {
         if (result.status === 200) {
           this.comments.unshift(result.data);
           this.comment.content = null;
+          this.highlightCode();
           await this.cancelComment();
           this.$toast.success("Bình luận thành công!", {
             duration: 5000

@@ -10,7 +10,7 @@
               <div class="col-md-9">
                 <div class="card-body">
                   <h5 class="card-title">{{ item.title }}</h5>
-                  <p class="card-text">{{ item.content }}...</p>
+                  <p class="card-text" v-html="item.content">...</p>
                   <p class="card-text">
                     <small class="text-muted">
                       <TimeSince :date="item.updatedAt" />
