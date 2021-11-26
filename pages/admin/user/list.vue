@@ -84,7 +84,7 @@ export default {
         firstName: null,
         lastName: null,
         picture: null,
-        scope: []
+        scope: [],
       }],
     }
   },

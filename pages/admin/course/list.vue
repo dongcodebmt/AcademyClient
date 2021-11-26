@@ -81,7 +81,7 @@ export default {
         },
         {
           label: 'Ngày tạo', field: 'createdAt', formatFn: function (value) {
-            return value != null ? new Date(value).toLocaleString() : null
+            return value != null ? new Date(value.replace(/\Z$/, "") + "Z").toLocaleString() : null
           }
         },
         { label: 'Thao tác', field: 'actions', sortable: false, }

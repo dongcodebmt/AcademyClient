@@ -28,7 +28,8 @@ export default {
     },
     async timeSince(date) {
       if (date) {
-        let seconds = Math.floor((new Date() - new Date(date)) / 1000);
+        let lastDate = new Date(date.replace(/\Z$/, "") + "Z");
+        let seconds = Math.floor((new Date() - lastDate) / 1000);
 
         let interval = seconds / 31536000;
 
