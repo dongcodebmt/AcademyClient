@@ -1,13 +1,13 @@
-import path from 'path'
-import fs from 'fs'
+// import path from 'path'
+// import fs from 'fs'
 
 export default {
-  server: {
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'example.key')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'example.crt'))
-    }
-  },
+  // server: {
+  //   https: {
+  //     key: fs.readFileSync(path.resolve(__dirname, 'example.key')),
+  //     cert: fs.readFileSync(path.resolve(__dirname, 'example.crt'))
+  //   }
+  // },
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -149,17 +149,17 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // baseURL: process.env.BACKEND_URL,
-    // credentials: true
-    proxy: true
+    baseURL: process.env.BACKEND_URL,
+    credentials: true
+    // proxy: true
   },
 
-  proxy: {
-    '/api/': {
-      target: process.env.BACKEND_URL,
-      secure: false
-    }
-  },
+  // proxy: {
+  //   '/api/': {
+  //     target: process.env.BACKEND_URL,
+  //     secure: false
+  //   }
+  // },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
