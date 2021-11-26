@@ -16,7 +16,7 @@
               <div :class="{ 'col-md-9': item.picturePath, 'col-md-12': !item.picturePath }">
                 <div class="card-body">
                   <h5 class="card-title">{{ item.title }}</h5>
-                  <p class="card-text">{{ item.description }}...</p>
+                  <p class="card-text" v-html="item.description">...</p>
                 </div>
               </div>
               <div class="col-md-3" v-if="item.picturePath">
