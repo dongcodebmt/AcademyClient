@@ -160,7 +160,7 @@
                     <tbody>
                       <tr v-for="item in courseRanks" :key="item.top">
                         <td>{{ item.top }}</td>
-                        <td>
+                        <td data-bs-dismiss="modal">
                           <div class="media d-flex align-items-center">
                             <img
                               class="avatar rounded-circle"
