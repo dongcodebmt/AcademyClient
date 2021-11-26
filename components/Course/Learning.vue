@@ -69,8 +69,8 @@
                         class="list-group-item rounded"
                         v-for="i in item.steps"
                         :key="i.id"
-                        :class="{ active: i.id === stepId, disabled: i.id > stepId + 1 && stepId !== 0 && i.completed === false }"
-                        v-on:click="getStep(i.id)"
+                        :class="{ active: i.id === currentStepId, disabled: isDisable(i) }"
+                        v-on:click="getStep(item.id, i.id)"
                       >{{ i.title }}</a>
                     </div>
                   </div>
@@ -113,7 +113,8 @@ export default {
   props: ['id'],
   data() {
     return {
-      stepId: 0,
+      currentStepId: 0,
+      nextStepId: 0,
       step: {
         id: null,
         trackId: 0,
@@ -142,19 +143,28 @@ export default {
       let result = (this.progress.completed / this.progress.total) * 100;
       return result ? result.toFixed(2) : 0;
     },
+    isDisable(item) {
+      if (this.nextStepId === item.id) {
+        return false;
+      }
+      if (item.completed === true) {
+        return false;
+      }
+      return true;
+    },
     async handleProgress() {
       this.trackSteps.forEach((element) => {
         this.progress.total += element.steps.length;
         element.steps.forEach((el) => {
           //Select current progress
-          if (this.stepId === 0 && el.completed === false) {
-            this.getStep(el.id);
+          if (this.currentStepId === 0 && el.completed === false) {
+            this.getStep(element.id, el.id);
             let d = document.getElementById("collapse" + element.id);
-            console.log(d);
             if (d) {
               d.className += " show";
             }
-            this.stepId = el.id;
+            this.currentStepId = el.id;
+            this.nextStepId = el.id;
           }
           //Count completed step
           if (el.completed === true) {
@@ -173,36 +183,68 @@ export default {
         console.log(e);
       }
     },
-    async getStep(stepId) {
-      this.stepId = stepId;
+    async getStep(trackId, stepId) {
+      this.currentStepId = stepId;
       try {
         let result = await this.$axios.get(`/api/step/${stepId}`);
         if (result.status === 200) {
           this.step = result.data;
-          // High light code
-          setTimeout(() => {
-            Prism.manual = true;
-            Prism.highlightAll();
-          }, 1000);
-          //Mark as complete by duration
-          this.markAsComplete(this.step.id);
+          this.highLightCode();
+          // Mark as complete
+          this.completeTiming(trackId, stepId);
         }
       } catch (e) {
         console.log(e);
       }
     },
-    async markAsComplete(stepId) {
-      if (!stepId || stepId === 0) {
-        return;
-      }
+    async completeTiming(trackId, stepId) {
       try {
+        let trackIndex = this.trackSteps.findIndex(x => x.id === trackId);
+        let stepIndex = this.trackSteps[trackIndex].steps.findIndex(x => x.id === stepId);
+        let duration = ((this.trackSteps[trackIndex].steps[stepIndex].duration * 70) / 100) * 1000;
+        if (this.trackSteps[trackIndex].steps[stepIndex].completed === true) {
+          return;
+        }
+        setTimeout(async () => {
+          let result = await this.markAsComplete(stepId);
+          if (result) {
+            this.nextStepId = await this.getNextStep(stepId);
+            this.trackSteps[trackIndex].steps[stepIndex].completed = true;
+            this.progress.completed += 1;
+          }
+        }, duration)
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getNextStep(stepId) {
+      let next = false;
+      for (let i = 0; i < this.trackSteps.length; i++) {
+        for (let j = 0; j < this.trackSteps[i].steps.length; j++) {
+          let id = this.trackSteps[i].steps[j].id;
+          if (next) {
+            return id;
+          }
+          if (id === stepId) {
+            next = true;
+          }
+        }
+      }
+      return 0;
+    },
+    async markAsComplete(stepId) {
+      try {
+        if (!stepId || stepId === 0) {
+          return;
+        }
         let result = await this.$axios.post(`/api/step/${stepId}/progress`);
         if (result.status === 200 && result.data === true) {
-          this.progress.completed += 1;
+          return true;
         }
       } catch (e) {
         console.log(e);
       }
+      return false;
     },
     async getTrackSteps(courseId) {
       try {
@@ -213,6 +255,12 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    async highLightCode() {
+      setTimeout(() => {
+        Prism.manual = true;
+        Prism.highlightAll();
+      }, 600);
     }
   }
 }

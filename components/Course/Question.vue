@@ -127,7 +127,7 @@ export default {
         let list = this.questionFull.options;
         list.forEach((element, index) => {
           if (!element.content) {
-            this.$toast.error(`Vui lòng nhập đáp án cho câu ${index+1}!`, {
+            this.$toast.error(`Vui lòng nhập nội dung cho đáp án ${index+1}!`, {
               duration: 5000
             });
             return false;

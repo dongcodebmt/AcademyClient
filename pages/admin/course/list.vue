@@ -39,12 +39,12 @@
                     >
                       <fa-icon icon="edit" />
                     </nuxt-link>
-                    <nuxt-link
+                    <button
                       class="btn btn-outline-danger btn-sm"
-                      :to="`/admin/course/edit?id=${props.row.id}`"
+                      v-on:click="deleteCourse(props.row.id)"
                     >
                       <fa-icon icon="trash-alt" />
-                    </nuxt-link>
+                    </button>
                   </span>
                   <span v-else>{{props.formattedRow[props.column.field]}}</span>
                 </template>
@@ -104,13 +104,26 @@ export default {
     }
   },
   mounted: async function () {
-    this.categories = await this.getCategories();
-    this.courses = await this.getCourse(0, 9999);
+    [this.categories, this.courses] = await Promise.all([this.getCategories(), this.getCourse(0, 9999)]);
   },
   methods: {
     getCategoryName(id) {
       let cate = this.categories.find(x => x.id === id);
       return cate ? cate.name : id;
+    },
+    async deleteCourse(id) {
+      try {
+        let result = await this.$axios.delete(`/api/Course/${id}`);
+        if (result.status === 200) {
+          let index = this.courses.findIndex(x => x.id === id);
+          this.courses.splice(index, 1);
+          this.$toast.success("Xóa khóa học thành công!", {
+            duration: 5000
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
     },
     async getCategories() {
       try {
