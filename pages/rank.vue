@@ -30,7 +30,7 @@
                   <div class="col-md-10 d-flex justify-content-start">
                     <h5
                       class="card-title"
-                    >Bảng xếp hạng những người hoàn thành nhiều khóa học nhất tuần</h5>
+                    >Bảng xếp hạng những người hoàn thành nhiều khóa học nhất {{ typeText }}</h5>
                   </div>
                   <div class="col-md-2 d-flex justify-content-end">
                     <select
@@ -86,7 +86,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-10 d-flex justify-content-start">
-                    <h5 class="card-title">Top khóa học đăng ký nhiều nhất</h5>
+                    <h5 class="card-title">Top khóa học đăng ký nhiều nhất {{ typeText }}</h5>
                   </div>
                   <div class="col-md-2 d-flex justify-content-end">
                     <select
@@ -143,7 +143,7 @@
           <div class="modal-dialog modal-xl">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Bản xếp hạng điểm theo khóa học</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Bảng xếp hạng điểm khóa học theo {{ typeText }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -207,6 +207,7 @@ export default {
       start: new Date(new Date().setDate(new Date().getDate() - 7)),
       end: new Date(new Date().setDate(new Date().getDate() + 1)),
       selected: 1,
+      typeText: "tuần",
       tops: [{
         top: 0,
         noOfCourse: 0,
@@ -234,7 +235,6 @@ export default {
       let start = this.start.toISOString();
       let end = this.end.toISOString();
       this.courseRanks = await this.getRankByCourse(courseId, start, end);
-      console.log(this.courseRanks)
     },
     // Get rank by course
     async getRankByCourse(courseId, start, end) {
@@ -261,8 +261,10 @@ export default {
     // Default rank
     async selectRange(type) {
       if (type == 1) {
+        this.typeText = "tuần";
         this.start = new Date(new Date().setDate(new Date().getDate() - 7));
       } else {
+        this.typeText = "tháng";
         this.start = new Date(new Date().setMonth(new Date().getMonth() - 1));
       }
       let start = this.start.toISOString();
