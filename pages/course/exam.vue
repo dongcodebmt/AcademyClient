@@ -121,6 +121,24 @@ export default {
     }
   },
   methods: {
+    // shuffle question
+    async shuffleQuestions() {
+      this.questions = await this.shuffle(this.questions);
+    },
+    async shuffleOptions() {
+      for (let i = 0; i < this.questions.length; i++) {
+        this.questions[i].options = await this.shuffle(this.questions[i].options);
+      }
+    },
+    async shuffle(unshuffled) {
+      let shuffled = unshuffled
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+
+      return shuffled;
+    },
+
     async requestCertify(courseId) {
       try {
         let result = await this.$axios.post(`/api/course/${courseId}/certify`);
@@ -172,6 +190,8 @@ export default {
       if (this.examUserId != 0) {
         this.start = true;
         this.questions = await this.getExamQuestions(this.id);
+        await this.shuffleOptions();
+        await this.shuffleQuestions();
         this.timeSeconds = this.exam.examDuration;
 
         this.timeCounter();
