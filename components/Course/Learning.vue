@@ -8,14 +8,6 @@
               <iframe :src="step.embedLink" class="rounded" allowfullscreen></iframe>
             </div>
           </div>
-          <div class="card mb-4" v-if="getAvg() == 100">
-            <div class="card-body border-0 shadow">
-              <h5 class="card-title">Xin chúc mừng!</h5>
-              <p
-                class="card-text"
-              >Bạn đã hoàn thành bài học. Bây giờ hãy làm các bài kiểm tra. Sau khi hoàn tất tất cả các bài kiểm tra bạn sẽ được chứng nhận hoàn thành khóa học.</p>
-            </div>
-          </div>
           <div class="card mb-4" v-if="step.content">
             <div class="card-body border-0 shadow">
               <h5 class="card-title">{{ step.title }}</h5>
@@ -34,17 +26,17 @@
                   <div class="progress-info">
                     <div class="h6 mb-0">Tiến độ khóa học</div>
                     <div class="small fw-bold text-gray-500">
-                      <span>{{ getAvg() + '%' }}</span>
+                      <span>{{ getPercent() + '%' }}</span>
                     </div>
                   </div>
                   <div class="progress mb-0">
                     <div
                       class="progress-bar bg-success"
                       role="progressbar"
-                      :aria-valuenow="getAvg()"
+                      :aria-valuenow="getPercent()"
                       aria-valuemin="0"
                       aria-valuemax="100"
-                      :style="'width: ' + getAvg() + '%;'"
+                      :style="'width: ' + getPercent() + '%;'"
                     ></div>
                   </div>
                 </div>
@@ -78,7 +70,7 @@
               </div>
 
               <!-- Exam -->
-              <div class="accordion-item" v-if="getAvg() == 100 && exams.length > 0">
+              <div class="accordion-item" v-if="getPercent() >= 100 && exams.length > 0">
                 <h2 class="accordion-header">
                   <button
                     class="accordion-button collapsed"
@@ -135,11 +127,27 @@ export default {
     if (this.id) {
       this.trackSteps = await this.getTrackSteps(this.id);
       this.exams = await this.getExams(this.id);
-      this.handleProgress();
+      await this.handleProgress();
+      if (this.getPercent() >= 100) {
+        this.showToastCompleted();
+      }
     }
   },
   methods: {
-    getAvg() {
+    showToastCompleted() {
+      this.$toast.success("Xin chúc mừng! Bạn đã hoàn thành tất cả bài học.", {
+        duration: 5000,
+        action: [
+          {
+            text: 'X',
+            onClick: (e, toastObject) => {
+              toastObject.goAway(0);
+            }
+          },
+        ]
+      });
+    },
+    getPercent() {
       let result = (this.progress.completed / this.progress.total) * 100;
       return result ? result.toFixed(2) : 0;
     },
@@ -153,25 +161,38 @@ export default {
       return true;
     },
     async handleProgress() {
-      this.trackSteps.forEach((element) => {
-        this.progress.total += element.steps.length;
-        element.steps.forEach((el) => {
+      for (let item of this.trackSteps) {
+        this.progress.total += item.steps.length;
+        for (let i of item.steps) {
           //Select current progress
-          if (this.currentStepId === 0 && el.completed === false) {
-            this.getStep(element.id, el.id);
-            let d = document.getElementById("collapse" + element.id);
+          if (this.currentStepId === 0 && i.completed === false) {
+            this.getStep(item.id, i.id);
+            let d = document.getElementById("collapse" + item.id);
             if (d) {
               d.className += " show";
             }
-            this.currentStepId = el.id;
-            this.nextStepId = el.id;
+            this.currentStepId = i.id;
+            this.nextStepId = i.id;
           }
           //Count completed step
-          if (el.completed === true) {
+          if (i.completed === true) {
             this.progress.completed += 1;
           }
-        });
-      });
+        }
+      }
+
+      //Show last step if completed
+      if (this.currentStepId === 0) {
+        let lastTrack = this.trackSteps[this.trackSteps.length - 1];
+        let lastStep =  lastTrack.steps[lastTrack.steps.length - 1];
+        this.getStep(lastTrack.id, lastStep.id);
+        let d = document.getElementById("collapse" + lastTrack.id);
+        if (d) {
+          d.className += " show";
+        }
+        this.currentStepId = lastStep.id;
+        this.nextStepId = lastStep.id;
+      }
     },
     async getExams(courseId) {
       try {
@@ -211,6 +232,11 @@ export default {
             this.nextStepId = await this.getNextStep(stepId);
             this.trackSteps[trackIndex].steps[stepIndex].completed = true;
             this.progress.completed += 1;
+          }
+
+          //Show message if user completed
+          if (this.getPercent() >= 100) {
+            this.showToastCompleted();
           }
         }, duration)
       } catch (e) {

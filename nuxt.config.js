@@ -23,12 +23,12 @@ export default {
   head: {
     title: 'Academy',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'vi'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: 'Học lập trình miễn phí' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
@@ -96,7 +96,7 @@ export default {
 
   toast: {
     position: 'top-right',
-    theme: "outline" 
+    theme: "outline"
   },
 
   auth: {

@@ -1,92 +1,101 @@
 <template>
-  <div id="courses">
-    <div class="d-flex justify-content-end py-4">
-      <client-only>
-        <date-picker v-model="dateRange" type="date" range placeholder="Chọn khoảng thời gian" v-on:change="getData()"></date-picker>
-      </client-only>
-    </div>
-    <div class="row">
-      <div class="col-12 col-sm-6 col-xl-4 mb-4" v-for="item in overview" :key="item.label">
-        <div class="card border-0 shadow">
-          <div class="card-body">
-            <div class="row d-block d-xl-flex align-items-center">
-              <div
-                class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center"
-              >
-                <div class="icon-shape icon-shape-tertiary rounded me-4 me-sm-0">
-                  <client-only>
-                    <fa-icon :icon="item.icon" class="icon icon-md" style="font-size: 30px;" />
-                  </client-only>
-                </div>
-              </div>
-              <div class="col-12 col-xl-7 px-xl-0">
-                <div class="d-none d-sm-block">
-                  <h2 class="h5">{{ item.label }}</h2>
-                  <h3 class="fw-extrabold mb-1">{{ item.total }}</h3>
-                </div>
-                <small class="d-flex align-items-center">{{ month() }}</small>
+  <div id="app">
+    <Loading v-if="loading" />
+    <div id="statistics" v-else>
+      <div class="d-flex justify-content-end py-4">
+        <client-only>
+          <date-picker
+            v-model="dateRange"
+            type="date"
+            range
+            placeholder="Chọn khoảng thời gian"
+            v-on:change="getData()"
+          ></date-picker>
+        </client-only>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-6 col-xl-4 mb-4" v-for="item in overview" :key="item.label">
+          <div class="card border-0 shadow">
+            <div class="card-body">
+              <div class="row d-block d-xl-flex align-items-center">
                 <div
-                  class="small d-flex mt-1"
-                  :set="temp = getPercent(item.lastTime, item.thisTime)"
+                  class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center"
                 >
-                  <fa-icon icon="angle-up" class="icon icon-xs text-success" v-if="temp > 0" />
-                  <fa-icon icon="angle-down" class="icon icon-xs text-danger" v-if="temp < 0" />
-                  <fa-icon icon="minus" class="icon icon-xs text-primary" v-if="temp == 0" />
-                  <div>
-                    <span class="text-success fw-bolder me-1" v-if="temp > 0">&nbsp;{{ temp }}%</span>
-                    <span
-                      class="text-danger fw-bolder me-1"
-                      v-if="temp < 0"
-                    >&nbsp;{{ Math.abs(temp) }}%</span>
-                    <span class="text-primary fw-bolder me-1" v-if="temp == 0">&nbsp;0%</span>
-                    So với khoảng thời gian trước
+                  <div class="icon-shape icon-shape-tertiary rounded me-4 me-sm-0">
+                    <client-only>
+                      <fa-icon :icon="item.icon" class="icon icon-md" style="font-size: 30px;" />
+                    </client-only>
+                  </div>
+                </div>
+                <div class="col-12 col-xl-7 px-xl-0">
+                  <div class="d-none d-sm-block">
+                    <h2 class="h5">{{ item.label }}</h2>
+                    <h3 class="fw-extrabold mb-1">{{ item.total }}</h3>
+                  </div>
+                  <small class="d-flex align-items-center">{{ month() }}</small>
+                  <div
+                    class="small d-flex mt-1"
+                    :set="temp = getPercent(item.lastTime, item.thisTime)"
+                  >
+                    <fa-icon icon="angle-up" class="icon icon-xs text-success" v-if="temp > 0" />
+                    <fa-icon icon="angle-down" class="icon icon-xs text-danger" v-if="temp < 0" />
+                    <fa-icon icon="minus" class="icon icon-xs text-primary" v-if="temp == 0" />
+                    <div>
+                      <span class="text-success fw-bolder me-1" v-if="temp > 0">&nbsp;{{ temp }}%</span>
+                      <span
+                        class="text-danger fw-bolder me-1"
+                        v-if="temp < 0"
+                      >&nbsp;{{ Math.abs(temp) }}%</span>
+                      <span class="text-primary fw-bolder me-1" v-if="temp == 0">&nbsp;0%</span>
+                      So với khoảng thời gian trước
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card border-0 shadow mb-4">
-          <div class="card-body">
-            <h5 class="card-title">Tổng quan điểm</h5>
-            <div class="row">
-              <p class="col-lg-6">Điểm cao nhất: {{ mark.highestMark.toFixed(2) }}</p>
-              <p class="col-lg-6">Điểm thấp nhất: {{ mark.lowestMark.toFixed(2) }}</p>
-              <p class="col-lg-6">Điểm trung bình: {{ mark.averageMark.toFixed(2) }}</p>
-              <p class="col-lg-6">Độ lệch chuẩn {{ mark.standardDeviation.toFixed(2) }}</p>
-              <p class="col-lg-6">Thời gian làm bài trung bình: {{ secToMin(mark.averageTime) }}</p>
-            </div>
-            <div class="table-responsive">
-              <client-only>
-                <chartist ratio="ct-chart" type="Line" :data="chartViews" :options="options"></chartist>
-              </client-only>
+        <div class="col-lg-6">
+          <div class="card border-0 shadow mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Tổng quan điểm</h5>
+              <div class="row">
+                <p class="col-lg-6">Điểm cao nhất: {{ mark.highestMark.toFixed(2) }}</p>
+                <p class="col-lg-6">Điểm thấp nhất: {{ mark.lowestMark.toFixed(2) }}</p>
+                <p class="col-lg-6">Điểm trung bình: {{ mark.averageMark.toFixed(2) }}</p>
+                <p class="col-lg-6">Độ lệch chuẩn {{ mark.standardDeviation.toFixed(2) }}</p>
+                <p class="col-lg-6">Thời gian làm bài trung bình: {{ secToMin(mark.averageTime) }}</p>
+              </div>
+              <div class="table-responsive">
+                <client-only>
+                  <chartist ratio="ct-chart" type="Line" :data="chartViews" :options="options"></chartist>
+                </client-only>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card border-0 shadow mb-4">
-          <div class="card-body">
-            <h5 class="card-title">Top khoá học đăng ký nhiều nhất</h5>
-            <div class="table-responsive">
-              <table class="table table-centered table-nowrap mb-4 rounded table-borderless">
-                <thead class="thead-light">
-                  <tr>
-                    <th class="border-0 rounded-start">#</th>
-                    <th class="border-0">Tên khoá học</th>
-                    <th class="border-0 rounded-end">Số người đăng ký</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="item in tops" :key="item.courseId">
-                    <td>{{ item.courseId }}</td>
-                    <td>{{ item.title }}</td>
-                    <td>{{ item.count }}</td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="col-lg-6">
+          <div class="card border-0 shadow mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Top khoá học đăng ký nhiều nhất</h5>
+              <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-4 rounded table-borderless">
+                  <thead class="thead-light">
+                    <tr>
+                      <th class="border-0 rounded-start">#</th>
+                      <th class="border-0">Tên khoá học</th>
+                      <th class="border-0 rounded-end">Số người đăng ký</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in tops" :key="item.courseId">
+                      <td>{{ item.courseId }}</td>
+                      <td>{{ item.title }}</td>
+                      <td>{{ item.count }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -114,6 +123,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       dateRange: [
         new Date(new Date().setMonth(new Date().getMonth() - 1)),
         new Date()
@@ -162,6 +172,7 @@ export default {
   },
   mounted: async function () {
     await this.getData();
+    this.loading = false;
   },
   methods: {
     async getData() {
@@ -228,10 +239,15 @@ export default {
       return result.toFixed(2);
     },
     month() {
-      let start = this.dateRange[0];
-      let end = this.dateRange[1];
-      let result = start.toLocaleDateString() + " - " + end.toLocaleDateString();
-      return result;
+      try {
+        let start = this.dateRange[0];
+        let end = this.dateRange[1];
+        let result = start.toLocaleDateString() + " - " + end.toLocaleDateString();
+        return result;
+      } catch (e) {
+        console.log(e);
+      }
+      return 0;
     }
   }
 }

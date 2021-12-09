@@ -11,7 +11,7 @@
       <div class="col-lg-9 gy-4" v-if="!start && !result && !isTested">
         <div class="card border-0 shadow mb-4">
           <div class="card-body">
-            <p class="card-text">{{ exam.title }}</p>
+            <h5 class="card-text">{{ exam.title }}</h5>
             <p class="card-text">Thời gian làm bài kiểm tra: {{ secToMin(exam.examDuration) }}</p>
             <button class="btn btn-outline-primary" v-on:click="startExam()">Bắt đầu</button>
           </div>
