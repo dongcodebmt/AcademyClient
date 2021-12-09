@@ -36,11 +36,11 @@
           <div class="card-header">Blog theo danh mục</div>
           <div class="card-body">
             <ul class="row list-unstyled mb-0">
-              <li class="col-lg-6" v-for="item in categories" :key="item.id">
+              <li class="col-lg-6" :class="{'text-danger': isActive(item.id)}" v-for="item in categories" :key="item.id">
                 <a v-on:click="selectCategory(item.id)">{{ item.name }}</a>
               </li>
               <li class="col-lg-6">
-                <a v-on:click="selectCategory(0)">Tất cả</a>
+                <a v-on:click="selectCategory(0)" :class="{'text-danger': isActive(0)}">Tất cả</a>
               </li>
             </ul>
           </div>
@@ -77,6 +77,12 @@ export default {
     this.categories = await this.getCategories();
   },
   methods: {
+    isActive(id) {
+      if (id === this.selected) {
+        return true;
+      }
+      return false;
+    },
     async selectCategory(id) {
       this.selected = id;
       this.page = 0;
