@@ -74,7 +74,7 @@ export default {
   },
   watch: {
     date: async function (val) {
-      await this.stop();
+      await this.stopCounter();
       this.startCounter();
     }
   }
