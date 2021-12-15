@@ -42,7 +42,7 @@
                   <tr v-for="item in courses" :key="item.id">
                     <td>{{ item.id }}</td>
                     <td>{{ item.title }}</td>
-                    <td>{{ item.progress.toFixed(2) }}</td>
+                    <td>{{ item.progress.toFixed(2) + '%' }}</td>
                   </tr>
                 </tbody>
               </table>
