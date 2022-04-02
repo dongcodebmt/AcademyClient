@@ -115,11 +115,11 @@
           <div class="card-body">
             <h5 class="card-title">Tổng quan điểm</h5>
             <div class="row">
-              <p class="col-lg-6">Điểm cao nhất: {{ mark.highestMark.toFixed(2) }}</p>
+              <!-- <p class="col-lg-6">Điểm cao nhất: {{ mark.highestMark.toFixed(2) }}</p>
               <p class="col-lg-6">Điểm thấp nhất: {{ mark.lowestMark.toFixed(2) }}</p>
               <p class="col-lg-6">Điểm trung bình: {{ mark.averageMark.toFixed(2) }}</p>
               <p class="col-lg-6">Độ lệch chuẩn {{ mark.standardDeviation.toFixed(2) }}</p>
-              <p class="col-lg-6">Thời gian làm bài trung bình: {{ secToMin(mark.averageTime) }}</p>
+              <p class="col-lg-6">Thời gian làm bài trung bình: {{ secToMin(mark.averageTime) }}</p> -->
             </div>
             <div class="table-responsive">
               <client-only>
@@ -174,11 +174,11 @@
                 <input
                   class="form-check-input"
                   type="checkbox"
-                  :id="'roles_' + item.id"
-                  :value="item.id"
+                  :id="item"
+                  :value="item"
                   v-model="roles"
                 />
-                <label class="form-check-label" :for="'roles_' + item.id">{{ item.name }}</label>
+                <label class="form-check-label" :for="item">{{ item }}</label>
               </div>
               <div class="d-flex justify-content-end mt-3">
                 <button
@@ -323,10 +323,7 @@ export default {
         confirmPassword: null
       },
       file: null,
-      fullRoles: [{
-        id: 0,
-        name: null
-      }],
+      fullRoles: [],
       roles: [],
       courses: [],
       certs: [],
@@ -363,11 +360,11 @@ export default {
       [this.user, this.roles, this.courses, this.certs, this.mark] = await Promise.all([
         this.getUser(this.id),
         this.getUserRoles(this.id),
-        this.getRegistedCourses(this.id),
-        this.getCertifications(this.id),
-        this.getMarkChart(this.id)
+        // this.getRegistedCourses(this.id),
+        // this.getCertifications(this.id),
+        // this.getMarkChart(this.id)
       ]);
-      this.setMarkToChart(this.mark.charts);
+      // this.setMarkToChart(this.mark.charts);
     }
   },
   methods: {
@@ -483,11 +480,7 @@ export default {
         });
       }
       try {
-        let result = await this.$axios.post(`/api/user/${userId}/password`, JSON.stringify(this.password.newPassword), {
-          headers: {
-            'Content-Type': 'application/json-patch+json'
-          }
-        });
+        let result = await this.$axios.post(`/api/user/${userId}/password`, { password: this.password.newPassword });
         if (result.status === 200) {
           this.password.newPassword = null;
           this.password.confirmPassword = null;
