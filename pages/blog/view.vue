@@ -205,7 +205,7 @@ export default {
     },
     async banUser(userId) {
       try {
-        let roles = [5];
+        let roles = ['Banned'];
         let result = await this.$axios.post(`/api/user/${userId}/roles`, roles);
         if (result.status === 200) {
           this.$toast.success("Cấm người dùng thành công!", {

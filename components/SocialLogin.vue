@@ -35,10 +35,12 @@
 export default {
   methods: {
     async google() {
-      this.$auth.loginWith("google");
+      // this.$auth.loginWith("google");
+      alert('Chức năng đang phát triển')
     },
     async facebook() {
-      this.$auth.loginWith("facebook");
+      // this.$auth.loginWith("facebook");
+      alert('Chức năng đang phát triển')
     }
   }
 };
