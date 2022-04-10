@@ -95,6 +95,12 @@ export default {
       this.exams.splice(index, 1);
     },
     async insertItem() {
+      if (this.exams.length >= 1) {
+        this.$toast.error("Tối đa 1 bài kiểm tra!", {
+          duration: 5000
+        });
+        return;
+      }
       this.exams.push({ courseId: this.courseId, title: null, examDuration: null });
     },
     async deleteExam(index) {

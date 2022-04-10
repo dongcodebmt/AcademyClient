@@ -34,15 +34,13 @@
                 <thead class="thead-light">
                   <tr>
                     <th class="border-0 rounded-start">#</th>
-                    <th class="border-0">Tên khoá học</th>
-                    <th class="border-0 rounded-end">Tiến trình</th>
+                    <th class="border-0 rounded-end">Tên khoá học</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="item in courses" :key="item.id">
                     <td>{{ item.id }}</td>
                     <td>{{ item.title }}</td>
-                    <td>{{ item.progress.toFixed(2) + '%' }}</td>
                   </tr>
                 </tbody>
               </table>

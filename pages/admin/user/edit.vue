@@ -62,15 +62,13 @@
                 <thead class="thead-light">
                   <tr>
                     <th class="border-0 rounded-start">#</th>
-                    <th class="border-0">Tên khoá học</th>
-                    <th class="border-0 rounded-end">Tiến trình</th>
+                    <th class="border-0 rounded-end">Tên khoá học</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="item in courses" :key="item.id">
                     <td>{{ item.id }}</td>
                     <td>{{ item.title }}</td>
-                    <td>{{ item.progress.toFixed(2) + '%' }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -243,8 +241,7 @@
                           <th class="border-0">Số câu đúng</th>
                           <th class="border-0">Thời gian thi</th>
                           <th class="border-0">Thời gian nộp</th>
-                          <th class="border-0">Điểm</th>
-                          <th class="border-0 rounded-end">Chi tiết</th>
+                          <th class="border-0 rounded-end">Điểm</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -256,9 +253,6 @@
                           <td>{{ new Date(item.startedAt).toLocaleString() }}</td>
                           <td>{{ new Date(item.completedAt).toLocaleString() }}</td>
                           <td>{{ item.mark.toFixed(2) }}</td>
-                          <td data-bs-dismiss="modal">
-                            <nuxt-link :to="`/course/result?id=${item.id}`">Xem chi tiết</nuxt-link>
-                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -308,32 +302,7 @@ export default {
       fullRoles: [],
       roles: [],
       courses: [],
-      certs: [],
-      examUsers: [],
-      mark: {
-        averageMark: 0,
-        lowestMark: 0,
-        highestMark: 0,
-        standardDeviation: 0,
-        averageTime: 0,
-        charts: [
-          {
-            mark: 0,
-            count: 0
-          }
-        ]
-      },
-      chartViews: {
-        labels: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-        series: [[]]
-      },
-      options: {
-        fullWidth: true,
-        lineSmooth: false,
-        chartPadding: {
-          right: 40
-        }
-      }
+      certs: []
     }
   },
   mounted: async function () {
@@ -342,37 +311,12 @@ export default {
       [this.user, this.roles, this.courses, this.certs, this.mark] = await Promise.all([
         this.getUser(this.id),
         this.getUserRoles(this.id),
-        // this.getRegistedCourses(this.id),
-        // this.getCertifications(this.id),
-        // this.getMarkChart(this.id)
+        this.getRegistedCourses(this.id),
+        this.getCertifications(this.id)
       ]);
-      // this.setMarkToChart(this.mark.charts);
     }
   },
   methods: {
-    // Mark overview
-    async setMarkToChart(marks) {
-      try {
-        this.chartViews.series[0].splice(0, this.chartViews.series[0].length)
-        for (let i = 0; i < 11; i++) {
-          let markObj = marks.find(x => x.mark == i);
-          let mark = markObj ? markObj.count : 0;
-          this.chartViews.series[0].push(mark);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async getMarkChart(userId) {
-      try {
-        let result = await this.$axios.get(`/api/Stat/Mark/${userId}`);
-        if (result.status === 200) {
-          return result.data;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
     // Exam details
     async showModal(courseId) {
       this.examUsers = [];
