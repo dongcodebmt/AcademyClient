@@ -85,8 +85,7 @@
                   <tr>
                     <th class="border-0 rounded-start">#</th>
                     <th class="border-0">Tên khoá học</th>
-                    <th class="border-0">Điểm</th>
-                    <th class="border-0 rounded-end">Chi tiết</th>
+                    <th class="border-0 rounded-end">Điểm</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -94,14 +93,6 @@
                     <td>{{ item.courseId }}</td>
                     <td>{{ item.courseName }}</td>
                     <td>{{ item.mark.toFixed(2) }}</td>
-                    <td>
-                      <!-- Button trigger modal -->
-                      <a
-                        data-bs-toggle="modal"
-                        data-bs-target="#listExam"
-                        v-on:click="showModal(item.courseId)"
-                      >Xem chi tiết</a>
-                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -208,60 +199,6 @@
                   <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Đổi mật khẩu</button>
                 </div>
               </form>
-            </div>
-          </div>
-
-          <!-- Cert details modal -->
-          <div
-            class="modal fade"
-            id="listExam"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Danh sách các bài đã thi</h5>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div class="modal-body">
-                  <div class="table-responsive">
-                    <table class="table table-centered table-nowrap mb-4 rounded table-borderless">
-                      <thead class="thead-light">
-                        <tr>
-                          <th class="border-0 rounded-start">#</th>
-                          <th class="border-0">Tên bài thi</th>
-                          <th class="border-0">Tổng số câu</th>
-                          <th class="border-0">Số câu đúng</th>
-                          <th class="border-0">Thời gian thi</th>
-                          <th class="border-0">Thời gian nộp</th>
-                          <th class="border-0 rounded-end">Điểm</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="item in examUsers" :key="item.id">
-                          <td>{{ item.id }}</td>
-                          <td>{{ item.title }}</td>
-                          <td>{{ item.noOfQuestion }}</td>
-                          <td>{{ item.noOfRightOption }}</td>
-                          <td>{{ new Date(item.startedAt).toLocaleString() }}</td>
-                          <td>{{ new Date(item.completedAt).toLocaleString() }}</td>
-                          <td>{{ item.mark.toFixed(2) }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
