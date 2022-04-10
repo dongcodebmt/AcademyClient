@@ -110,24 +110,6 @@
             </div>
           </div>
         </div>
-
-        <div class="card border-0 shadow mb-4">
-          <div class="card-body">
-            <h5 class="card-title">Tổng quan điểm</h5>
-            <div class="row">
-              <!-- <p class="col-lg-6">Điểm cao nhất: {{ mark.highestMark.toFixed(2) }}</p>
-              <p class="col-lg-6">Điểm thấp nhất: {{ mark.lowestMark.toFixed(2) }}</p>
-              <p class="col-lg-6">Điểm trung bình: {{ mark.averageMark.toFixed(2) }}</p>
-              <p class="col-lg-6">Độ lệch chuẩn {{ mark.standardDeviation.toFixed(2) }}</p>
-              <p class="col-lg-6">Thời gian làm bài trung bình: {{ secToMin(mark.averageTime) }}</p> -->
-            </div>
-            <div class="table-responsive">
-              <client-only>
-                <chartist ratio="ct-chart" type="Line" :data="chartViews" :options="options"></chartist>
-              </client-only>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="col-12 col-xl-4">
         <div class="row">
@@ -494,17 +476,14 @@ export default {
     },
     // Picture
     async updatePicture(userId) {
-      let picId = await this.uploadFile();
+      let picId = await this.uploadFile(userId);
       if (picId === 0) {
         this.$toast.error("Hình ảnh đã chọn không hợp lệ!", {
           duration: 5000
         });
-      } else {
-        this.user.pictureId = picId;
-        this.putUser(userId);
       }
     },
-    async uploadFile() {
+    async uploadFile(userId) {
       if (!this.file) {
         return 0;
       }
@@ -512,7 +491,7 @@ export default {
       let formData = new FormData();
       formData.append('file', this.file);
       try {
-        let result = await this.$axios.post(`/api/picture/upload`, formData, {
+        let result = await this.$axios.post(`/api/picture/upload/${userId}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
