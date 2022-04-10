@@ -1,11 +1,5 @@
 export default [
     {
-        "name": "Thống kê",
-        "url": "/admin/statistics",
-        "icon": "signal",
-        "roles": ["Administrators"]
-    },
-    {
         "name": "Quản lý danh mục",
         "url": "/admin/category",
         "icon": "list-ul",
